@@ -1,10 +1,17 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Switch } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
 import React, { useEffect, useState } from "react";
 import Action from "../action/auth.action";
 const { Header } = Layout;
+import {
+  BellTwoTone,
+  CaretDownOutlined,
+  InteractionTwoTone,
+  PlaySquareTwoTone,
+  SettingTwoTone,
+} from "@ant-design/icons";
 
 const MainHeader = () => {
   const [state, dispatch] = useAppState();
@@ -48,9 +55,29 @@ const MainHeader = () => {
               </a>
             </Menu.Item>
           )}
+
           <Menu.Item>
             <img src={general_helper.imgDefault} style={{ width: "100px" }} />
           </Menu.Item>
+          <span className="mr-auto" />
+          {!state.mobile && (
+            <Menu.Item onClick={() => dispatch({ type: "fullscreen" })}>
+              <InteractionTwoTone style={{ fontSize: "20px" }} />
+            </Menu.Item>
+          )}
+          {!state.mobile && (
+            <Menu.Item>
+              <Switch
+                size="large"
+                checkedChildren="Terang"
+                unCheckedChildren="Gelap"
+                checked={!!state.weakColor}
+                onChange={(checked) =>
+                  dispatch({ type: "weak", value: checked })
+                }
+              />
+            </Menu.Item>
+          )}
         </Menu>
       </Header>
     </DashHeader>

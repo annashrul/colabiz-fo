@@ -34,8 +34,9 @@ export const handlePost = async (url, data, callback) => {
     }
   } catch (err) {
     callback([], false, "gagal");
-    let msg = "Terjadi Kesalahan Jaringan";
-    if (err.response.data.meta !== undefined) {
+    let msg = err.message;
+    console.log(err);
+    if (err.response.data !== undefined) {
       msg = err.response.data.meta.message;
     }
     const key = `open${Date.now()}`;

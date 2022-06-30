@@ -9,6 +9,8 @@ import Router from "next/router";
 import axios from "axios";
 import Action from "../action/auth.action";
 import { Message } from "antd";
+import { Provider } from "react-redux";
+import store from "../redux/store";
 
 axios.defaults.headers.common[
   "Content-Type"
@@ -55,7 +57,7 @@ class MyApp extends App {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <link rel="shortcut icon" href="/images/triangle.png" />
-          <title>Prowara Member</title>
+          <title>Kolabiz Member</title>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link
@@ -74,11 +76,13 @@ class MyApp extends App {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
           )}
         </Head>
-        <AppProvider>
-          <Page>
-            <Component {...pageProps} />
-          </Page>
-        </AppProvider>
+        <Provider store={store}>
+          <AppProvider>
+            <Page>
+              <Component {...pageProps} />
+            </Page>
+          </AppProvider>
+        </Provider>
       </>
     );
   }

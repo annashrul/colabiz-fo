@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 
 import { ConfigProvider } from "antd";
 import Router from "next/router";
-
+import store from "../../redux/store";
 const Context = createContext();
 const { Provider } = Context;
 let mql;
@@ -76,10 +76,10 @@ const reducer = (state, action) => {
       return newState;
     }
     case "weak": {
-      const weak = state.weakColor;
-      let darkSidebar = state.darkSidebar;
-      if (!weak && darkSidebar) darkSidebar = false;
-      const newState = { ...state, weakColor: !state.weakColor, darkSidebar };
+      // const weak = state.weakColor;
+      // let darkSidebar = state.darkSidebar;
+      // if (!weak && darkSidebar) darkSidebar = false;
+      const newState = { ...state, weakColor: !state.weakColor };
       saveToLocal(newState);
       return newState;
     }
@@ -113,7 +113,7 @@ const AppProvider = (props) => {
     sidebarPopup: false,
     sidebarIcons: true,
     collapsed: false,
-    weakColor: false,
+    weakColor: true,
     optionDrawer: false,
     mobileDrawer: false,
     fullscreen: false,

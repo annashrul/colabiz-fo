@@ -5,7 +5,7 @@ import copy from "copy-to-clipboard";
 
 const RangePicker = DatePicker.RangePicker;
 
-const imgDefault = "/logos.png";
+const imgDefault = "/logo.png";
 
 const setCookie = (name, data) => {
   Cookies.set(name, btoa(data), { expires: 1 });

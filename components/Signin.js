@@ -1,17 +1,15 @@
 import { Button, Form, Input, Spin, Message, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-
 import Link from "next/link";
 import Router from "next/router";
 import styled from "styled-components";
-import { useAppState } from "./shared/AppProvider";
 import React, { useEffect, useState } from "react";
 import { StringLink } from "../helper/string_link_helper";
-
-import Action from "../action/auth.action";
 import ModalPin from "./ModalPin";
-import { handleGet, handlePost, handlePut } from "../action/baseAction";
+import { handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
 
 const FormItem = Form.Item;
 
@@ -22,72 +20,52 @@ const Content = styled.div`
 `;
 
 const Signin = () => {
-  const [state] = useAppState();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [, forceUpdate] = useState();
   const [loading, setLoading] = useState(false);
-  const [iconLoading, setIconLoading] = useState(false);
   const [showModalPin, setShowModalPin] = useState(false);
   const [dataUser, setDataUser] = useState({});
+
+  const resLogin = useSelector((state) => state.authUserReducer.dataLogin);
+  const resLoading = useSelector((state) => state.authUserReducer.loadingLogin);
 
   useEffect(() => {
     forceUpdate({});
   }, []);
-  const handleLoadInfo = async () => {
-    await handleGet("site/info", (res, status, msg) => {
-      Action.setInfo(res.data);
-    });
-  };
 
-  const handleUserDetail = async (dataLogin) => {
-    await handleGet(
-      `member/get/${dataLogin.id}`,
-      (resUser, statusUser, msgUser) => {
-        if (dataLogin.pin === "-") {
-          Message.success("Anda Belum Mempunya Pin").then(() => {
-            setShowModalPin(true);
-            setIconLoading(false);
+  useEffect(() => {
+    if (form.getFieldValue("username") !== undefined) {
+      if (resLogin.pin === "-") {
+        Message.success("Anda Belum Mempunya Pin").then(() =>
+          setShowModalPin(true)
+        );
+      } else if (resLogin.status === 3) {
+        if (resLogin.kd_trx === "" || resLogin.kd_trx === "-") {
+          Router.push(StringLink.transactionRecycle).then(() => {
+            dispatch(setLoadingLogin(false));
           });
-        } else if (dataLogin.status === 3) {
-          if (dataLogin.kd_trx === "" || dataLogin.kd_trx === "-") {
-            Router.push(StringLink.transactionRecycle).then(() =>
-              setIconLoading(false)
-            );
-          } else {
-            localStorage.setItem("linkBack", "/signin");
-            localStorage.setItem("typeTrx", "Recycle");
-            localStorage.setItem("kdTrx", dataLogin.kd_trx);
-            Router.push(StringLink.invoiceRecycle).then(() =>
-              setIconLoading(false)
-            );
-          }
         } else {
-          Message.success(
-            "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-          ).then(() => Router.push("/").then(() => setIconLoading(false)));
+          localStorage.setItem("linkBack", "/signin");
+          localStorage.setItem("typeTrx", "Recycle");
+          localStorage.setItem("kdTrx", resLogin.kd_trx);
+          Router.push(StringLink.invoiceRecycle).then(() =>
+            dispatch(setLoadingLogin(false))
+          );
         }
-        Action.setToken(dataLogin.token);
-        Object.assign(dataLogin, resUser.data);
-        Action.setUser(dataLogin);
-        setDataUser(dataLogin);
+      } else {
+        Message.success(
+          "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+        ).then(() =>
+          Router.push("/").then(() => dispatch(setLoadingLogin(false)))
+        );
       }
-    );
-  };
+      setDataUser(resLogin);
+    }
+  }, [resLogin]);
 
   const handleSubmit = async (values) => {
-    setIconLoading(true);
-    await handlePost("auth/signin", values, async (res, status, msg) => {
-      if (status) {
-        Action.http.axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.token}`;
-
-        handleUserDetail(res.data);
-        handleLoadInfo();
-      } else {
-        setIconLoading(false);
-      }
-    });
+    dispatch(loginAction(values));
   };
 
   const handlePin = async (pin) => {
@@ -130,7 +108,7 @@ const Signin = () => {
           </Link>
           <h5 className="mb-0 mt-3">Sign in Member</h5>
         </div>
-        <Spin spinning={iconLoading}>
+        <Spin spinning={resLoading}>
           <Form layout="vertical" onFinish={handleSubmit} form={form}>
             <FormItem
               label="Username"
@@ -157,11 +135,6 @@ const Signin = () => {
                 placeholder="Password"
                 prefix={<LockOutlined style={{ fontSize: "16px" }} />}
               />
-              {/* <Input
-              prefix={<EyeTwoTone style={{ fontSize: "16px" }} />}
-              type="password"
-              placeholder="Password"
-            /> */}
             </FormItem>
 
             <Form.Item shouldUpdate={true}>
@@ -171,7 +144,7 @@ const Signin = () => {
                   htmlType="submit"
                   className="mt-3"
                   style={{ width: "100%" }}
-                  loading={iconLoading}
+                  loading={resLoading}
                   disabled={
                     !form.isFieldsTouched(true) ||
                     form.getFieldsError().filter(({ errors }) => errors.length)

@@ -7,12 +7,12 @@ function setUser(datum) {
 }
 
 function setToken(datum) {
-  Cookies.set("_prowara", btoa(datum), { expires: 7 });
+  Cookies.set("__kolabiz", btoa(datum), { expires: 7 });
 }
 export function doLogout() {
   Helper.removeCookie("__uidInfo");
   Helper.removeCookie("__uid");
-  Helper.removeCookie("_prowara");
+  Helper.removeCookie("__kolabiz");
   Helper.removeCookie("_regist");
   http.axios.defaults.headers.common["Authorization"] = "";
 }
@@ -35,7 +35,7 @@ function getInfo() {
 }
 
 function getToken() {
-  return Cookies.get("_prowara");
+  return Cookies.get("__kolabiz");
 }
 
 export default {

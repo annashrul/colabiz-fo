@@ -13,7 +13,6 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { doLogout } from "../action/auth.action";
-import Action from "../action/auth.action";
 const { Content } = Layout;
 
 const NonDashboardRoutes = [
@@ -34,7 +33,7 @@ const Page = ({ router, children }) => {
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
 
   useEffect(() => {
-    const coo = Cookies.get("_prowara");
+    const coo = Cookies.get("__kolabiz");
     setTimeout(() => {
       if (coo !== undefined) {
         setLoading(false);
@@ -56,7 +55,9 @@ const Page = ({ router, children }) => {
     <Spin tip="Tunggu Sebentar..." size="large" spinning={loading}>
       <ThemeProvider theme={theme}>
         <Container
-          className={`weakColor ${state.boxed ? "boxed shadow-sm" : ""}`}
+          className={`${state.weakColor ? "weakColor" : ""} ${
+            state.boxed ? "boxed shadow-sm" : ""
+          }`}
         >
           {!isNotDashboard && <Header />}
           <Layout className="workspace">

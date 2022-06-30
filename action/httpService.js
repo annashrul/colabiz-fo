@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const coo = Cookies.get("_prowara");
+const coo = Cookies.get("__kolabiz");
 if (coo !== undefined) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
 }
