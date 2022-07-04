@@ -35,7 +35,6 @@ export const handlePost = async (url, data, callback) => {
   } catch (err) {
     callback([], false, "gagal");
     let msg = err.message;
-    console.log(err);
     if (err.response.data !== undefined) {
       msg = err.response.data.meta.message;
     }

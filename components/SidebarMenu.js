@@ -66,7 +66,7 @@ const SidebarContent = ({
   useEffect(() => {
     let users = authAction.getUser();
     let infos = authAction.getInfo();
-    setInfo(infos);
+    // setInfo(infos);
     setUser(users);
     appRoutes.forEach((route, index) => {
       const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
@@ -87,16 +87,16 @@ const SidebarContent = ({
 
   const checkStatusMember = () => {
     if (info !== undefined) {
-      if (info.status_member === 3) {
-        Message.info("Anda Telah Mencapai Limit Bonus")
-          .then(() =>
-            Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
-          )
-          .then(() => {
-            Router.push("/signin");
-            doLogout();
-          });
-      }
+      // if (info.status_member === 3) {
+      //   Message.info("Anda Telah Mencapai Limit Bonus")
+      //     .then(() =>
+      //       Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
+      //     )
+      //     .then(() => {
+      //       Router.push("/signin");
+      //       doLogout();
+      //     });
+      // }
     }
   };
 

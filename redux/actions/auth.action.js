@@ -39,6 +39,18 @@ export const setLoadingPin = (load) => {
     load,
   };
 };
+export const setValidateUsername = (load) => {
+  return {
+    type: AUTH_USER.VALIDATE_USERNAME,
+    load,
+  };
+};
+export const setLoadingValidateUsername = (load) => {
+  return {
+    type: AUTH_USER.LOADING_VALIDATE_USERNAME,
+    load,
+  };
+};
 
 export const loginAction = (data) => {
   return (dispatch) => {
@@ -51,12 +63,24 @@ export const loginAction = (data) => {
         Action.setToken(res.data.token);
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
-        dispatch(infoAction());
+        // dispatch(infoAction());
         dispatch(userDetailAction(res.data.id));
       }
-
-      //   dispatch(setLoading(false));
     });
+  };
+};
+
+export const validateUsernameAction = (username) => {
+  return (dispatch) => {
+    dispatch(setLoadingValidateUsername(true));
+    handlePost(
+      "auth/validate/username",
+      { username: username },
+      (res, status, msg) => {
+        dispatch(setValidateUsername(status));
+        dispatch(setLoadingValidateUsername(false));
+      }
+    );
   };
 };
 

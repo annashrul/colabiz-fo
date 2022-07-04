@@ -27,14 +27,15 @@ const Overview = () => {
       setFont("80%");
     }
     const info = Action.getInfo();
-    if (info === undefined) {
-      Router.push("/signin");
-      doLogout();
-    } else {
-      const user = Action.getUser();
-      setObjUser(user);
-      setObjInfo(info);
-    }
+    console.log("###################", info);
+    // if (info === undefined) {
+    //   Router.push("/signin");
+    //   doLogout();
+    // } else {
+    //   const user = Action.getUser();
+    //   setObjUser(user);
+    //   setObjInfo(info);
+    // }
   }, [isData]);
 
   const cardMobile = (bg, saldo, title) => {

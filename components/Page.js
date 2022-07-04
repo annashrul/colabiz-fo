@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { doLogout } from "../action/auth.action";
+import { STRING_COOKIES } from "../redux/type";
 const { Content } = Layout;
 
 const NonDashboardRoutes = [
@@ -33,7 +34,8 @@ const Page = ({ router, children }) => {
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
 
   useEffect(() => {
-    const coo = Cookies.get("__kolabiz");
+    const coo = Cookies.get(STRING_COOKIES.token);
+    console.log("__KOLABIZ", coo);
     setTimeout(() => {
       if (coo !== undefined) {
         setLoading(false);

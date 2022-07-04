@@ -19,11 +19,16 @@ import Router from "next/router";
 import { StringLink } from "../../helper/string_link_helper";
 import general_helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { validateUsernameAction } from "../../redux/actions/auth.action";
+import { provinceAction } from "../../redux/actions/address.action";
+
 const { Panel } = Collapse;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
 const TambahMitra = () => {
+  const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
@@ -34,16 +39,17 @@ const TambahMitra = () => {
   const [iconLoading, setIconLoading] = useState(false);
   const [user, setUser] = useState({});
   const [info, setInfo] = useState({});
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [, forceUpdate] = useState();
   const [objBank, setObjBank] = useState({});
-  const [objPaket, setObjPaket] = useState({});
-  const [objPaymentChannel, setObjPaymentChannel] = useState({});
-  const [usernameError, setUsernameError] = useState({
-    enable: false,
-    helpText: "-",
-  });
-  const usernameErrorRef = useRef(usernameError);
+  const { validateUsername, loadingValidateUsername } = useSelector(
+    (state) => state.authUserReducer
+  );
+
+  const { dataProvince, loadingProvince } = useSelector(
+    (state) => state.addressReducer
+  );
+
   const usernameInput = useRef(null);
   const [fontSize, setFontSize] = useState("12px");
 
@@ -51,21 +57,19 @@ const TambahMitra = () => {
     if (state.mobile) {
       setFontSize("80%");
     }
-    usernameErrorRef.current = usernameError;
-    if (usernameError.enable) {
-      usernameInput.current.focus();
-      form.validateFields();
-    } else {
-      if (usernameError.helpText === "-") {
-        setInfo(Action.getInfo());
-        setUser(Action.getUser());
-        forceUpdate({});
-        handleProduct();
-        handleBank();
-        handlePaymentChannel();
-      }
+    setInfo(Action.getInfo());
+    setUser(Action.getUser());
+    forceUpdate({});
+  }, []);
+  useEffect(() => {
+    if (step === 1 && loadingValidateUsername) {
+      !validateUsername && usernameInput.current.focus();
     }
-  }, [form, usernameError]);
+    if (!loadingValidateUsername && validateUsername) {
+      setStep(2);
+    }
+    setIconLoading(loadingValidateUsername);
+  }, [loadingValidateUsername]);
 
   const handleProduct = async () => {
     await handleGet(
@@ -87,26 +91,7 @@ const TambahMitra = () => {
   };
 
   const handleStep = async (e) => {
-    setIconLoading(true);
-    await handlePost(
-      "auth/validate/username",
-      { username: e.username },
-      (res, status, msg) => {
-        setIconLoading(false);
-        if (!status) {
-          usernameInput.current.focus();
-          setUsernameError({
-            enable: true,
-            helpText: "username telah digunakan",
-          });
-        } else {
-          setStep(1);
-        }
-      }
-    );
-  };
-  const handleStep1 = (e) => {
-    setStep(2);
+    dispatch(validateUsernameAction(e.username));
   };
 
   const onFinish = async (e) => {
@@ -130,7 +115,6 @@ const TambahMitra = () => {
         localStorage.setItem("linkBack", StringLink.tambahMitra);
         localStorage.setItem("typeTrx", "Mitra Baru");
         localStorage.setItem("kdTrx", res.data.kd_trx);
-        // setIconLoading(false);
         Message.success(msg).then(() =>
           Router.push(StringLink.invoiceMitra).then(() => setIconLoading(false))
         );
@@ -169,11 +153,6 @@ const TambahMitra = () => {
     <>
       <Form
         form={form}
-        onChange={() => {
-          if (usernameError.enable) {
-            setUsernameError({ enable: false, helpText: "" });
-          }
-        }}
         layout="vertical"
         name="addressForm"
         onFinish={handleStep}
@@ -181,23 +160,28 @@ const TambahMitra = () => {
           sponsor: "NETINDO",
         }}
       >
-        {step === 0 && (
-          <Row type="flex" justify="center" gutter={10}>
-            <Col md={24} xs={24} sm={24} className={"mb-2"}>
-              <Card
-                title={!state.mobile && "Mitra Baru"}
-                extra={
-                  <Button size={"small"} type={"info"}>
-                    {user.referral}
-                  </Button>
-                }
-              >
-                <Row gutter={6}>
-                  <Col md={8} xs={24} sm={12}>
+        <Row
+          type="flex"
+          justify="center"
+          style={{ alignItems: "center" }}
+          gutter={10}
+        >
+          <Col md={8} xs={24}>
+            <Card
+              title={!state.mobile && "Mitra Baru"}
+              extra={
+                <Button size={"small"} type={"info"}>
+                  {user.referral}
+                </Button>
+              }
+            >
+              {step === 1 && (
+                <Row>
+                  <Col md={24} xs={24} sm={24}>
                     <Form.Item
                       hasFeedback
                       name={"fullname"}
-                      label="Name"
+                      label="Nama Lengkap"
                       rules={[{ required: true, message: msgInput }]}
                     >
                       <Input placeholder="Ex: Jhon Doe" />
@@ -205,7 +189,7 @@ const TambahMitra = () => {
                     <Form.Item
                       hasFeedback
                       name="mobile_no"
-                      label="No Handphone"
+                      label="No Telepon"
                       rules={[
                         { required: true, message: "Tidak Boleh Kosong" },
                         {
@@ -216,7 +200,7 @@ const TambahMitra = () => {
                         { max: 14, message: "no handphone tidak valid" },
                       ]}
                       tooltip={{
-                        title: "Minimal 10 Angka",
+                        title: "Pastikan no telepon anda aktif",
                         icon: <InfoCircleOutlined />,
                       }}
                     >
@@ -233,14 +217,6 @@ const TambahMitra = () => {
                           message:
                             "Tidak boleh memasukan selain huruf,angka dan tanpa spasi",
                         },
-                        {
-                          validator(_, value) {
-                            if (usernameError.enable) {
-                              return Promise.reject(usernameError.helpText);
-                            }
-                            return Promise.resolve();
-                          },
-                        },
                       ]}
                       tooltip={{
                         title:
@@ -250,417 +226,47 @@ const TambahMitra = () => {
                     >
                       <Input ref={usernameInput} placeholder="Ex: jhondoe" />
                     </Form.Item>
-                  </Col>
-                  <Col md={8} xs={24} sm={12}>
                     <Form.Item
                       hasFeedback
-                      name={"password"}
-                      label="Password"
+                      name={"email"}
+                      label="Email"
                       rules={[
                         { required: true, message: msgInput },
-                        { min: 6, message: "password minimal 6 karakter" },
-                      ]}
-                      tooltip={{
-                        title: "Minimal 6 Karakter",
-                        icon: <InfoCircleOutlined />,
-                      }}
-                    >
-                      <Input.Password />
-                    </Form.Item>
-                    <Form.Item
-                      name="confirm_password"
-                      label="Konfirmasi Password"
-                      dependencies={["password"]}
-                      hasFeedback
-                      rules={[
                         {
-                          required: true,
-                          message: msgInput,
+                          type: "email",
+                          message: "Email yang anda masukan tidak valid",
                         },
-                        {
-                          min: 6,
-                          message: "konfirmasi password minimal 6 karakter",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              new Error("Password Tidak Sama")
-                            );
-                          },
-                        }),
                       ]}
                     >
-                      <Input.Password />
-                    </Form.Item>
-                    <Form.Item
-                      hasFeedback
-                      name={"acc_name"}
-                      label="Atas Nama"
-                      rules={[{ required: true, message: msgInput }]}
-                    >
-                      <Input placeholder="Ex: Jhon Doe" />
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} xs={24} sm={12}>
-                    <Form.Item
-                      hasFeedback
-                      name="acc_no"
-                      label="No Rekening"
-                      rules={[
-                        { required: true, message: "Tidak Boleh Kosong" },
-                        {
-                          pattern: new RegExp(/^[0-9]*$/),
-                          message: "Harus Berupa Angka",
-                        },
-                        { min: 10, message: "no rekening tidak valid" },
-                      ]}
-                      tooltip={{
-                        title: "Minimal 10 Angka",
-                        icon: <InfoCircleOutlined />,
-                      }}
-                    >
-                      <Input placeholder="XXXXXXXX" />
-                    </Form.Item>
-                    <Form.Item
-                      hasFeedback
-                      name="id_bank"
-                      label="Bank"
-                      rules={[{ required: true, message: msgInput }]}
-                    >
-                      <Select
-                        style={{ width: "100%" }}
-                        showSearch
-                        placeholder="Pilih Bank"
-                        optionFilterProp="children"
-                        onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
-                        onSearch={() => {}}
-                        onSelect={(e, i) =>
-                          setObjBank(arrBank[parseInt(i.key, 10)])
-                        }
-                      >
-                        {arrBank.map((val, key) => {
-                          return (
-                            <Option key={key} value={val.id}>
-                              {val.name}
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-
-                    <Form.Item shouldUpdate={true} label={`   `}>
-                      {() => (
-                        <Button
-                          loading={iconLoading}
-                          style={{ width: "100%" }}
-                          type="primary"
-                          htmlType="submit"
-                          className=""
-                        >
-                          Lanjut
-                        </Button>
-                      )}
+                      <Input placeholder="Ex: jhondoe@gmail.com" />
                     </Form.Item>
                   </Col>
                 </Row>
-              </Card>
-            </Col>
-          </Row>
-        )}
-      </Form>
+              )}
 
-      {step === 1 && (
-        <Form
-          form={form1}
-          layout="vertical"
-          name="formSte2"
-          onFinish={handleStep1}
-        >
-          <Row
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{ alignItems: "center" }}
-            gutter={10}
-          >
-            <Col
-              md={8}
-              xs={24}
-              className={"mb-2"}
-              style={{
-                verticalAlign: "middle",
-              }}
-            >
-              <Card
-                title={!state.mobile && "Mitra Baru"}
-                extra={
-                  <Button size={"small"} type={"info"}>
-                    {user.referral}
-                  </Button>
-                }
-              >
-                <Form.Item
-                  hasFeedback
-                  name="payment_channel"
-                  label="Payment Channel"
-                  rules={[{ required: true, message: msgInput }]}
-                >
-                  <Select
-                    style={{ width: "100%" }}
-                    showSearch
-                    placeholder="Pilih Payment Channel"
-                    optionFilterProp="children"
-                    onChange={(e) =>
-                      form1.setFieldsValue({ payment_channel: e })
-                    }
-                    onSearch={() => {}}
-                    onSelect={(e, i) =>
-                      setObjPaymentChannel(
-                        arrPaymentChannel[parseInt(i.key, 10)]
-                      )
-                    }
-                  >
-                    {arrPaymentChannel.map((val, key) => {
-                      return (
-                        <Option key={key} value={val.code}>
-                          {val.name}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  hasFeedback
-                  name="id_paket"
-                  label="Paket"
-                  rules={[{ required: true, message: msgInput }]}
-                >
-                  <Select
-                    style={{ width: "100%" }}
-                    showSearch
-                    placeholder="Pilih Paket"
-                    optionFilterProp="children"
-                    onChange={(e) => form1.setFieldsValue({ id_paket: e })}
-                    onSearch={() => {}}
-                    onSelect={(e, i) =>
-                      setObjPaket(arrProduct[parseInt(i.key, 10)])
-                    }
-                  >
-                    {arrProduct.map((val, key) => {
-                      return (
-                        <Option key={key} value={val.id}>
-                          {val.title} - {general_helper.toRp(val.price)}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-                <Row gutter={6}>
-                  <Col xs={12} md={12} sm={12}>
-                    <Button
-                      style={{ width: "100%" }}
-                      type="dashed"
-                      primary
-                      htmlType="button"
-                      className="mt-3"
-                      onClick={() => setStep(0)}
-                    >
-                      Kembali
-                    </Button>
-                  </Col>
-                  <Col xs={12} md={12} sm={12}>
-                    <Button
-                      style={{ width: "100%" }}
-                      type="primary"
-                      htmlType="submit"
-                      className="mt-3"
-                    >
-                      Lanjut
-                    </Button>
-                  </Col>
+              {step === 2 && (
+                <Row>
+                  <Col md={24} xs={24} sm={24}></Col>
                 </Row>
-              </Card>
-            </Col>
-          </Row>
-        </Form>
-      )}
+              )}
 
-      {step === 2 && (
-        <Form
-          form={form2}
-          layout="vertical"
-          name="formSte3"
-          onFinish={onFinish}
-        >
-          <Row type="flex" justify="center" gutter={10}>
-            <Col md={8} xs={24} className={"mb-2"}>
-              <Spin
-                tip="Tunggu Sebentar..."
-                size="large"
-                spinning={iconLoading}
-              >
-                <Card
-                  title={!state.mobile && "Mitra Baru"}
-                  extra={
-                    <Button size={"small"} type={"info"}>
-                      {user.referral}
-                    </Button>
-                  }
-                >
-                  <small style={{ fontSize: fontSize }}>
-                    Total Yang Harus Di Bayar
-                  </small>
-                  <Row>
-                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
-                  </Row>
+              <Form.Item shouldUpdate={true} label={`   `}>
+                {() => (
                   <Button
-                    style={{ width: "100%", marginBottom: "2px" }}
-                    type="dashed"
-                    danger
-                    size={"large"}
+                    loading={iconLoading}
+                    style={{ width: "100%" }}
+                    type="primary"
+                    htmlType="submit"
+                    className=""
                   >
-                    {general_helper.toRp(
-                      parseInt(objPaket.price, 10) +
-                        parseInt(info.fee_aktivasi, 10) +
-                        parseInt(objPaymentChannel.fee_customer.flat, 10)
-                    )}
+                    Lanjut
                   </Button>
-                  <Row>
-                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
-                  </Row>
-
-                  {tempRow("Nama", form.getFieldValue("fullname"), false)}
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-                  {tempRow(
-                    "No Handphone",
-                    general_helper.checkNo(form.getFieldValue("mobile_no")),
-                    false
-                  )}
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-
-                  {tempRow("Username", form.getFieldValue("username"), false)}
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-
-                  {tempRow("Bank", objBank.name, false)}
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-
-                  {tempRow("Atas Nama", form.getFieldValue("acc_name"), false)}
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-
-                  {tempRow("No Rekening", form.getFieldValue("acc_no"), false)}
-
-                  <Row>
-                    <Col md={24} sm={24} xs={24}>
-                      <hr />
-                    </Col>
-                  </Row>
-                  <Collapse bordered={false}>
-                    <Panel
-                      header={
-                        <small style={{ fontSize: fontSize }}>
-                          Informasi Paket
-                        </small>
-                      }
-                      key={"0"}
-                    >
-                      {tempRow("Nama", objPaket.title, false)}
-                      {tempRow("Pin Registrasi", info.fee_aktivasi)}
-                      {tempRow("Harga", objPaket.price)}
-                    </Panel>
-                  </Collapse>
-                  <Collapse bordered={false}>
-                    <Panel
-                      header={
-                        <small style={{ fontSize: fontSize }}>
-                          Metode Pembayaran
-                        </small>
-                      }
-                      key={"0"}
-                    >
-                      {tempRow(
-                        objPaymentChannel.code,
-                        objPaymentChannel.name,
-                        false
-                      )}
-                      {tempRow("Admin", objPaymentChannel.fee_customer.flat)}
-                    </Panel>
-                  </Collapse>
-                  <Row>
-                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
-                  </Row>
-
-                  {tempRow(
-                    "Total",
-                    general_helper.toRp(
-                      parseInt(objPaket.price, 10) +
-                        parseInt(info.fee_aktivasi, 10) +
-                        parseInt(objPaymentChannel.fee_customer.flat, 10)
-                    )
-                  )}
-
-                  <Row gutter={6}>
-                    <Col xs={12} sm={12} md={12}>
-                      <Button
-                        style={{ width: "100%" }}
-                        type="dashed"
-                        primary
-                        htmlType="button"
-                        className="mt-3"
-                        onClick={() => setStep(1)}
-                      >
-                        Kembali
-                      </Button>
-                    </Col>
-                    <Col xs={12} sm={12} md={12}>
-                      <Popconfirm
-                        title="harap periksa data anda kembali"
-                        onConfirm={(e) => onFinish(e)}
-                        onCancel={() => {}}
-                        okText="Lanjut"
-                        cancelText="Batal"
-                        okType="submit"
-                      >
-                        <Button
-                          style={{ width: "100%" }}
-                          type="primary"
-                          htmlType="button"
-                          className="mt-3"
-                          // loading={iconLoading}
-                        >
-                          Lanjut
-                        </Button>
-                      </Popconfirm>
-                    </Col>
-                  </Row>
-                </Card>
-              </Spin>
-            </Col>
-          </Row>
-        </Form>
-      )}
+                )}
+              </Form.Item>
+            </Card>
+          </Col>
+        </Row>
+      </Form>
     </>
   );
 };

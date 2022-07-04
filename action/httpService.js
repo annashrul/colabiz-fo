@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { STRING_COOKIES } from "../redux/type";
 
-const coo = Cookies.get("__kolabiz");
+const coo = Cookies.get(STRING_COOKIES.token);
 if (coo !== undefined) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
 }
@@ -12,10 +13,7 @@ export default {
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
-  // apiUrl: "http://192.168.100.10:6704/",
-  // apiClient: "http://192.168.100.10:6704/",
   noData: "https://www.napro.id/assets/images/placeholder-no-data.png",
-  // apiUrl: "http://192.168.111.2:6704/",
-  apiUrl: "https://api.prowara.id/",
-  apiClient: "https://api.prowara.id/",
+  apiUrl: "https://api.kolabiz.id/",
+  apiClient: "https://api.kolabiz.id/",
 };
