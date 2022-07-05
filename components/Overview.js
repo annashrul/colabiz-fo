@@ -26,17 +26,14 @@ const Overview = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    const info = Action.getInfo();
-    console.log("###################", info);
-    // if (info === undefined) {
-    //   Router.push("/signin");
-    //   doLogout();
-    // } else {
-    //   const user = Action.getUser();
-    //   setObjUser(user);
-    //   setObjInfo(info);
-    // }
-  }, [isData]);
+    const user = Action.getUser();
+    if (user === undefined) {
+      Router.push("/signin");
+      doLogout();
+    } else {
+      setObjUser(user);
+    }
+  }, [isData, state]);
 
   const cardMobile = (bg, saldo, title) => {
     return (
@@ -60,7 +57,12 @@ const Overview = () => {
             type="dashed"
             danger
             icon={<CopyOutlined />}
-            style={{ whiteSpace: "normal", height: "auto", width: "100%" }}
+            style={{
+              whiteSpace: "normal",
+              fontSize: font,
+              height: "auto",
+              width: "100%",
+            }}
             block={true}
             onClick={async (e) => Helper.copyText(objUser.referral_url)}
           >
@@ -69,12 +71,12 @@ const Overview = () => {
         </Col>
         <Col xs={12} sm={12} md={6} className="mb-2">
           {state.mobile ? (
-            cardMobile(theme.primaryColor, objInfo.saldo, "Saldo Bonus")
+            cardMobile(theme.primaryColor, 0, "Saldo Bonus")
           ) : (
             <StatCard
               type="fill"
               title="Saldo Bonus"
-              value={Helper.toRp(parseFloat(objInfo.saldo).toFixed(0))}
+              value={Helper.toRp(0)}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.primaryColor}
             />
@@ -82,16 +84,12 @@ const Overview = () => {
         </Col>
         <Col xs={12} sm={12} md={6} className="mb-2">
           {state.mobile ? (
-            cardMobile(
-              theme.darkColor,
-              objInfo.saldo_pending,
-              "Saldo Bonus Nasional"
-            )
+            cardMobile(theme.darkColor, 0, "Saldo Bonus Nasional")
           ) : (
             <StatCard
               type="fill"
               title="Saldo Bonus Nasional"
-              value={Helper.toRp(parseFloat(objInfo.saldo_pending).toFixed(0))}
+              value={Helper.toRp(parseFloat(0).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.darkColor}
             />
@@ -99,12 +97,12 @@ const Overview = () => {
         </Col>
         <Col xs={12} sm={12} md={6} className="mb-2">
           {state.mobile ? (
-            cardMobile(theme.warningColor, objInfo.total_wd, "Total Penarikan")
+            cardMobile(theme.warningColor, 0, "Total Penarikan")
           ) : (
             <StatCard
               type="fill"
               title="Total Penarikan"
-              value={Helper.toRp(parseFloat(objInfo.total_wd).toFixed(0))}
+              value={Helper.toRp(parseFloat(0).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.warningColor}
             />
@@ -112,16 +110,12 @@ const Overview = () => {
         </Col>
         <Col xs={12} sm={12} md={6} className="mb-2">
           {state.mobile ? (
-            cardMobile(
-              theme.errorColor,
-              objInfo.omset_nasional,
-              "Total Omset Nasional"
-            )
+            cardMobile(theme.errorColor, 0, "Total Omset Nasional")
           ) : (
             <StatCard
               type="fill"
               title="Total Omset Nasional"
-              value={Helper.toRp(parseFloat(objInfo.omset_nasional).toFixed(0))}
+              value={Helper.toRp(parseFloat(0).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.errorColor}
             />

@@ -76,10 +76,15 @@ const reducer = (state, action) => {
       return newState;
     }
     case "weak": {
+      console.log(state);
       // const weak = state.weakColor;
       // let darkSidebar = state.darkSidebar;
       // if (!weak && darkSidebar) darkSidebar = false;
-      const newState = { ...state, weakColor: !state.weakColor };
+      const newState = {
+        ...state,
+        weakColor: !state.weakColor,
+      };
+
       saveToLocal(newState);
       return newState;
     }

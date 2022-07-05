@@ -14,6 +14,7 @@
     "react-code-input": "^3.10.1",
     "react-dom": "17.0.1",
     "react-pin-input": "^1.1.0",
+    "react-places-autocomplete": "^7.3.0",
     "reactour": "^1.18.7",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",

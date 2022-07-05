@@ -75,6 +75,11 @@ class MyApp extends App {
           {pageProps.ieBrowser && (
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
           )}
+          <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqD1Z03FoLnIGJTbpAgRvjcchrR-NiICk&libraries=places"
+            async
+            defer
+          />
         </Head>
         <Provider store={store}>
           <AppProvider>

@@ -2,6 +2,7 @@ export const StringLink = {
   dashboard: "/",
   news: "/news",
   tambahMitra: "/mitra",
+  stockis: "/stockis",
   invoiceMitra: "/mitra/invoice",
   address: "/address",
   profile: "/profile",

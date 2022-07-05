@@ -6,6 +6,14 @@ import { STRING_COOKIES } from "../redux/type";
 function setUser(datum) {
   Cookies.set(STRING_COOKIES.user, btoa(JSON.stringify(datum)), { expires: 7 });
 }
+function setBank(datum) {
+  Cookies.set(STRING_COOKIES.bank, btoa(JSON.stringify(datum)), { expires: 7 });
+}
+function setAddress(datum) {
+  Cookies.set(STRING_COOKIES.address, btoa(JSON.stringify(datum)), {
+    expires: 7,
+  });
+}
 
 function setToken(datum) {
   Cookies.set(STRING_COOKIES.token, btoa(datum), { expires: 7 });
@@ -20,7 +28,14 @@ function getUser() {
   const coo = Cookies.get(STRING_COOKIES.user);
   return JSON.parse(atob(coo));
 }
-
+function getBank() {
+  const coo = Cookies.get(STRING_COOKIES.bank);
+  return JSON.parse(atob(coo));
+}
+function getAddress() {
+  const coo = Cookies.get(STRING_COOKIES.address);
+  return JSON.parse(atob(coo));
+}
 function setInfo(datum) {
   Cookies.set(STRING_COOKIES.info, btoa(JSON.stringify(datum)));
 }
@@ -40,6 +55,10 @@ function getToken() {
 
 export default {
   http,
+  setBank,
+  setAddress,
+  getBank,
+  getAddress,
   doLogout,
   setUser,
   getUser,

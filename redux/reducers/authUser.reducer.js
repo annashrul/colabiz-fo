@@ -6,8 +6,10 @@ const initialState = {
   dataInfo: [],
   dataUserDetail: [],
   dataPin: [],
-  validateUsername: true,
+  validateUsername: false,
   loadingValidateUsername: false,
+  dataSignUp: [],
+  loadingSignUp: false,
 };
 
 export const authUserReducer = (state = initialState, action) => {
@@ -32,6 +34,11 @@ export const authUserReducer = (state = initialState, action) => {
         ...state,
         dataPin: action.data,
       };
+    case AUTH_USER.DATA_SIGNUP:
+      return {
+        ...state,
+        dataSignUp: action.data,
+      };
     case AUTH_USER.LOADING:
       return Object.assign({}, state, {
         loadingLogin: action.load,
@@ -47,6 +54,10 @@ export const authUserReducer = (state = initialState, action) => {
     case AUTH_USER.LOADING_VALIDATE_USERNAME:
       return Object.assign({}, state, {
         loadingValidateUsername: action.load,
+      });
+    case AUTH_USER.LOADING_SIGNUP:
+      return Object.assign({}, state, {
+        loadingSignUp: action.load,
       });
 
     default:

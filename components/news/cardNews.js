@@ -43,11 +43,13 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
     }
   };
   useEffect(() => {
+    handleLoadNews(perpage);
+  }, [perpage]);
+  useEffect(() => {
     if (state.mobile) {
       setFont("80%");
     }
-    handleLoadNews(perpage);
-  }, [state, perpage]);
+  }, [state]);
 
   const handleLoadNews = async (pages, where = "") => {
     await handleGet(

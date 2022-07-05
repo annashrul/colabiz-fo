@@ -111,7 +111,7 @@ const ListAddress = () => {
       }
     );
   };
-  const onChange = (value, col = "", idx = 0) => {
+  const onChange = (value, col = "") => {
     setBtnDisabled();
     if (col === "prov") {
       form.setFieldsValue({ kd_kota: undefined });

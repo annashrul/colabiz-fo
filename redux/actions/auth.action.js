@@ -1,6 +1,8 @@
 import { AUTH_USER } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
+import { Message } from "antd";
+import Router from "next/router";
 
 export const setDataLogin = (data) => {
   return {
@@ -23,6 +25,12 @@ export const setDataInfo = (data) => {
 export const setDataPin = (data) => {
   return {
     type: AUTH_USER.DATA_PIN,
+    data,
+  };
+};
+export const setDataSignUp = (data) => {
+  return {
+    type: AUTH_USER.DATA_SIGNUP,
     data,
   };
 };
@@ -51,6 +59,12 @@ export const setLoadingValidateUsername = (load) => {
     load,
   };
 };
+export const setLoadingSignUp = (load) => {
+  return {
+    type: AUTH_USER.LOADING_SIGNUP,
+    load,
+  };
+};
 
 export const loginAction = (data) => {
   return (dispatch) => {
@@ -63,8 +77,24 @@ export const loginAction = (data) => {
         Action.setToken(res.data.token);
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
-        // dispatch(infoAction());
-        dispatch(userDetailAction(res.data.id));
+        setTimeout(() => {
+          dispatch(userDetailAction(res.data.id));
+        }, 300);
+      }
+      dispatch(setLoadingLogin(true));
+    });
+  };
+};
+export const signUpAction = (e) => {
+  return (dispatch) => {
+    dispatch(setLoadingSignUp(true));
+    handlePost("auth/signup", e, (res, status, msg) => {
+      if (status) {
+        Message.success(res.meta.message).then(() =>
+          Router.push("/").then(() => dispatch(setLoadingSignUp(false)))
+        );
+      } else {
+        dispatch(setLoadingSignUp(false));
       }
     });
   };
@@ -95,9 +125,12 @@ export const infoAction = () => {
 export const userDetailAction = (id) => {
   return (dispatch) => {
     handleGet(`member/get/${id}`, (res, status) => {
+      console.log(res);
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
       Action.setUser(actUser);
+      Action.setBank(res.data.bank);
+      Action.setAddress(res.data.address);
       dispatch(setDataUserDetail(res.data));
     });
   };

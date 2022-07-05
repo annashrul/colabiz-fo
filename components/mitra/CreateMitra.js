@@ -20,8 +20,18 @@ import { StringLink } from "../../helper/string_link_helper";
 import general_helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
 import { useDispatch, useSelector } from "react-redux";
-import { validateUsernameAction } from "../../redux/actions/auth.action";
-import { provinceAction } from "../../redux/actions/address.action";
+import {
+  setLoadingValidateUsername,
+  setValidateUsername,
+  signUpAction,
+  validateUsernameAction,
+} from "../../redux/actions/auth.action";
+import {
+  cityAction,
+  districtsAction,
+  provinceAction,
+} from "../../redux/actions/address.action";
+import { bankGeneralAction } from "../../redux/actions/banks.action";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -31,122 +41,140 @@ const TambahMitra = () => {
   const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
-  const [form1] = Form.useForm();
-  const [form2] = Form.useForm();
-  const [arrPaymentChannel, setArrPaymentChannel] = useState([]);
-  const [arrProduct, setArrProduct] = useState([]);
-  const [arrBank, setArrBank] = useState([]);
   const [iconLoading, setIconLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [dataForm, setDataForm] = useState({});
   const [info, setInfo] = useState({});
   const [step, setStep] = useState(1);
   const [, forceUpdate] = useState();
-  const [objBank, setObjBank] = useState({});
-  const { validateUsername, loadingValidateUsername } = useSelector(
-    (state) => state.authUserReducer
-  );
-
-  const { dataProvince, loadingProvince } = useSelector(
-    (state) => state.addressReducer
-  );
-
   const usernameInput = useRef(null);
-  const [fontSize, setFontSize] = useState("12px");
+  const { validateUsername, loadingValidateUsername, loadingSignUp } =
+    useSelector((state) => state.authUserReducer);
+
+  const {
+    dataProvince,
+    loadingProvince,
+    dataCity,
+    loadingCity,
+    dataDistricts,
+    loadingDistricts,
+  } = useSelector((state) => state.addressReducer);
+  const { dataBankGeneral, loadingBankGeneral } = useSelector(
+    (state) => state.banksReducer
+  );
 
   useEffect(() => {
-    if (state.mobile) {
-      setFontSize("80%");
-    }
     setInfo(Action.getInfo());
     setUser(Action.getUser());
     forceUpdate({});
+    setValidateUsername(false);
+    setLoadingValidateUsername(false);
+    setStep(1);
   }, []);
   useEffect(() => {
-    if (step === 1 && loadingValidateUsername) {
-      !validateUsername && usernameInput.current.focus();
+    setIconLoading(loadingSignUp);
+  }, [loadingSignUp]);
+
+  useEffect(() => {
+    console.log("fullname", form.getFieldValue("fullname"));
+    if (form.getFieldValue("fullname") !== undefined) {
+      if (step === 1 && loadingValidateUsername) {
+        !validateUsername && usernameInput.current.focus();
+      }
+      if (step === 1 && validateUsername && !loadingValidateUsername) {
+        dispatch(provinceAction());
+        setTimeout(() => setStep(2), 300);
+      }
+      setIconLoading(loadingValidateUsername);
     }
-    if (!loadingValidateUsername && validateUsername) {
-      setStep(2);
-    }
-    setIconLoading(loadingValidateUsername);
   }, [loadingValidateUsername]);
 
-  const handleProduct = async () => {
-    await handleGet(
-      "paket?page=1&perpage=10&category=5d96d9f0-49bd-49e2-895f-f8171ba3a9ea",
-      (datum, isLoading) => {
-        setArrProduct(datum.data);
-      }
-    );
+  const handleChangeAddress = (value, col = "") => {
+    if (col === "prov") {
+      form.setFieldsValue({ kd_kota: undefined });
+      form.setFieldsValue({ kd_kec: undefined });
+      dispatch(cityAction(value));
+    } else if (col === "kota") {
+      form.setFieldsValue({ kd_kec: undefined });
+      dispatch(districtsAction(value));
+    }
   };
-  const handlePaymentChannel = async () => {
-    await handleGet("transaction/channel", (datum, isLoading) => {
-      setArrPaymentChannel(datum.data);
-    });
-  };
-  const handleBank = async () => {
-    await handleGet("transaction/data_bank", (datum, isLoading) => {
-      setArrBank(datum.data);
-    });
+  const handleBackStep = (val) => {
+    setStep(val);
+    dispatch(setValidateUsername(false));
   };
 
   const handleStep = async (e) => {
-    dispatch(validateUsernameAction(e.username));
+    if (step === 1) {
+      dispatch(validateUsernameAction(e.username));
+      Object.assign(dataForm, e);
+      setDataForm(dataForm);
+      form.setFieldsValue({ acc_name: e.fullname });
+    } else if (step === 2) {
+      Object.assign(dataForm, e);
+      setDataForm(dataForm);
+      dispatch(bankGeneralAction());
+      if (form.getFieldValue("kd_kec") !== undefined) {
+        setStep(3);
+      }
+    } else {
+      Object.assign(dataForm, e);
+      setDataForm(dataForm);
+      onFinish();
+    }
   };
 
-  const onFinish = async (e) => {
+  const onFinish = async () => {
     const data = {
-      fullname: form.getFieldValue("fullname"),
-      mobile_no: general_helper.checkNo(form.getFieldValue("mobile_no")),
-      username: form.getFieldValue("username"),
-      password: form.getFieldValue("password"),
+      fullname: dataForm.fullname,
+      mobile_no: dataForm.mobile_no,
+      username: dataForm.username,
+      email: dataForm.email,
       sponsor: user.referral,
-      payment_channel: form1.getFieldValue("payment_channel"),
-      id_paket: form1.getFieldValue("id_paket"),
       data_bank: {
-        id_bank: objBank.id,
-        acc_name: form.getFieldValue("acc_name"),
-        acc_no: form.getFieldValue("acc_no"),
+        id_bank: dataForm.id_bank,
+        acc_name: dataForm.acc_name,
+        acc_no: dataForm.acc_no,
+      },
+      address: {
+        main_address: dataForm.main_address,
+        kd_prov: dataForm.kd_prov,
+        kd_kota: dataForm.kd_kota,
+        kd_kec: dataForm.kd_kec,
       },
     };
-    setIconLoading(true);
-    await handlePost("auth/signup", data, (res, status, msg) => {
-      if (status) {
-        localStorage.setItem("linkBack", StringLink.tambahMitra);
-        localStorage.setItem("typeTrx", "Mitra Baru");
-        localStorage.setItem("kdTrx", res.data.kd_trx);
-        Message.success(msg).then(() =>
-          Router.push(StringLink.invoiceMitra).then(() => setIconLoading(false))
-        );
-        // onReset();
-      } else {
-        setIconLoading(false);
-        // Message.info(msg).then(() => setIconLoading(false));
-      }
-    });
-  };
+    dispatch(signUpAction(data));
 
-  const onReset = () => {
-    form.resetFields();
-  };
-
-  const tempRow = (title, desc, isRp = true) => {
-    return (
-      <Row>
-        <Col xs={10} md={10} style={{ alignItems: "left", textAlign: "left" }}>
-          <small style={{ fontSize: fontSize }}>{title}</small>
-        </Col>
-        <Col
-          xs={14}
-          md={14}
-          style={{ alignItems: "right", textAlign: "right" }}
-        >
-          <small style={{ fontSize: fontSize }}>
-            {isRp ? general_helper.toRp(desc) : desc}
-          </small>
-        </Col>
-      </Row>
-    );
+    // console.log(data);
+    // const data = {
+    //   fullname: form.getFieldValue("fullname"),
+    //   mobile_no: general_helper.checkNo(form.getFieldValue("mobile_no")),
+    //   username: form.getFieldValue("username"),
+    //   password: form.getFieldValue("password"),
+    //   sponsor: user.referral,
+    //   payment_channel: form1.getFieldValue("payment_channel"),
+    //   id_paket: form1.getFieldValue("id_paket"),
+    //   data_bank: {
+    //     id_bank: objBank.id,
+    //     acc_name: form.getFieldValue("acc_name"),
+    //     acc_no: form.getFieldValue("acc_no"),
+    //   },
+    // };
+    // setIconLoading(true);
+    // await handlePost("auth/signup", data, (res, status, msg) => {
+    //   if (status) {
+    //     localStorage.setItem("linkBack", StringLink.tambahMitra);
+    //     localStorage.setItem("typeTrx", "Mitra Baru");
+    //     localStorage.setItem("kdTrx", res.data.kd_trx);
+    //     Message.success(msg).then(() =>
+    //       Router.push(StringLink.invoiceMitra).then(() => setIconLoading(false))
+    //     );
+    //     // onReset();
+    //   } else {
+    //     setIconLoading(false);
+    //     // Message.info(msg).then(() => setIconLoading(false));
+    //   }
+    // });
   };
 
   return (
@@ -178,11 +206,18 @@ const TambahMitra = () => {
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
+                    <h5>Lengakapi Form Data Diri Anda</h5>
+                    <br />
                     <Form.Item
                       hasFeedback
                       name={"fullname"}
                       label="Nama Lengkap"
                       rules={[{ required: true, message: msgInput }]}
+                      tooltip={{
+                        title:
+                          "Nama ini akan di gunakan juga sebagai nama akun bank anda",
+                        icon: <InfoCircleOutlined />,
+                      }}
                     >
                       <Input placeholder="Ex: Jhon Doe" />
                     </Form.Item>
@@ -246,23 +281,243 @@ const TambahMitra = () => {
 
               {step === 2 && (
                 <Row>
-                  <Col md={24} xs={24} sm={24}></Col>
+                  <Col md={24} xs={24} sm={24}>
+                    <h5>Lengakapi Form Alamat Anda</h5>
+                    <Form.Item
+                      hasFeedback
+                      name="kd_prov"
+                      label="Provinsi"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Select
+                        loading={loadingProvince}
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Provinsi"
+                        optionFilterProp="children"
+                        onChange={(e) => handleChangeAddress(e, "prov", 0)}
+                        onSearch={(e) => {}}
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                      >
+                        {dataProvince.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.name}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="kd_kota"
+                      label="Kota"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Select
+                        loading={loadingCity}
+                        disabled={dataCity.length < 1}
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Kota"
+                        optionFilterProp="children"
+                        onChange={(e) => handleChangeAddress(e, "kota", 0)}
+                        onSearch={(e) => {}}
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                      >
+                        {dataCity.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.name}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="kd_kec"
+                      label="Kecamatan"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Select
+                        loading={loadingDistricts}
+                        disabled={dataDistricts.length < 1}
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Kecamatan"
+                        optionFilterProp="children"
+                        onChange={(e) => handleChangeAddress(e, "kecamatan", 0)}
+                        onSearch={(e) => {}}
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                      >
+                        {dataDistricts.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.kecamatan}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name={"main_address"}
+                      label="Alamat Lengkap"
+                      rules={[
+                        { required: true, message: msgInput },
+                        { min: 20, message: "minimal 20 karakter" },
+                      ]}
+                      tooltip={{
+                        title:
+                          "Masukan alamat anda dari nama jalan,rt,rw,blok rumah, no rumah",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input.TextArea placeholder="Ex: Jln Kebon Manggu Rt 02/04 No.112" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              )}
+              {step === 3 && (
+                <Row>
+                  <Col md={24} xs={24} sm={24}>
+                    <h5>Lengakapi Form Akun Bank Anda</h5>
+                    <Form.Item
+                      hasFeedback
+                      name={"acc_name"}
+                      label="Atas Nama"
+                      rules={[{ required: true, message: msgInput }]}
+                      tooltip={{
+                        title:
+                          "Atas nama ini diambil dari form isian nama yang anda masukan sebelumnya",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input disabled={true} placeholder="Ex: Jhon Doe" />
+                    </Form.Item>
+
+                    <Form.Item
+                      hasFeedback
+                      name="acc_no"
+                      label="No Rekening"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        {
+                          pattern: new RegExp(/^[0-9]*$/),
+                          message: "Harus Berupa Angka",
+                        },
+                        { min: 10, message: "no rekening tidak valid" },
+                      ]}
+                      tooltip={{
+                        title: "Minimal 10 Angka",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input placeholder="XXXXXXXX" />
+                    </Form.Item>
+
+                    <Form.Item
+                      hasFeedback
+                      name="id_bank"
+                      label="Bank"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Bank"
+                        optionFilterProp="children"
+                        onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
+                        onSearch={() => {}}
+                      >
+                        {dataBankGeneral.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.name}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col>
                 </Row>
               )}
 
-              <Form.Item shouldUpdate={true} label={`   `}>
-                {() => (
-                  <Button
-                    loading={iconLoading}
-                    style={{ width: "100%" }}
-                    type="primary"
-                    htmlType="submit"
-                    className=""
-                  >
-                    Lanjut
-                  </Button>
+              <Row gutter={8}>
+                {step !== 1 && (
+                  <Col md={12} xs={12} sm={12}>
+                    <Form.Item shouldUpdate={true}>
+                      {() => (
+                        <Button
+                          style={{ width: "100%" }}
+                          type="dashed"
+                          htmlType="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+
+                            handleBackStep(step - 1);
+                          }}
+                        >
+                          Kembali
+                        </Button>
+                      )}
+                    </Form.Item>
+                  </Col>
                 )}
-              </Form.Item>
+
+                <Col
+                  md={step === 1 ? 24 : 12}
+                  xs={step === 1 ? 24 : 12}
+                  sm={step === 1 ? 24 : 12}
+                >
+                  <Form.Item shouldUpdate={true}>
+                    {() =>
+                      step === 3 ? (
+                        <Popconfirm
+                          placement="top"
+                          title="Anda yakin akan melanjutkan proses ini ?"
+                          onConfirm={handleStep}
+                          okText="Simpan"
+                          cancelText="Batal"
+                        >
+                          <Button
+                            loading={iconLoading}
+                            style={{ width: "100%" }}
+                            type="primary"
+                            htmlType="submit"
+                            className=""
+                          >
+                            Lanjut
+                          </Button>
+                        </Popconfirm>
+                      ) : (
+                        <Button
+                          loading={iconLoading}
+                          style={{ width: "100%" }}
+                          type="primary"
+                          htmlType="submit"
+                          className=""
+                        >
+                          Lanjut
+                        </Button>
+                      )
+                    }
+                  </Form.Item>
+                </Col>
+              </Row>
             </Card>
           </Col>
         </Row>

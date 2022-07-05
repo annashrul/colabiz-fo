@@ -43,29 +43,31 @@ export const setLoadingDistricts = (load) => {
 
 export const provinceAction = () => {
   return (dispatch) => {
-    setLoadingProvince(true);
-    handleGet("transaction/kurir/get/provinsi", (res, status) => {
+    dispatch(setLoadingProvince(true));
+    handleGet("kurir/get/provinsi", (res, status) => {
       console.log("province", res.data);
       dispatch(setDataProvince(res.data));
-      setLoadingProvince(false);
+      dispatch(setLoadingProvince(false));
     });
   };
 };
 
 export const cityAction = (idProvince) => {
   return (dispatch) => {
-    handleGet(`transaction/kurir/get/kota?id=${idProvince}`, (res, status) => {
+    dispatch(setLoadingCity(true));
+    handleGet(`kurir/get/kota?id=${idProvince}`, (res, status) => {
       dispatch(setDataCity(res.data));
-      console.log("city", res.data);
+      dispatch(setLoadingCity(false));
     });
   };
 };
 
 export const districtsAction = (idCity) => {
   return (dispatch) => {
-    handleGet(`transaction/kurir/get/kecamatan?id=${idCity}`, (res, status) => {
+    dispatch(setLoadingDistricts(true));
+    handleGet(`kurir/get/kecamatan?id=${idCity}`, (res, status) => {
       dispatch(setDataDistricts(res.data));
-      console.log("districts", res.data);
+      dispatch(setLoadingDistricts(false));
     });
   };
 };

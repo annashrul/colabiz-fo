@@ -53,6 +53,7 @@ const SidebarContent = ({
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [info, setInfo] = useState({});
+  const [isStockis, setIsStockis] = useState(true);
   const [appRoutes] = useState(Routes);
   const { pathname } = router;
 
@@ -74,6 +75,7 @@ const SidebarContent = ({
       rootSubMenuKeys.push(key);
       if (isCurrentPath) setOpenKeys([...openKeys, key]);
     });
+    // setTimeout(() => checkStatusMember(), 300);
   }, [state, collapsed]);
 
   const onOpenChange = (openKeys) => {
@@ -87,6 +89,13 @@ const SidebarContent = ({
 
   const checkStatusMember = () => {
     if (info !== undefined) {
+      if (pathname === StringLink.stockis && user.stockis === 0) {
+        setIsStockis(false);
+      }
+      // if (user.stockis === 0) {
+      //   Message.info("Anda belum dapat mengakses menu ini");
+      //   return;
+      // }
       // if (info.status_member === 3) {
       //   Message.info("Anda Telah Mencapai Limit Bonus")
       //     .then(() =>
@@ -114,6 +123,16 @@ const SidebarContent = ({
         onOpenChange={onOpenChange}
       >
         {appRoutes.map((route, index) => {
+          // console.log(route);
+          // console.log(Object.keys(user));
+          if (Object.keys(user).length > 0) {
+            if (route.name === "Stokis") {
+              if (user.stockis === 1) {
+                delete appRoutes[index];
+              }
+            }
+          }
+
           const hasChildren = !!route.children;
           if (!hasChildren) {
             return (
@@ -123,7 +142,6 @@ const SidebarContent = ({
                   pathname === route.path ? "ant-menu-item-selected" : ""
                 }
                 onClick={() => {
-                  // checkStatusMember();
                   setOpenKeys([getKey(route.name, index)]);
                   if (state.mobile) dispatch({ type: "mobileDrawer" });
                 }}
@@ -161,7 +179,6 @@ const SidebarContent = ({
                           : ""
                       }
                       onClick={() => {
-                        // checkStatusMember();
                         if (state.mobile) dispatch({ type: "mobileDrawer" });
                       }}
                     >
@@ -182,7 +199,6 @@ const SidebarContent = ({
       </Menu>
     </>
   );
-  checkStatusMember();
   return (
     <>
       <Inner>
@@ -249,91 +265,92 @@ const SidebarContent = ({
           </Sider>
         )}
 
-        {state.mobile && (
-          <Drawer
-            closable={false}
-            width={220}
-            placement={`${state.direction === "rtl" ? "right" : "left"}`}
-            onClose={() => dispatch({ type: "mobileDrawer" })}
-            visible={state.mobileDrawer}
-            className="chat-drawer"
-          >
-            <Inner>
-              <div
-                style={{
-                  overflow: `hidden`,
-                  flex: `1 1 auto`,
-                  flexDirection: `column`,
-                  display: `flex`,
-                  height: `100vh`,
-                  maxHeight: `-webkit-fill-available`,
-                }}
-              >
-                <DashHeader>
-                  <Header>
-                    <img
-                      src={general_helper.imgDefault}
-                      style={{ width: "100px" }}
-                    />
-                  </Header>
-                </DashHeader>
-                {menu}
-                <Divider
-                  className={`m-0`}
+        {state.mobile ||
+          (state.mobile === undefined && (
+            <Drawer
+              closable={false}
+              width={220}
+              placement={`${state.direction === "rtl" ? "right" : "left"}`}
+              onClose={() => dispatch({ type: "mobileDrawer" })}
+              visible={state.mobileDrawer}
+              className="chat-drawer"
+            >
+              <Inner>
+                <div
                   style={{
-                    display: `${sidebarTheme === "dark" ? "none" : ""}`,
+                    overflow: `hidden`,
+                    flex: `1 1 auto`,
+                    flexDirection: `column`,
+                    display: `flex`,
+                    height: `100vh`,
+                    maxHeight: `-webkit-fill-available`,
                   }}
-                />
-                <div className={`py-3 px-4 bg-${sidebarTheme}`}>
-                  <Row type="flex" align="middle" justify="space-around">
-                    <span>
-                      <Avatar shape="circle" size={40} src={user.foto}>
-                        {user.fullname &&
-                          general_helper.getInitialName(user.fullname)}
-                      </Avatar>
-                    </span>
-                    <span className="mr-auto" />
-                    <a
-                      onClick={() => {
-                        Router.push(StringLink.profile);
-                        if (state.mobile) dispatch({ type: "mobileDrawer" });
-                      }}
-                      className={`px-3 ${
-                        sidebarTheme === "dark" ? "text-white" : "text-body"
-                      }`}
-                    >
-                      <Tooltip title="Profile">
-                        <IdcardOutlined style={{ fontSize: "20px" }} />
-                      </Tooltip>
-                    </a>
-
-                    <Popconfirm
-                      placement="top"
-                      title="Anda yakin akan keluar ?"
-                      onConfirm={() => {
-                        doLogout();
-                        Router.push("/signin");
-                      }}
-                      okText="Keluar"
-                      cancelText="Batal"
-                    >
+                >
+                  <DashHeader>
+                    <Header>
+                      <img
+                        src={general_helper.imgDefault}
+                        style={{ width: "100px" }}
+                      />
+                    </Header>
+                  </DashHeader>
+                  {menu}
+                  <Divider
+                    className={`m-0`}
+                    style={{
+                      display: `${sidebarTheme === "dark" ? "none" : ""}`,
+                    }}
+                  />
+                  <div className={`py-3 px-4 bg-${sidebarTheme}`}>
+                    <Row type="flex" align="middle" justify="space-around">
+                      <span>
+                        <Avatar shape="circle" size={40} src={user.foto}>
+                          {user.fullname &&
+                            general_helper.getInitialName(user.fullname)}
+                        </Avatar>
+                      </span>
+                      <span className="mr-auto" />
                       <a
-                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          Router.push(StringLink.profile);
+                          if (state.mobile) dispatch({ type: "mobileDrawer" });
+                        }}
                         className={`px-3 ${
                           sidebarTheme === "dark" ? "text-white" : "text-body"
                         }`}
                       >
-                        <Tooltip title="keluar">
-                          <PoweroffOutlined style={{ fontSize: "16px" }} />
+                        <Tooltip title="Profile">
+                          <IdcardOutlined style={{ fontSize: "20px" }} />
                         </Tooltip>
                       </a>
-                    </Popconfirm>
-                  </Row>
+
+                      <Popconfirm
+                        placement="top"
+                        title="Anda yakin akan keluar ?"
+                        onConfirm={() => {
+                          doLogout();
+                          Router.push("/signin");
+                        }}
+                        okText="Keluar"
+                        cancelText="Batal"
+                      >
+                        <a
+                          style={{ cursor: "pointer" }}
+                          className={`px-3 ${
+                            sidebarTheme === "dark" ? "text-white" : "text-body"
+                          }`}
+                        >
+                          <Tooltip title="keluar">
+                            <PoweroffOutlined style={{ fontSize: "16px" }} />
+                          </Tooltip>
+                        </a>
+                      </Popconfirm>
+                    </Row>
+                  </div>
                 </div>
-              </div>
-            </Inner>
-          </Drawer>
-        )}
+              </Inner>
+            </Drawer>
+          ))}
       </Inner>
     </>
   );
