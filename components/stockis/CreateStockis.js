@@ -80,7 +80,6 @@ const CreateStockis = () => {
   };
 
   const handleStep = async (e) => {
-    // console.log(e);
     let dataForm = Object.assign(objForm, e);
     setObjForm(dataForm);
     if (step == 2) {

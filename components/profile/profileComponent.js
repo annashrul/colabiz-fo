@@ -19,9 +19,9 @@ const ProfileComponent = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    const infos = authAction.getInfo();
+    // const infos = authAction.getInfo();
     const users = authAction.getUser();
-    setInfo(infos);
+    // setInfo(infos);
     setUser(users);
     // handleUser();
   }, [state, showForm]);
@@ -149,7 +149,7 @@ const ProfileComponent = () => {
         <Col xs={12} sm={12} md={6} className="mb-1">
           <Card style={{ backgroundColor: theme.primaryColor }} size="small">
             <small style={{ fontSize: font }} className="text-white">
-              {general_helper.toRp(parseFloat(info.saldo).toFixed(0))}{" "}
+              {general_helper.toRp(0)}{" "}
             </small>
             <br />
             <small style={{ fontSize: font }} className="text-white">
@@ -163,7 +163,7 @@ const ProfileComponent = () => {
             size="small"
           >
             <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(parseFloat(info.saldo_pending).toFixed(0))}{" "}
+              {general_helper.toRp(0)}{" "}
             </small>
             <br />
             <small style={{ fontSize: font }} className="text-white">
@@ -175,7 +175,7 @@ const ProfileComponent = () => {
         <Col xs={12} sm={12} md={6} className="mb-1">
           <Card style={{ backgroundColor: theme.warningColor }} size="small">
             <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(parseFloat(info.total_wd).toFixed(0))}{" "}
+              {general_helper.toRp(0)}{" "}
             </small>
             <br />
             <small style={{ fontSize: font }} className="text-white">
@@ -186,7 +186,7 @@ const ProfileComponent = () => {
         <Col xs={12} sm={12} md={6} className="mb-1">
           <Card style={{ backgroundColor: theme.errorColor }} size="small">
             <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(parseFloat(info.omset_nasional).toFixed(0))}{" "}
+              {general_helper.toRp(0)}{" "}
             </small>
             <br />
             <small style={{ fontSize: font }} className="text-white">

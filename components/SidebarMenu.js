@@ -265,92 +265,91 @@ const SidebarContent = ({
           </Sider>
         )}
 
-        {state.mobile ||
-          (state.mobile === undefined && (
-            <Drawer
-              closable={false}
-              width={220}
-              placement={`${state.direction === "rtl" ? "right" : "left"}`}
-              onClose={() => dispatch({ type: "mobileDrawer" })}
-              visible={state.mobileDrawer}
-              className="chat-drawer"
-            >
-              <Inner>
-                <div
+        {state.mobile && (
+          <Drawer
+            closable={false}
+            width={220}
+            placement={`${state.direction === "rtl" ? "right" : "left"}`}
+            onClose={() => dispatch({ type: "mobileDrawer" })}
+            visible={state.mobileDrawer}
+            className="chat-drawer"
+          >
+            <Inner>
+              <div
+                style={{
+                  overflow: `hidden`,
+                  flex: `1 1 auto`,
+                  flexDirection: `column`,
+                  display: `flex`,
+                  height: `100vh`,
+                  maxHeight: `-webkit-fill-available`,
+                }}
+              >
+                <DashHeader>
+                  <Header>
+                    <img
+                      src={general_helper.imgDefault}
+                      style={{ width: "100px" }}
+                    />
+                  </Header>
+                </DashHeader>
+                {menu}
+                <Divider
+                  className={`m-0`}
                   style={{
-                    overflow: `hidden`,
-                    flex: `1 1 auto`,
-                    flexDirection: `column`,
-                    display: `flex`,
-                    height: `100vh`,
-                    maxHeight: `-webkit-fill-available`,
+                    display: `${sidebarTheme === "dark" ? "none" : ""}`,
                   }}
-                >
-                  <DashHeader>
-                    <Header>
-                      <img
-                        src={general_helper.imgDefault}
-                        style={{ width: "100px" }}
-                      />
-                    </Header>
-                  </DashHeader>
-                  {menu}
-                  <Divider
-                    className={`m-0`}
-                    style={{
-                      display: `${sidebarTheme === "dark" ? "none" : ""}`,
-                    }}
-                  />
-                  <div className={`py-3 px-4 bg-${sidebarTheme}`}>
-                    <Row type="flex" align="middle" justify="space-around">
-                      <span>
-                        <Avatar shape="circle" size={40} src={user.foto}>
-                          {user.fullname &&
-                            general_helper.getInitialName(user.fullname)}
-                        </Avatar>
-                      </span>
-                      <span className="mr-auto" />
+                />
+                <div className={`py-3 px-4 bg-${sidebarTheme}`}>
+                  <Row type="flex" align="middle" justify="space-around">
+                    <span>
+                      <Avatar shape="circle" size={40} src={user.foto}>
+                        {user.fullname &&
+                          general_helper.getInitialName(user.fullname)}
+                      </Avatar>
+                    </span>
+                    <span className="mr-auto" />
+                    <a
+                      onClick={() => {
+                        Router.push(StringLink.profile);
+                        if (state.mobile) dispatch({ type: "mobileDrawer" });
+                      }}
+                      className={`px-3 ${
+                        sidebarTheme === "dark" ? "text-white" : "text-body"
+                      }`}
+                    >
+                      <Tooltip title="Profile">
+                        <IdcardOutlined style={{ fontSize: "20px" }} />
+                      </Tooltip>
+                    </a>
+
+                    <Popconfirm
+                      placement="top"
+                      title="Anda yakin akan keluar ?"
+                      onConfirm={() => {
+                        doLogout();
+                        Router.push("/signin");
+                      }}
+                      okText="Keluar"
+                      cancelText="Batal"
+                    >
                       <a
-                        onClick={() => {
-                          Router.push(StringLink.profile);
-                          if (state.mobile) dispatch({ type: "mobileDrawer" });
-                        }}
+                        style={{ cursor: "pointer" }}
                         className={`px-3 ${
                           sidebarTheme === "dark" ? "text-white" : "text-body"
                         }`}
                       >
-                        <Tooltip title="Profile">
-                          <IdcardOutlined style={{ fontSize: "20px" }} />
+                        <Tooltip title="keluar">
+                          <PoweroffOutlined style={{ fontSize: "16px" }} />
                         </Tooltip>
                       </a>
-
-                      <Popconfirm
-                        placement="top"
-                        title="Anda yakin akan keluar ?"
-                        onConfirm={() => {
-                          doLogout();
-                          Router.push("/signin");
-                        }}
-                        okText="Keluar"
-                        cancelText="Batal"
-                      >
-                        <a
-                          style={{ cursor: "pointer" }}
-                          className={`px-3 ${
-                            sidebarTheme === "dark" ? "text-white" : "text-body"
-                          }`}
-                        >
-                          <Tooltip title="keluar">
-                            <PoweroffOutlined style={{ fontSize: "16px" }} />
-                          </Tooltip>
-                        </a>
-                      </Popconfirm>
-                    </Row>
-                  </div>
+                    </Popconfirm>
+                  </Row>
                 </div>
-              </Inner>
-            </Drawer>
-          ))}
+              </div>
+            </Inner>
+          </Drawer>
+        )}
       </Inner>
     </>
   );

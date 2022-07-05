@@ -1,5 +1,5 @@
-import Forgot from '../components/Forgot';
+// import Forgot from '../components/Forgot';
 
-const ForgotPage = () => <Forgot />;
+// const ForgotPage = () => <Forgot />;
 
-export default ForgotPage;
+// export default ForgotPage;
