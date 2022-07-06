@@ -65,6 +65,7 @@ const CreateStockis = () => {
     forceUpdate({});
     setStep(1);
     let banks = Action.getBank();
+    // console.log("banks", banks);
     let adress = Action.getAddress();
     setObjAddress(adress);
     setObjBanks(banks);
@@ -239,6 +240,11 @@ const CreateStockis = () => {
                       hasFeedback
                       name="alamat"
                       label="Longitude & Latitude"
+                      tooltip={{
+                        title:
+                          "ketikan nama jalan untuk mendapatkan longitude dan latitude",
+                        icon: <InfoCircleOutlined />,
+                      }}
                     >
                       <PlacesAutocomplete
                         value={alamat}
@@ -254,7 +260,7 @@ const CreateStockis = () => {
                         }) => (
                           <div>
                             <Input
-                              placeholder="Ex: Jhon Doe"
+                              placeholder=""
                               {...getInputProps({
                                 onClick: handleSelect,
                               })}

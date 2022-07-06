@@ -30,6 +30,7 @@ function getUser() {
 }
 function getBank() {
   const coo = Cookies.get(STRING_COOKIES.bank);
+  console.log("bank", coo);
   return JSON.parse(atob(coo));
 }
 function getAddress() {

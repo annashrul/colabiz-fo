@@ -46,3 +46,7 @@ export const STOCKIS = {
   SUCCESS: "STOCKIS_SUCCESS",
   LOADING: "STOCKIS_LOADING",
 };
+
+export const MEMBER = {
+  LOADING: "MEMBER_LOADING",
+};

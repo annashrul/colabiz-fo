@@ -77,11 +77,9 @@ export const loginAction = (data) => {
         Action.setToken(res.data.token);
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
-        setTimeout(() => {
-          dispatch(userDetailAction(res.data.id));
-        }, 300);
+        dispatch(userDetailAction(res.data.id));
       }
-      dispatch(setLoadingLogin(true));
+      dispatch(setLoadingLogin(false));
     });
   };
 };
@@ -125,9 +123,9 @@ export const infoAction = () => {
 export const userDetailAction = (id) => {
   return (dispatch) => {
     handleGet(`member/get/${id}`, (res, status) => {
-      console.log(res);
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
+      console.log(res.data);
       Action.setUser(actUser);
       Action.setBank(res.data.bank);
       Action.setAddress(res.data.address);

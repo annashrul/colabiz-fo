@@ -13,6 +13,7 @@ export const createStockisAction = (e) => {
     dispatch(setLoading(true));
     handlePost("stockis", e, (res, status, msg) => {
       dispatch(setLoading(false));
+      console.log(res);
       if (status) {
         Message.success(res.meta.message).then(() =>
           Router.push("/").then(() => dispatch(setLoading(false)))
