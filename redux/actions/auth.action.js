@@ -78,8 +78,9 @@ export const loginAction = (data) => {
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
         dispatch(userDetailAction(res.data.id));
+      } else {
+        dispatch(setLoadingLogin(false));
       }
-      dispatch(setLoadingLogin(false));
     });
   };
 };
