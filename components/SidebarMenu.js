@@ -66,7 +66,7 @@ const SidebarContent = ({
 
   useEffect(() => {
     let users = authAction.getUser();
-    let infos = authAction.getInfo();
+    // let infos = authAction.getInfo();
     // setInfo(infos);
     setUser(users);
     appRoutes.forEach((route, index) => {
@@ -84,28 +84,6 @@ const SidebarContent = ({
       setOpenKeys([...latestOpenKey]);
     } else {
       setOpenKeys(latestOpenKey ? [...latestOpenKey] : []);
-    }
-  };
-
-  const checkStatusMember = () => {
-    if (info !== undefined) {
-      if (pathname === StringLink.stockis && user.stockis === 0) {
-        setIsStockis(false);
-      }
-      // if (user.stockis === 0) {
-      //   Message.info("Anda belum dapat mengakses menu ini");
-      //   return;
-      // }
-      // if (info.status_member === 3) {
-      //   Message.info("Anda Telah Mencapai Limit Bonus")
-      //     .then(() =>
-      //       Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
-      //     )
-      //     .then(() => {
-      //       Router.push("/signin");
-      //       doLogout();
-      //     });
-      // }
     }
   };
 
