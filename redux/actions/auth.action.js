@@ -28,6 +28,12 @@ export const setDataPin = (data) => {
     data,
   };
 };
+export const setDataResendEmail = (data) => {
+  return {
+    type: AUTH_USER.DATA_RESEND_EMAIL,
+    data,
+  };
+};
 export const setDataSignUp = (data) => {
   return {
     type: AUTH_USER.DATA_SIGNUP,
@@ -66,6 +72,13 @@ export const setLoadingSignUp = (load) => {
   };
 };
 
+export const setLoadingResendEmail = (load) => {
+  return {
+    type: AUTH_USER.LOADING_RESEND_EMAIL,
+    load,
+  };
+};
+
 export const loginAction = (data) => {
   return (dispatch) => {
     dispatch(setLoadingLogin(true));
@@ -80,6 +93,27 @@ export const loginAction = (data) => {
         dispatch(userDetailAction(res.data.id));
       } else {
         dispatch(setLoadingLogin(false));
+      }
+    });
+  };
+};
+export const resendEmailAction = (data, callback) => {
+  return (dispatch) => {
+    dispatch(setLoadingResendEmail(true));
+    handlePost("auth/resend/verifikasi", data, (res, status, msg) => {
+      console.log("resed", status);
+      console.log("resed", res.length);
+
+      if (status && res.length === undefined) {
+        Message.success(res.meta.message).then(() => {
+          Router.push("/signin").then(() => {
+            callback(false);
+            dispatch(setLoadingResendEmail(false));
+          });
+        });
+      } else {
+        callback(true);
+        dispatch(setLoadingResendEmail(false));
       }
     });
   };
