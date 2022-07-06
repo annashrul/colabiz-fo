@@ -10,6 +10,7 @@ import { handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
+import ModalResendEmail from "./modalResendEmail";
 
 const FormItem = Form.Item;
 
@@ -22,9 +23,11 @@ const Content = styled.div`
 const Signin = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+
   const [, forceUpdate] = useState();
   const [loading, setLoading] = useState(false);
   const [showModalPin, setShowModalPin] = useState(false);
+  const [showModalResendEmail, setShowModalResendEmail] = useState(false);
   const [dataUser, setDataUser] = useState({});
 
   const resLogin = useSelector((state) => state.authUserReducer.dataLogin);
@@ -156,6 +159,16 @@ const Signin = () => {
               )}
             </Form.Item>
           </Form>
+
+          <p className="text-right">
+            <a
+              onClick={() => {
+                setShowModalResendEmail(true);
+              }}
+            >
+              Resend Verifikasi
+            </a>
+          </p>
         </Spin>
       </Content>
       {showModalPin && (
@@ -168,6 +181,14 @@ const Signin = () => {
             setShowModalPin(false);
           }}
           modalPin={showModalPin}
+        />
+      )}
+      {showModalResendEmail && (
+        <ModalResendEmail
+          modal={showModalResendEmail}
+          onCancel={() => {
+            setShowModalResendEmail(false);
+          }}
         />
       )}
     </Row>

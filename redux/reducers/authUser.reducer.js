@@ -1,5 +1,7 @@
 import { AUTH_USER } from "../type";
 const initialState = {
+  loadingResendEmail: false,
+  dataResendEmail: [],
   loadingLogin: false,
   loadingPin: false,
   dataLogin: [],
@@ -18,6 +20,11 @@ export const authUserReducer = (state = initialState, action) => {
       return {
         ...state,
         dataLogin: action.data,
+      };
+    case AUTH_USER.DATA_RESEND_EMAIL:
+      return {
+        ...state,
+        dataResendEmail: action.data,
       };
     case AUTH_USER.DATA_USER_DETAIL:
       return {
@@ -58,6 +65,10 @@ export const authUserReducer = (state = initialState, action) => {
     case AUTH_USER.LOADING_SIGNUP:
       return Object.assign({}, state, {
         loadingSignUp: action.load,
+      });
+    case AUTH_USER.LOADING_RESEND_EMAIL:
+      return Object.assign({}, state, {
+        loadingResendEmail: action.load,
       });
 
     default:
