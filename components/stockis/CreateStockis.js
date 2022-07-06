@@ -236,115 +236,113 @@ const CreateStockis = () => {
               {step === 2 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
-                    <Spin loading={loading}>
-                      <Form.Item
-                        hasFeedback
-                        name="alamat"
-                        label="Longitude & Latitude"
-                        tooltip={{
-                          title:
-                            "ketikan nama jalan untuk mendapatkan longitude dan latitude",
-                          icon: <InfoCircleOutlined />,
-                        }}
+                    <Form.Item
+                      hasFeedback
+                      name="alamat"
+                      label="Longitude & Latitude"
+                      tooltip={{
+                        title:
+                          "ketikan nama jalan untuk mendapatkan longitude dan latitude",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <PlacesAutocomplete
+                        value={alamat}
+                        onClick={handleSelect}
+                        onChange={handleOnChange}
+                        onSelect={handleSelect}
                       >
-                        <PlacesAutocomplete
-                          value={alamat}
-                          onClick={handleSelect}
-                          onChange={handleOnChange}
-                          onSelect={handleSelect}
-                        >
-                          {({
-                            getInputProps,
-                            suggestions,
-                            getSuggestionItemProps,
-                            loading,
-                          }) => (
-                            <div>
-                              <Input
-                                placeholder=""
-                                {...getInputProps({
-                                  onClick: handleSelect,
-                                })}
-                              />
+                        {({
+                          getInputProps,
+                          suggestions,
+                          getSuggestionItemProps,
+                          loading,
+                        }) => (
+                          <div>
+                            <Input
+                              placeholder=""
+                              {...getInputProps({
+                                onClick: handleSelect,
+                              })}
+                            />
 
-                              <div
-                                className="autocomplete-dropdown-container"
-                                style={{ width: "96%" }}
-                              >
-                                {loading && <div>Loading...</div>}
-                                {suggestions.map((suggestion) => {
-                                  const className = suggestion.active
-                                    ? "suggestion-item--active"
-                                    : "suggestion-item";
-                                  const style = suggestion.active
-                                    ? {
-                                        backgroundColor: "#000000",
-                                        cursor: "pointer",
-                                        color: "white",
-                                      }
-                                    : {
-                                        backgroundColor: "white",
-                                        cursor: "pointer",
-                                      };
-                                  return (
-                                    <div
-                                      {...getSuggestionItemProps(suggestion, {
-                                        className,
-                                        style,
-                                      })}
-                                    >
-                                      <span>{suggestion.description}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
+                            <div
+                              className="autocomplete-dropdown-container"
+                              style={{ width: "96%" }}
+                            >
+                              {loading && <div>Loading...</div>}
+                              {suggestions.map((suggestion) => {
+                                const className = suggestion.active
+                                  ? "suggestion-item--active"
+                                  : "suggestion-item";
+                                const style = suggestion.active
+                                  ? {
+                                      backgroundColor: "#000000",
+                                      cursor: "pointer",
+                                      color: "white",
+                                    }
+                                  : {
+                                      backgroundColor: "white",
+                                      cursor: "pointer",
+                                    };
+                                return (
+                                  <div
+                                    {...getSuggestionItemProps(suggestion, {
+                                      className,
+                                      style,
+                                    })}
+                                  >
+                                    <span>{suggestion.description}</span>
+                                  </div>
+                                );
+                              })}
                             </div>
-                          )}
-                        </PlacesAutocomplete>
-                      </Form.Item>
-                      <Form.Item
-                        name="checkedAddress"
-                        label="Gunakan alamat yang sudah ada ?"
-                        onChange={(e) => {
-                          console.log("sadasd,", e.target.value);
-                          if (e.target.value === "1") {
-                            dispatch(provinceAction());
-                          }
-                          setCheckedAddress(parseInt(e.target.value, 10));
-                        }}
+                          </div>
+                        )}
+                      </PlacesAutocomplete>
+                    </Form.Item>
+                    <Form.Item
+                      name="checkedAddress"
+                      label="Gunakan alamat yang sudah ada ?"
+                      onChange={(e) => {
+                        console.log("sadasd,", e.target.value);
+                        if (e.target.value === "1") {
+                          dispatch(provinceAction());
+                        }
+                        setCheckedAddress(parseInt(e.target.value, 10));
+                      }}
+                    >
+                      <Radio.Group
+                        buttonStyle="outline"
+                        style={{ width: "100%" }}
                       >
-                        <Radio.Group
-                          buttonStyle="outline"
-                          style={{ width: "100%" }}
-                        >
-                          <Radio.Button value="0" style={{ width: "50%" }}>
-                            Iya
-                          </Radio.Button>
-                          <Radio.Button value="1" style={{ width: "50%" }}>
-                            Tidak
-                          </Radio.Button>
-                        </Radio.Group>
-                      </Form.Item>
-                      <Form.Item
-                        name="checkedBanks"
-                        label="Gunakan akun bank yang sudah ada ?"
-                        onChange={(e) => {
-                          setCheckedBanks(parseInt(e.target.value, 10));
-                        }}
+                        <Radio.Button value="0" style={{ width: "50%" }}>
+                          Iya
+                        </Radio.Button>
+                        <Radio.Button value="1" style={{ width: "50%" }}>
+                          Tidak
+                        </Radio.Button>
+                      </Radio.Group>
+                    </Form.Item>
+                    <Form.Item
+                      name="checkedBanks"
+                      label="Gunakan akun bank yang sudah ada ?"
+                      onChange={(e) => {
+                        setCheckedBanks(parseInt(e.target.value, 10));
+                      }}
+                    >
+                      <Radio.Group
+                        buttonStyle="outline"
+                        style={{ width: "100%" }}
                       >
-                        <Radio.Group
-                          buttonStyle="outline"
-                          style={{ width: "100%" }}
-                        >
-                          <Radio.Button value="0" style={{ width: "50%" }}>
-                            Iya
-                          </Radio.Button>
-                          <Radio.Button value="1" style={{ width: "50%" }}>
-                            Tidak
-                          </Radio.Button>
-                        </Radio.Group>
-                      </Form.Item>
-                    </Spin>
+                        <Radio.Button value="0" style={{ width: "50%" }}>
+                          Iya
+                        </Radio.Button>
+                        <Radio.Button value="1" style={{ width: "50%" }}>
+                          Tidak
+                        </Radio.Button>
+                      </Radio.Group>
+                    </Form.Item>
                   </Col>
                 </Row>
               )}
