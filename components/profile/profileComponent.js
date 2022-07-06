@@ -1,5 +1,4 @@
-import { Avatar, Button, Card, Col, Message, Row, Tooltip } from "antd";
-import { theme } from "../styles/GlobalStyles";
+import { Avatar, Button, Card, Col, Row, Tooltip } from "antd";
 import { useAppState } from "../shared/AppProvider";
 import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
@@ -12,18 +11,14 @@ moment.locale("id");
 const ProfileComponent = () => {
   const [state] = useAppState();
   const [user, setUser] = useState({});
-  const [info, setInfo] = useState({});
   const [font, setFont] = useState("14px");
   const [showForm, setShowForm] = useState(false);
   useEffect(() => {
     if (state.mobile) {
       setFont("80%");
     }
-    // const infos = authAction.getInfo();
     const users = authAction.getUser();
-    // setInfo(infos);
     setUser(users);
-    // handleUser();
   }, [state, showForm]);
 
   const handleUser = async (isShow = false) => {
@@ -63,7 +58,7 @@ const ProfileComponent = () => {
     <div>
       <Card
         headStyle={{
-          backgroundImage: "url(/images/23.jpg)",
+          // backgroundImage: "url(/images/23.jpg)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center center",
@@ -72,7 +67,7 @@ const ProfileComponent = () => {
         className="mb-4 overflow-hidden w-100"
         title={
           <Row type="flex" align="middle">
-            <Avatar size={50} src={user.foto}>
+            <Avatar src={user.foto}>
               {" "}
               {user.fullname !== undefined &&
                 general_helper.getInitialName(user.fullname)}
@@ -83,16 +78,17 @@ const ProfileComponent = () => {
                 display: inline-block;
               `}
             >
-              <h5 className="my-0 text-white">
-                <span>{user.fullname}</span>
-              </h5>
+              <h6 className="my-0">
+                <span className="my-0">{user.fullname}</span>
+              </h6>
               <small
-                style={{ cursor: "pointer" }}
+                className="text-light"
+                style={{ cursor: "pointer", color: "white" }}
                 onClick={async () => general_helper.copyText(user.referral_url)}
               >
-                {user.referral} &nbsp;
+                <span style={{ color: "red" }}>{user.referral_url}</span> &nbsp;
                 <Tooltip title="copy kode referral">
-                  <CopyOutlined style={{ marginLeft: "1px" }} />
+                  <CopyOutlined style={{ marginLeft: "1px", color: "red" }} />
                 </Tooltip>
               </small>
             </div>
@@ -115,15 +111,12 @@ const ProfileComponent = () => {
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
-        {tempRow("No Handphone", user.mobile_no)}
+        {tempRow("No Telepon", user.mobile_no)}
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
-        {tempRow("Tanggal Recycle", moment(user.recycle_date).format("LL"))}
-        <Row>
-          <Col style={{ margin: "1px" }}></Col>
-        </Row>
-        {tempRow("Tanggal Join", moment(user.created_at).format("LL"))}
+
+        {tempRow("Tanggal Gabung", moment(user.created_at).format("LL"))}
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
@@ -135,66 +128,19 @@ const ProfileComponent = () => {
           <Col style={{ margin: "1px" }}></Col>
         </Row>
         {state.mobile && (
-          <Button
-            style={{ width: "100%", marginTop: "10px" }}
-            type="dashed"
-            danger
-            onClick={() => setShowForm(!showForm)}
-          >
-            Ubah Profile
-          </Button>
+          <div>
+            <Button
+              style={{ width: "100%", marginTop: "10px" }}
+              type="dashed"
+              danger
+              onClick={() => setShowForm(!showForm)}
+            >
+              Ubah Profile
+            </Button>
+          </div>
         )}
       </Card>
-      <Row gutter={4}>
-        <Col xs={12} sm={12} md={6} className="mb-1">
-          <Card style={{ backgroundColor: theme.primaryColor }} size="small">
-            <small style={{ fontSize: font }} className="text-white">
-              {general_helper.toRp(0)}{" "}
-            </small>
-            <br />
-            <small style={{ fontSize: font }} className="text-white">
-              Saldo Bonus
-            </small>
-          </Card>
-        </Col>
-        <Col xs={12} sm={12} md={6} className="mb-1">
-          <Card
-            style={{ backgroundColor: theme.darkColor, padding: 0 }}
-            size="small"
-          >
-            <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(0)}{" "}
-            </small>
-            <br />
-            <small style={{ fontSize: font }} className="text-white">
-              Saldo Bonus Nasional
-            </small>
-          </Card>
-        </Col>
 
-        <Col xs={12} sm={12} md={6} className="mb-1">
-          <Card style={{ backgroundColor: theme.warningColor }} size="small">
-            <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(0)}{" "}
-            </small>
-            <br />
-            <small style={{ fontSize: font }} className="text-white">
-              Total Penarikan
-            </small>
-          </Card>
-        </Col>
-        <Col xs={12} sm={12} md={6} className="mb-1">
-          <Card style={{ backgroundColor: theme.errorColor }} size="small">
-            <small className="text-white" style={{ fontSize: font }}>
-              {general_helper.toRp(0)}{" "}
-            </small>
-            <br />
-            <small style={{ fontSize: font }} className="text-white">
-              Total Omset Nasional
-            </small>
-          </Card>
-        </Col>
-      </Row>
       <br />
       {showForm && (
         <FormComponent

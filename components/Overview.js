@@ -1,22 +1,14 @@
-import {
-  RightCircleOutlined,
-  WalletOutlined,
-  CopyOutlined,
-} from "@ant-design/icons";
-import { Col, Message, Button, Row, Card } from "antd";
-import StatCard from "./shared/StatCard";
-import { theme } from "./styles/GlobalStyles";
+import { RightCircleOutlined, CopyOutlined } from "@ant-design/icons";
+import { Col, Button, Row, Card } from "antd";
 import React, { useEffect, useState } from "react";
-import { handleGet } from "../action/baseAction";
 import Action, { doLogout } from "../action/auth.action";
 import Helper from "../helper/general_helper";
 import Router from "next/router";
 import { useAppState } from "./shared/AppProvider";
 import CardNews from "./news/cardNews";
-const { Meta } = Card;
+import { StringLink } from "../helper/string_link_helper";
 
 const Overview = () => {
-  const [objInfo, setObjInfo] = useState({});
   const [objUser, setObjUser] = useState({});
   const [isData, setIsData] = useState(false);
   const [font, setFont] = useState("14px");
@@ -35,31 +27,21 @@ const Overview = () => {
     }
   }, [isData, state]);
 
-  const cardMobile = (bg, saldo, title) => {
-    return (
-      <Card style={{ backgroundColor: bg }} size="small">
-        <small style={{ fontSize: font }} className="text-white">
-          {Helper.toRp(parseFloat(saldo).toFixed(0))}{" "}
-        </small>
-        <br />
-        <small style={{ fontSize: font }} className="text-white">
-          {title}
-        </small>
-      </Card>
-    );
-  };
+  const arrBtn = [
+    { title: "Register", link: StringLink.tambahMitra },
+    { title: "Daftar Stokis", link: StringLink.stockis },
+    // { title: "Laporan Transaksi", link: StringLink.reportTransaction },
+  ];
 
   return (
     <div>
       <Row gutter={4}>
-        <Col xs={24} sm={24} md={24} className="mb-2">
+        <Col xs={24} sm={8} md={8} className="mb-2">
           <Button
-            type="dashed"
-            danger
+            type="primary"
             icon={<CopyOutlined />}
             style={{
               whiteSpace: "normal",
-              fontSize: font,
               height: "auto",
               width: "100%",
             }}
@@ -69,57 +51,40 @@ const Overview = () => {
             {objUser && objUser.referral_url}
           </Button>
         </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
-          {state.mobile ? (
-            cardMobile(theme.primaryColor, 0, "Saldo Bonus")
-          ) : (
-            <StatCard
-              type="fill"
-              title="Saldo Bonus"
-              value={Helper.toRp(0)}
-              icon={<WalletOutlined style={{ fontSize: "20px" }} />}
-              color={theme.primaryColor}
-            />
-          )}
-        </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
-          {state.mobile ? (
-            cardMobile(theme.darkColor, 0, "Saldo Bonus Nasional")
-          ) : (
-            <StatCard
-              type="fill"
-              title="Saldo Bonus Nasional"
-              value={Helper.toRp(parseFloat(0).toFixed(0))}
-              icon={<WalletOutlined style={{ fontSize: "20px" }} />}
-              color={theme.darkColor}
-            />
-          )}
-        </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
-          {state.mobile ? (
-            cardMobile(theme.warningColor, 0, "Total Penarikan")
-          ) : (
-            <StatCard
-              type="fill"
-              title="Total Penarikan"
-              value={Helper.toRp(parseFloat(0).toFixed(0))}
-              icon={<WalletOutlined style={{ fontSize: "20px" }} />}
-              color={theme.warningColor}
-            />
-          )}
-        </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
-          {state.mobile ? (
-            cardMobile(theme.errorColor, 0, "Total Omset Nasional")
-          ) : (
-            <StatCard
-              type="fill"
-              title="Total Omset Nasional"
-              value={Helper.toRp(parseFloat(0).toFixed(0))}
-              icon={<WalletOutlined style={{ fontSize: "20px" }} />}
-              color={theme.errorColor}
-            />
-          )}
+        {arrBtn.map((v, i) => {
+          return (
+            <Col xs={12} sm={8} md={8} className="mb-2" key={i}>
+              <Button
+                type="primary"
+                style={{
+                  whiteSpace: "normal",
+                  height: "auto",
+                  width: "100%",
+                }}
+                onClick={async (e) => {
+                  Router.push(v.link);
+                }}
+              >
+                {v.title}
+              </Button>
+            </Col>
+          );
+        })}
+      </Row>
+      <Row>
+        <Col xs={24} sm={24} md={24}>
+          <Button
+            type="dashed"
+            danger
+            style={{
+              whiteSpace: "normal",
+              height: "auto",
+              width: "100%",
+            }}
+          >
+            PERHATIAN !!
+            <br /> Mohon maaf,Konten lainnya masih dalam tahap pengembangan
+          </Button>
         </Col>
       </Row>
 

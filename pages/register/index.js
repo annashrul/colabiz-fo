@@ -6,18 +6,7 @@ import React from "react";
 
 const IndexMitra = () => {
   const [state] = useAppState();
-
-  return state.mobile ? (
-    <PageHeader
-      className="site-page-header"
-      onBack={() => Router.back()}
-      title="Mitra Baru"
-    >
-      <CreateMitra />
-    </PageHeader>
-  ) : (
-    <CreateMitra />
-  );
+  return <CreateMitra />;
 };
 
 export default IndexMitra;

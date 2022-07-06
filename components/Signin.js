@@ -38,33 +38,33 @@ const Signin = () => {
   }, []);
 
   useEffect(() => {
-    if (form.getFieldValue("username") !== undefined) {
-      if (resLogin.pin === "-") {
-        Message.success("Anda Belum Mempunya Pin").then(() =>
-          setShowModalPin(true)
-        );
-      } else if (resLogin.status === 3) {
-        if (resLogin.kd_trx === "" || resLogin.kd_trx === "-") {
-          Router.push(StringLink.transactionRecycle).then(() => {
-            dispatch(setLoadingLogin(false));
-          });
-        } else {
-          localStorage.setItem("linkBack", "/signin");
-          localStorage.setItem("typeTrx", "Recycle");
-          localStorage.setItem("kdTrx", resLogin.kd_trx);
-          Router.push(StringLink.invoiceRecycle).then(() =>
-            dispatch(setLoadingLogin(false))
-          );
-        }
-      } else {
-        Message.success(
-          "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-        ).then(() =>
-          Router.push("/").then(() => dispatch(setLoadingLogin(false)))
-        );
-      }
-      setDataUser(resLogin);
-    }
+    // if (form.getFieldValue("username") !== undefined) {
+    //   if (resLogin.pin === "-") {
+    //     Message.success("Anda Belum Mempunya Pin").then(() =>
+    //       setShowModalPin(true)
+    //     );
+    //   } else if (resLogin.status === 3) {
+    //     if (resLogin.kd_trx === "" || resLogin.kd_trx === "-") {
+    //       Router.push(StringLink.transactionRecycle).then(() => {
+    //         dispatch(setLoadingLogin(false));
+    //       });
+    //     } else {
+    //       localStorage.setItem("linkBack", "/signin");
+    //       localStorage.setItem("typeTrx", "Recycle");
+    //       localStorage.setItem("kdTrx", resLogin.kd_trx);
+    //       Router.push(StringLink.invoiceRecycle).then(() =>
+    //         dispatch(setLoadingLogin(false))
+    //       );
+    //     }
+    //   } else {
+    //     Message.success(
+    //       "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+    //     ).then(() =>
+    //       Router.push("/").then(() => dispatch(setLoadingLogin(false)))
+    //     );
+    //   }
+    //   setDataUser(resLogin);
+    // }
   }, [resLogin]);
 
   const handleSubmit = async (values) => {
@@ -139,7 +139,14 @@ const Signin = () => {
                 prefix={<LockOutlined style={{ fontSize: "16px" }} />}
               />
             </FormItem>
-
+            <div className="text-center">
+              <small className="text-muted">
+                <span>Kirim ulang link verifikasi?</span>{" "}
+                <a onClick={() => setShowModalResendEmail(true)}>
+                  &nbsp;Kirim sekarang!
+                </a>
+              </small>
+            </div>
             <Form.Item shouldUpdate={true}>
               {() => (
                 <Button
@@ -159,16 +166,6 @@ const Signin = () => {
               )}
             </Form.Item>
           </Form>
-
-          <p className="text-right">
-            <a
-              onClick={() => {
-                setShowModalResendEmail(true);
-              }}
-            >
-              Resend Verifikasi
-            </a>
-          </p>
         </Spin>
       </Content>
       {showModalPin && (

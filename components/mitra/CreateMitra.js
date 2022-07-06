@@ -1,7 +1,6 @@
 import {
   Col,
   Collapse,
-  Message,
   Row,
   Input,
   Card,
@@ -9,15 +8,10 @@ import {
   Form,
   Select,
   Popconfirm,
-  Spin,
 } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState, useRef } from "react";
-import { handleGet, handlePost } from "../../action/baseAction";
 import Action from "../../action/auth.action";
-import Router from "next/router";
-import { StringLink } from "../../helper/string_link_helper";
-import general_helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -33,7 +27,6 @@ import {
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
 
-const { Panel } = Collapse;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
@@ -195,14 +188,7 @@ const TambahMitra = () => {
           gutter={10}
         >
           <Col md={8} xs={24}>
-            <Card
-              title={!state.mobile && "Mitra Baru"}
-              extra={
-                <Button size={"small"} type={"info"}>
-                  {user.referral}
-                </Button>
-              }
-            >
+            <Card title={`Sponsor ${user.referral}`}>
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
@@ -259,7 +245,11 @@ const TambahMitra = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <Input ref={usernameInput} placeholder="Ex: jhondoe" />
+                      <Input
+                        ref={usernameInput}
+                        style={{ textTransform: "lowercase" }}
+                        placeholder="Ex: jhondoe"
+                      />
                     </Form.Item>
                     <Form.Item
                       hasFeedback

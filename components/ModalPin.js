@@ -1,10 +1,8 @@
 import { Modal, Popconfirm, Row, Spin, Col, Button, Message } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { theme } from "./styles/GlobalStyles";
 import dynamic from "next/dynamic";
 const ReactCodeInput = dynamic(import("react-code-input"));
-const { confirm } = Modal;
 
 const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
   const [isModal, setIsModal] = useState(modalPin);
