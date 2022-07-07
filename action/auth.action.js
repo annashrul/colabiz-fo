@@ -2,6 +2,7 @@ import http from "./httpService";
 import Cookies from "js-cookie";
 import Helper from "../helper/general_helper";
 import { STRING_COOKIES } from "../redux/type";
+import Router from "next/router";
 
 function setUser(datum) {
   Cookies.set(STRING_COOKIES.user, btoa(JSON.stringify(datum)), { expires: 7 });
@@ -26,7 +27,11 @@ export function doLogout() {
 }
 function getUser() {
   const coo = Cookies.get(STRING_COOKIES.user);
-  return JSON.parse(atob(coo));
+  if (coo !== undefined) {
+    return JSON.parse(atob(coo));
+  } else {
+    return undefined;
+  }
 }
 function getBank() {
   const coo = Cookies.get(STRING_COOKIES.bank);

@@ -132,7 +132,7 @@ const CreateStockis = () => {
           gutter={10}
         >
           <Col md={8} xs={24}>
-            <Card title={!state.mobile && "Daftar Stokis"}>
+            <Card title={"Daftar Stokis"}>
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
