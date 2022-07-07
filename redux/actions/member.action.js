@@ -1,5 +1,5 @@
 import { MEMBER } from "../type";
-import { handlePost, handlePut } from "../../action/baseAction";
+import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction from "../../action/auth.action";
 import { Message } from "antd";
 import Router from "next/router";
@@ -10,7 +10,29 @@ export const setLoading = (load) => {
     load,
   };
 };
+export const setLoadingGenealogy = (load) => {
+  return {
+    type: MEMBER.LOADING_GENEALOGY,
+    load,
+  };
+};
 
+export const setDataGenealogy = (data) => {
+  return {
+    type: MEMBER.DATA_GENEALOGY,
+    data,
+  };
+};
+
+export const getGenealogyAction = (where = "") => {
+  return (dispatch) => {
+    dispatch(setLoadingGenealogy(true));
+    handleGet("member/genealogy/" + where, (res, status) => {
+      dispatch(setDataGenealogy(res.data));
+      dispatch(setLoadingGenealogy(false));
+    });
+  };
+};
 export const putMemberAction = (id, e) => {
   return (dispatch) => {
     dispatch(setLoading(true));

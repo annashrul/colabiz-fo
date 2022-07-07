@@ -45,6 +45,7 @@ const Page = ({ router, children }) => {
           doLogout();
         }
       } else {
+        // console.log("asdasdasdsadsad");
         setLoading(true);
         doLogout();
         Routes.push("/signin").then(() => setLoading(false));

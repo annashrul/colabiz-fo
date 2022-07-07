@@ -70,12 +70,20 @@ const SidebarContent = ({
     // setInfo(infos);
     setUser(users);
     appRoutes.forEach((route, index) => {
+      if (Object.keys(users).length > 0) {
+        console.log("stokis", route.name);
+
+        if (route.name === "Daftar Stokis") {
+          if (users.stockis !== 0) {
+            delete appRoutes[index];
+          }
+        }
+      }
       const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
       const key = getKey(route.name, index);
       rootSubMenuKeys.push(key);
       if (isCurrentPath) setOpenKeys([...openKeys, key]);
     });
-    // setTimeout(() => checkStatusMember(), 300);
   }, [state, collapsed]);
 
   const onOpenChange = (openKeys) => {
@@ -102,14 +110,6 @@ const SidebarContent = ({
       >
         {appRoutes.map((route, index) => {
           // console.log(route);
-          // console.log(Object.keys(user));
-          if (Object.keys(user).length > 0) {
-            if (route.name === "Stokis") {
-              if (user.stockis === 1) {
-                delete appRoutes[index];
-              }
-            }
-          }
 
           if (state.mobile && route.path === StringLink.profile) {
             delete appRoutes[index];
@@ -198,7 +198,52 @@ const SidebarContent = ({
                 display: `${sidebarTheme === "dark" ? "none" : ""}`,
               }}
             />
-            <div className={`py-3 px-4 bg-${sidebarTheme}`}>Versi 0.0.1</div>
+            <div className={`py-3 px-4 bg-${sidebarTheme}`}>
+              <Row type="flex" align="middle" justify="space-around">
+                <span>
+                  <Avatar shape="circle" size={40} src={user.foto}>
+                    {user.fullname &&
+                      general_helper.getInitialName(user.fullname)}
+                  </Avatar>
+                </span>
+                <span className="mr-auto" />
+                <a
+                  onClick={() => {
+                    Router.push(StringLink.profile);
+                    if (state.mobile) dispatch({ type: "mobileDrawer" });
+                  }}
+                  className={`px-3 ${
+                    sidebarTheme === "dark" ? "text-white" : "text-body"
+                  }`}
+                >
+                  <Tooltip title="Profile">
+                    <IdcardOutlined style={{ fontSize: "20px" }} />
+                  </Tooltip>
+                </a>
+
+                <Popconfirm
+                  placement="top"
+                  title="Anda yakin akan keluar ?"
+                  onConfirm={() => {
+                    doLogout();
+                    Router.push("/signin");
+                  }}
+                  okText="Keluar"
+                  cancelText="Batal"
+                >
+                  <a
+                    style={{ cursor: "pointer" }}
+                    className={`px-3 ${
+                      sidebarTheme === "dark" ? "text-white" : "text-body"
+                    }`}
+                  >
+                    <Tooltip title="keluar">
+                      <PoweroffOutlined style={{ fontSize: "16px" }} />
+                    </Tooltip>
+                  </a>
+                </Popconfirm>
+              </Row>
+            </div>
           </Sider>
         )}
 

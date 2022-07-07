@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { StringLink } from "../helper/string_link_helper";
 import authAction from "../action/auth.action";
+import Router from "next/router";
 
 const { SubMenu } = Menu;
 
@@ -17,7 +18,12 @@ const MainHeader = () => {
   const [state, dispatch] = useAppState();
   useEffect(() => {
     const users = authAction.getUser();
-    setUser(users);
+    if (users === undefined) {
+      Router.push("/signin");
+      authAction.doLogout();
+    } else {
+      setUser(users);
+    }
   }, []);
 
   return (
