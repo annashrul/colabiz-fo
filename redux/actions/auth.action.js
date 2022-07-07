@@ -91,6 +91,11 @@ export const loginAction = (data) => {
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
         dispatch(userDetailAction(res.data.id));
+        Message.success(
+          "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+        ).then(() =>
+          Router.push("/").then(() => dispatch(setLoadingLogin(false)))
+        );
       } else {
         dispatch(setLoadingLogin(false));
       }

@@ -1,39 +1,21 @@
 import {
   Col,
-  Collapse,
-  Message,
   Row,
   Modal,
   Input,
   Card,
   Button,
   Form,
-  Select,
   Popconfirm,
   Radio,
-  Spin,
 } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import React, { useEffect, useState, useRef } from "react";
-import { handleGet, handlePost } from "../../action/baseAction";
+import React, { useEffect, useState } from "react";
 import Action from "../../action/auth.action";
-import Router from "next/router";
-import { StringLink } from "../../helper/string_link_helper";
-import general_helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLoadingValidateUsername,
-  setValidateUsername,
-  signUpAction,
-  validateUsernameAction,
-} from "../../redux/actions/auth.action";
-import {
-  cityAction,
-  districtsAction,
-  provinceAction,
-} from "../../redux/actions/address.action";
-import { bankGeneralAction } from "../../redux/actions/banks.action";
+import { setValidateUsername } from "../../redux/actions/auth.action";
+import { provinceAction } from "../../redux/actions/address.action";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -42,15 +24,12 @@ import FormAddress from "../address/formAddress";
 import FormBank from "../bank/formBank";
 import { createStockisAction } from "../../redux/actions/stockis.action";
 
-const { Panel } = Collapse;
-const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
 const CreateStockis = () => {
   const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
-  const [iconLoading, setIconLoading] = useState(false);
   const [checkedAdress, setCheckedAddress] = useState(0);
   const [checkedBanks, setCheckedBanks] = useState(0);
   const [alamat, setAlamat] = useState("-");
@@ -70,10 +49,6 @@ const CreateStockis = () => {
     setObjAddress(adress);
     setObjBanks(banks);
   }, []);
-
-  useEffect(() => {
-    setIconLoading(loading);
-  }, [loading]);
 
   const handleBackStep = (val) => {
     setStep(val);
@@ -157,7 +132,7 @@ const CreateStockis = () => {
           gutter={10}
         >
           <Col md={8} xs={24}>
-            <Card title={!state.mobile && "Stokis"}>
+            <Card title={!state.mobile && "Daftar Stokis"}>
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
@@ -172,7 +147,7 @@ const CreateStockis = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <Input placeholder="Ex: Jhon Doe" />
+                      <Input />
                     </Form.Item>
                     <Form.Item
                       hasFeedback
@@ -192,7 +167,7 @@ const CreateStockis = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <Input prefix={"+62"} placeholder="81223165XXXX" />
+                      <Input prefix={"+62"} />
                     </Form.Item>
 
                     <Form.Item
@@ -207,7 +182,7 @@ const CreateStockis = () => {
                         },
                       ]}
                     >
-                      <Input placeholder="Ex: jhondoe@gmail.com" />
+                      <Input placeholder="Contoh: gugel@gmail.com" />
                     </Form.Item>
                     <Form.Item
                       hasFeedback
@@ -271,7 +246,7 @@ const CreateStockis = () => {
                               style={{ width: "96%" }}
                             >
                               {loading && <div>Loading...</div>}
-                              {suggestions.map((suggestion) => {
+                              {suggestions.map((suggestion, i) => {
                                 const className = suggestion.active
                                   ? "suggestion-item--active"
                                   : "suggestion-item";
@@ -287,6 +262,7 @@ const CreateStockis = () => {
                                     };
                                 return (
                                   <div
+                                    key={i}
                                     {...getSuggestionItemProps(suggestion, {
                                       className,
                                       style,

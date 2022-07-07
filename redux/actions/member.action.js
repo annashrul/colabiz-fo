@@ -20,7 +20,7 @@ export const putMemberAction = (id, e) => {
           .then(() => Message.info("Anda akan dialikan ke halaman login"))
           .then(() => {
             Router.push("/signin").then(() => {
-              setLoading(false);
+              dispatch(setLoading(false));
               authAction.doLogout();
             });
           });

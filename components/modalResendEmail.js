@@ -57,10 +57,13 @@ const ModalResendEmail = ({ modal, onCancel }) => {
                 icon: <InfoCircleOutlined />,
               }}
             >
-              <Input placeholder="masukan username anda" />
+              <Input
+                style={{ textTransform: "lowercase" }}
+                placeholder="masukan username anda"
+              />
             </FormItem>
             <Row gutter={12}>
-              <Col md={12}>
+              <Col md={12} xs={12} sm={12}>
                 <FormItem shouldUpdate={true}>
                   {() => (
                     <Button
@@ -77,7 +80,7 @@ const ModalResendEmail = ({ modal, onCancel }) => {
                   )}
                 </FormItem>
               </Col>
-              <Col md={12}>
+              <Col md={12} xs={12} sm={12}>
                 <Form.Item shouldUpdate={true}>
                   {() => (
                     <Button
@@ -92,7 +95,7 @@ const ModalResendEmail = ({ modal, onCancel }) => {
                           .filter(({ errors }) => errors.length).length
                       }
                     >
-                      Log in
+                      Kirim
                     </Button>
                   )}
                 </Form.Item>

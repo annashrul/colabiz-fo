@@ -111,6 +111,10 @@ const SidebarContent = ({
             }
           }
 
+          if (state.mobile && route.path === StringLink.profile) {
+            delete appRoutes[index];
+          }
+
           const hasChildren = !!route.children;
           if (!hasChildren) {
             return (
@@ -194,52 +198,7 @@ const SidebarContent = ({
                 display: `${sidebarTheme === "dark" ? "none" : ""}`,
               }}
             />
-            <div className={`py-3 px-4 bg-${sidebarTheme}`}>
-              <Row type="flex" align="middle" justify="space-around">
-                <span>
-                  <Avatar shape="circle" size={40} src={user.foto}>
-                    {user.fullname &&
-                      general_helper.getInitialName(user.fullname)}
-                  </Avatar>
-                </span>
-                <span className="mr-auto" />
-                <a
-                  onClick={() => {
-                    Router.push(StringLink.profile);
-                    if (state.mobile) dispatch({ type: "mobileDrawer" });
-                  }}
-                  className={`px-3 ${
-                    sidebarTheme === "dark" ? "text-white" : "text-body"
-                  }`}
-                >
-                  <Tooltip title="Profile">
-                    <IdcardOutlined style={{ fontSize: "20px" }} />
-                  </Tooltip>
-                </a>
-
-                <Popconfirm
-                  placement="top"
-                  title="Anda yakin akan keluar ?"
-                  onConfirm={() => {
-                    doLogout();
-                    Router.push("/signin");
-                  }}
-                  okText="Keluar"
-                  cancelText="Batal"
-                >
-                  <a
-                    style={{ cursor: "pointer" }}
-                    className={`px-3 ${
-                      sidebarTheme === "dark" ? "text-white" : "text-body"
-                    }`}
-                  >
-                    <Tooltip title="keluar">
-                      <PoweroffOutlined style={{ fontSize: "16px" }} />
-                    </Tooltip>
-                  </a>
-                </Popconfirm>
-              </Row>
-            </div>
+            <div className={`py-3 px-4 bg-${sidebarTheme}`}>Versi 0.0.1</div>
           </Sider>
         )}
 

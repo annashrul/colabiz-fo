@@ -1,29 +1,13 @@
-import {
-  Button,
-  Col,
-  Row,
-  Input,
-  Message,
-  Upload,
-  Modal,
-  Form,
-  Tabs,
-  Spin,
-} from "antd";
+import { Button, Col, Row, Input, Upload, Modal, Form, Tabs, Spin } from "antd";
 import {
   InfoCircleOutlined,
   InboxOutlined,
   SolutionOutlined,
-  KeyOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import Router from "next/router";
 
 import { useState, useEffect } from "react";
 import general_helper from "../../helper/general_helper";
-import { handlePut } from "../../action/baseAction";
-import { StringLink } from "../../helper/string_link_helper";
-import authAction from "../../action/auth.action";
 import { useDispatch, useSelector } from "react-redux";
 import { putMemberAction, setLoading } from "../../redux/actions/member.action";
 

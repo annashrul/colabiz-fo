@@ -1,12 +1,24 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Avatar } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { StringLink } from "../helper/string_link_helper";
+import authAction from "../action/auth.action";
+
+const { SubMenu } = Menu;
+
 const { Header } = Layout;
 
 const MainHeader = () => {
+  const [user, setUser] = useState({});
+
   const [state, dispatch] = useAppState();
+  useEffect(() => {
+    const users = authAction.getUser();
+    setUser(users);
+  }, []);
 
   return (
     <DashHeader>
@@ -49,6 +61,16 @@ const MainHeader = () => {
           )}
           <Menu.Item>
             <img src={general_helper.imgDefault} style={{ width: "100px" }} />
+          </Menu.Item>
+          <span className="mr-auto" />
+          <Menu.Item>
+            <Link href={StringLink.profile}>
+              <Avatar src={user.foto}>
+                {" "}
+                {user.fullname !== undefined &&
+                  general_helper.getInitialName(user.fullname)}
+              </Avatar>
+            </Link>
           </Menu.Item>
         </Menu>
       </Header>

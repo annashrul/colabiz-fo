@@ -7,8 +7,6 @@ import NProgress from "nprogress";
 import Page from "../components/Page";
 import Router from "next/router";
 import axios from "axios";
-import Action from "../action/auth.action";
-import { Message } from "antd";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 
@@ -75,11 +73,20 @@ class MyApp extends App {
           {pageProps.ieBrowser && (
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
           )}
-          <script
+
+          <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDqD1Z03FoLnIGJTbpAgRvjcchrR-NiICk"></script>
+          {/* <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqD1Z03FoLnIGJTbpAgRvjcchrR-NiICk&libraries=places"
             async
             defer
-          />
+          /> */}
+          {/* <script
+            async
+            defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&amp;libraries=places"
+          >
+            &lt
+          </script> */}
         </Head>
         <Provider store={store}>
           <AppProvider>
