@@ -1,4 +1,4 @@
-import { Collapse, Spin, Message, Row, Col, Avatar, Empty } from "antd";
+import { Collapse, Spin, Message, Row, Col, Avatar, Empty, Tree } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import { arrayToTree } from "performant-array-to-tree";
@@ -8,11 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGenealogyAction } from "../../redux/actions/member.action";
 import authAction from "../../action/auth.action";
 import general_helper from "../../helper/general_helper";
+import { CaretRightOutlined, DownOutlined } from "@ant-design/icons";
 
 moment.locale("id");
 const { Panel } = Collapse;
 
 const Index = ({
+  key,
+  isActive,
   loading,
   joinDate,
   picture,
@@ -21,18 +24,21 @@ const Index = ({
   children = [],
   callback,
 }) => {
-  const handleMore = (idData) => {
+  const handleMore = (idData, index) => {
+    console.log(`key`, `${key}-${index}`);
     if (idData === null) Message.success("data tidak ada");
     else {
-      callback(idData);
+      callback(idData, index);
     }
-    // addToast(idData, {appearance: 'warning',autoDismiss: true});
   };
-
   return (
     <Collapse
-      onChange={(key) => {
-        handleMore(id);
+      bordered={false}
+      style={{ borderLeft: "1px solid red" }}
+      onChange={(keys) => {
+        if (!isActive) {
+          handleMore(id, key);
+        }
       }}
     >
       <Panel
@@ -55,22 +61,28 @@ const Index = ({
         }
       >
         {children.length > 0
-          ? children.map((res, key) => {
+          ? children.map((res, index) => {
               return (
-                <Index
-                  key={key}
-                  {...res}
-                  loading={loading}
-                  joinDate={res.join_date}
-                  picture={res.picture}
-                  id={res.id}
-                  name={res.name}
-                  children={res.children}
-                  callback={(val) => handleMore(val)}
-                />
+                <span key={index}>
+                  <Index
+                    key={index}
+                    isActive={res.isActive}
+                    loading={loading}
+                    joinDate={res.join_date}
+                    picture={res.picture}
+                    id={res.id}
+                    name={`${res.name}`}
+                    children={res.children}
+                    callback={(val, keys) => {
+                      handleMore(val, index);
+                    }}
+                  />
+                </span>
               );
             })
-          : !loading && <Empty />}
+          : !loading && (
+              <Empty description={`${name} tidak mempunyai downline`} />
+            )}
       </Panel>
     </Collapse>
   );

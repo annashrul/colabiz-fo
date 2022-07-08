@@ -71,8 +71,6 @@ const SidebarContent = ({
     setUser(users);
     appRoutes.forEach((route, index) => {
       if (Object.keys(users).length > 0) {
-        console.log("stokis", route.name);
-
         if (route.name === "Daftar Stokis") {
           if (users.stockis !== 0) {
             delete appRoutes[index];

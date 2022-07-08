@@ -19,62 +19,71 @@ const Genealogy = () => {
   let user = authAction.getUser();
 
   const getGenealogy = async (where) => {
-    console.log("user", user);
     setData([
       {
         hasChild: parseInt(user.jumlah_downline, 10) > 0,
-        id: user.referral,
+        id: "KOLABIZMASTER",
         join_date: user.created_at,
         name: user.fullname,
         parentId: null,
         picture: user.foto,
+        isActive: false,
+        key: "0",
       },
     ]);
     setLoading(false);
   };
 
   useEffect(() => {
-    getGenealogy(`${user.referral}?isfirst=true`);
+    getGenealogy(`${"KOLABIZMASTER"}?isfirst=true`);
   }, []);
 
-  const onChange = async (val) => {
+  const onChange = async (val, keys) => {
+    console.log("keys", keys);
     setLoading(true);
     await handleGet("member/genealogy/" + val, (res, status) => {
-      console.log("data", data);
-      console.log("res.data", res.data);
-      console.log("concat", data.concat(res.data));
       if (res.data.length > 0) {
+        res.data.map((row, index) => {
+          Object.assign(row, {
+            isActive: false,
+          });
+        });
+
+        data.map((row, index) => {
+          if (row.id === val) {
+            Object.assign(row, { isActive: true });
+          }
+        });
+
         setData(data.concat(res.data));
-      } else {
-        Message.success("data tidak ada");
       }
       setLoading(false);
       // setData(newData);
     });
   };
 
-  // console.log("anying", data);
-
-  return (
-    <Spin tip="Tunggu Sebentar..." size="large" spinning={loading}>
-      {arrayToTree(data.length > 0 ? data : [], {
-        dataField: null,
-        childrenField: "children",
-      }).map((res, key) => (
+  return arrayToTree(data.length > 0 ? data : [], {
+    dataField: null,
+    childrenField: "children",
+  }).map((res, index) => {
+    return (
+      <span key={index}>
         <Index
-          key={key}
-          {...res}
+          key={index}
+          isActive={res.isActive}
           loading={loading}
           joinDate={res.join_date}
           picture={res.picture}
           id={res.id}
-          name={res.name}
+          name={`${res.name}`}
           children={res.children}
-          callback={(val) => onChange(val)}
+          callback={(val, keys) => {
+            onChange(val, index);
+          }}
         />
-      ))}
-    </Spin>
-  );
+      </span>
+    );
+  });
 };
 
 export default Genealogy;

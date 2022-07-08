@@ -9,7 +9,7 @@ import {
   Popconfirm,
   Radio,
 } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Action from "../../action/auth.action";
 import { useAppState } from "../shared/AppProvider";
@@ -281,12 +281,29 @@ const CreateStockis = () => {
                       name="checkedAddress"
                       label="Gunakan alamat yang sudah ada ?"
                       onChange={(e) => {
-                        console.log("sadasd,", e.target.value);
                         if (e.target.value === "1") {
                           dispatch(provinceAction());
                         }
                         setCheckedAddress(parseInt(e.target.value, 10));
                       }}
+                      tooltip={
+                        parseInt(checkedAdress, 10) === 1
+                          ? {
+                              title: "ubah alamat",
+                              icon: (
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    console.log(objAddress);
+                                    setCheckedAddress(1);
+                                  }}
+                                >
+                                  <EditOutlined />
+                                </span>
+                              ),
+                            }
+                          : null
+                      }
                     >
                       <Radio.Group
                         buttonStyle="outline"
@@ -306,6 +323,23 @@ const CreateStockis = () => {
                       onChange={(e) => {
                         setCheckedBanks(parseInt(e.target.value, 10));
                       }}
+                      tooltip={
+                        parseInt(checkedBanks, 10) === 1
+                          ? {
+                              title: "ubah akun bank",
+                              icon: (
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    setCheckedBanks(1);
+                                  }}
+                                >
+                                  <EditOutlined />
+                                </span>
+                              ),
+                            }
+                          : null
+                      }
                     >
                       <Radio.Group
                         buttonStyle="outline"
@@ -400,6 +434,7 @@ const CreateStockis = () => {
           footer={null}
         >
           <FormAddress
+            dataOld={objAddress}
             callback={(param, e) => {
               if (param !== "cancel") {
                 setObjAddress(e);
@@ -423,7 +458,9 @@ const CreateStockis = () => {
           footer={null}
         >
           <FormBank
+            dataOld={objBanks}
             callback={(param, e) => {
+              console.log(e);
               if (param !== "cancel") {
                 setObjBanks(e);
               }

@@ -43,7 +43,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
-const FormBank = ({ callback }) => {
+const FormBank = ({ dataOld, callback }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [data, setData] = useState({});
@@ -53,6 +53,12 @@ const FormBank = ({ callback }) => {
 
   useEffect(() => {
     dispatch(bankGeneralAction());
+    if (Object.keys(dataOld).length === 3) {
+      setData(dataOld);
+      form.setFieldsValue({ acc_name: dataOld.acc_name });
+      form.setFieldsValue({ acc_no: dataOld.acc_no });
+      form.setFieldsValue({ id_bank: dataOld.id_bank });
+    }
   }, []);
 
   const onChange = (e) => {

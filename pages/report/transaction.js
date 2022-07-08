@@ -37,7 +37,7 @@ const TransactionReport = () => {
       )}&dateto=${moment(endDate).format("YYYY-MM-DD")}`
     );
   }, []);
-  const handleLoadData = async (where) => {
+  const handleLoadData = async (where = "") => {
     setLoading(true);
     await handleGet(
       `transaction/report?perpage=10${where}`,
