@@ -5,6 +5,7 @@ import { addressReducer } from "./reducers/address.reducer";
 import { banksReducer } from "./reducers/banks.reducer";
 import { stockisReducer } from "./reducers/stockis.reducer";
 import { memberReducer } from "./reducers/member.reducer";
+import { infoReducer } from "./reducers/info.reducer";
 export default combineReducers({
   loginReducer,
   authUserReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
   banksReducer,
   stockisReducer,
   memberReducer,
+  infoReducer,
 });

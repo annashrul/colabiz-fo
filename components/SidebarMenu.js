@@ -35,7 +35,7 @@ const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
 
 let rootSubMenuKeys = [];
-
+const versi = "Versi 1.0.0";
 const getKey = (name, index) => {
   const string = `${name}-${index}`;
   let key = string.replace(" ", "-");
@@ -198,12 +198,7 @@ const SidebarContent = ({
             />
             <div className={`py-3 px-4 bg-${sidebarTheme}`}>
               <Row type="flex" align="middle" justify="space-around">
-                <span>
-                  <Avatar shape="circle" size={40} src={user.foto}>
-                    {user.fullname &&
-                      general_helper.getInitialName(user.fullname)}
-                  </Avatar>
-                </span>
+                <span>{versi}</span>
                 <span className="mr-auto" />
                 <a
                   onClick={() => {
@@ -282,12 +277,7 @@ const SidebarContent = ({
                 />
                 <div className={`py-3 px-4 bg-${sidebarTheme}`}>
                   <Row type="flex" align="middle" justify="space-around">
-                    <span>
-                      <Avatar shape="circle" size={40} src={user.foto}>
-                        {user.fullname &&
-                          general_helper.getInitialName(user.fullname)}
-                      </Avatar>
-                    </span>
+                    <span>{versi}</span>
                     <span className="mr-auto" />
                     <a
                       onClick={() => {

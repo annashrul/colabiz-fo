@@ -1,14 +1,7 @@
 import { Collapse, Spin, Message, Row, Col, Avatar, Empty, Tree } from "antd";
 import React, { useEffect, useState } from "react";
-import { handleGet } from "../../action/baseAction";
-import { arrayToTree } from "performant-array-to-tree";
-import listToTree from "list-to-tree-lite";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
-import { getGenealogyAction } from "../../redux/actions/member.action";
-import authAction from "../../action/auth.action";
 import general_helper from "../../helper/general_helper";
-import { CaretRightOutlined, DownOutlined } from "@ant-design/icons";
 
 moment.locale("id");
 const { Panel } = Collapse;
@@ -34,12 +27,17 @@ const Index = ({
   return (
     <Collapse
       bordered={false}
-      style={{ borderLeft: "1px solid red" }}
+      style={{
+        borderLeft: "1px solid green",
+        borderBottom: "none",
+        marginBottom: "10px",
+      }}
       onChange={(keys) => {
         if (!isActive) {
           handleMore(id, key);
         }
       }}
+      expandIconPosition="right"
     >
       <Panel
         header={

@@ -1,18 +1,19 @@
-import { Collapse, Spin, Message } from "antd";
+import { Collapse, Spin, Message, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import { arrayToTree } from "performant-array-to-tree";
-import listToTree from "list-to-tree-lite";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { getGenealogyAction } from "../../redux/actions/member.action";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
+import Matahari from "../../components/genealogy/matahari";
+const { TabPane } = Tabs;
 
 moment.locale("id");
 const { Panel } = Collapse;
 
 const Genealogy = () => {
+  const [step, setStep] = useState(1);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,6 +62,55 @@ const Genealogy = () => {
       // setData(newData);
     });
   };
+
+  return (
+    <Tabs defaultActiveKey="1" onChange={(e) => setStep(parseInt(e, 10))}>
+      <TabPane tab="Satu Arah" key="1">
+        {arrayToTree(data.length > 0 ? data : [], {
+          dataField: null,
+          childrenField: "children",
+        }).map((res, index) => {
+          return (
+            <Index
+              key={index}
+              isActive={res.isActive}
+              loading={loading}
+              joinDate={res.join_date}
+              picture={res.picture}
+              id={res.id}
+              name={`${res.name}`}
+              children={res.children}
+              callback={(val, keys) => {
+                onChange(val, index);
+              }}
+            />
+          );
+        })}
+      </TabPane>
+      <TabPane tab="Matahari" key="2">
+        {arrayToTree(data.length > 0 ? data : [], {
+          dataField: null,
+          childrenField: "children",
+        }).map((res, index) => {
+          return (
+            <Matahari
+              key={index}
+              isActive={res.isActive}
+              loading={loading}
+              joinDate={res.join_date}
+              picture={res.picture}
+              id={res.id}
+              name={`${res.name}`}
+              children={res.children}
+              callback={(val, keys) => {
+                onChange(val, index);
+              }}
+            />
+          );
+        })}
+      </TabPane>
+    </Tabs>
+  );
 
   return arrayToTree(data.length > 0 ? data : [], {
     dataField: null,

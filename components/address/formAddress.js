@@ -86,7 +86,10 @@ const FormAddress = ({ dataOld, callback }) => {
       <Form
         form={form}
         layout="vertical"
-        onFinish={(e) => callback("submit", data)}
+        onFinish={(e) => {
+          // console.log("data", data);
+          callback("submit", data);
+        }}
       >
         <Form.Item
           hasFeedback

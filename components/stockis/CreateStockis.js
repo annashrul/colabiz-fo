@@ -58,6 +58,7 @@ const CreateStockis = () => {
   const handleStep = async (e) => {
     let dataForm = Object.assign(objForm, e);
     setObjForm(dataForm);
+
     if (step == 2) {
       onFinish();
     } else {
@@ -97,6 +98,7 @@ const CreateStockis = () => {
             }
           : {},
     };
+    // console.log(data);
     dispatch(createStockisAction(data));
   };
   const handleSelect = (address) => {
@@ -214,7 +216,7 @@ const CreateStockis = () => {
                     <Form.Item
                       hasFeedback
                       name="alamat"
-                      label="Longitude & Latitude"
+                      label="Tag Lokasi"
                       tooltip={{
                         title:
                           "ketikan nama jalan untuk mendapatkan longitude dan latitude",
@@ -436,6 +438,7 @@ const CreateStockis = () => {
           <FormAddress
             dataOld={objAddress}
             callback={(param, e) => {
+              console.log(e);
               if (param !== "cancel") {
                 setObjAddress(e);
               }

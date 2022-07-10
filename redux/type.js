@@ -54,3 +54,8 @@ export const MEMBER = {
   LOADING_GENEALOGY: "LOADING_GENEALOGY",
   DATA_GENEALOGY: "DATA_GENEALOGY",
 };
+
+export const INFO = {
+  LOADING: "LOADING",
+  DATA: "DATA",
+};

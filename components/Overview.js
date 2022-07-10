@@ -1,4 +1,10 @@
-import { RightCircleOutlined, CopyOutlined } from "@ant-design/icons";
+import {
+  RightCircleOutlined,
+  CopyOutlined,
+  WalletOutlined,
+  ApartmentOutlined,
+} from "@ant-design/icons";
+import { theme } from "./styles/GlobalStyles";
 import { Col, Button, Row, Card } from "antd";
 import React, { useEffect, useState } from "react";
 import Action, { doLogout } from "../action/auth.action";
@@ -7,12 +13,17 @@ import Router from "next/router";
 import { useAppState } from "./shared/AppProvider";
 import CardNews from "./news/cardNews";
 import { StringLink } from "../helper/string_link_helper";
-
+import { useDispatch, useSelector } from "react-redux";
+import { getInfoAction } from "../redux/actions/info.action";
+import StatCard from "./shared/StatCard";
 const Overview = () => {
+  const dispatch = useDispatch();
+
   const [objUser, setObjUser] = useState({});
   const [isData, setIsData] = useState(false);
   const [font, setFont] = useState("14px");
   const [state] = useAppState();
+  const { loading, data } = useSelector((state) => state.infoReducer);
 
   useEffect(() => {
     if (state.mobile) {
@@ -25,53 +36,23 @@ const Overview = () => {
     } else {
       setObjUser(user);
     }
+    console.log("data info", data);
   }, [isData, state]);
+  useEffect(() => {
+    dispatch(getInfoAction());
+  }, []);
 
   const arrBtn = [
     { title: "Register", link: StringLink.tambahMitra },
     { title: "Daftar Stokis", link: StringLink.stockis },
+    { title: "Genealogy", link: StringLink.genealogy },
+    { title: "Laporan", link: StringLink.reportTransaction },
     // { title: "Laporan Transaksi", link: StringLink.reportTransaction },
   ];
 
   return (
     <div>
-      <Row gutter={4}>
-        <Col xs={24} sm={8} md={8} className="mb-2">
-          <Button
-            type="primary"
-            icon={<CopyOutlined />}
-            style={{
-              whiteSpace: "normal",
-              height: "auto",
-              width: "100%",
-            }}
-            block={true}
-            onClick={async (e) => Helper.copyText(objUser.referral_url)}
-          >
-            {objUser && objUser.referral_url}
-          </Button>
-        </Col>
-        {arrBtn.map((v, i) => {
-          return (
-            <Col xs={12} sm={8} md={8} className="mb-2" key={i}>
-              <Button
-                type="primary"
-                style={{
-                  whiteSpace: "normal",
-                  height: "auto",
-                  width: "100%",
-                }}
-                onClick={async (e) => {
-                  Router.push(v.link);
-                }}
-              >
-                {v.title}
-              </Button>
-            </Col>
-          );
-        })}
-      </Row>
-      <Row>
+      <Row className="mb-2">
         <Col xs={24} sm={24} md={24}>
           <Button
             type="dashed"
@@ -85,6 +66,83 @@ const Overview = () => {
             PERHATIAN !!
             <br /> Mohon maaf,Konten lainnya masih dalam tahap pengembangan
           </Button>
+        </Col>
+      </Row>
+      <Row gutter={4}>
+        <Col xs={24} sm={24} md={24} className="mb-2">
+          <Card title="Kirimkan Link Referral Anda">
+            <Button
+              type="primary"
+              icon={<CopyOutlined />}
+              style={{
+                whiteSpace: "normal",
+                height: "auto",
+                width: "100%",
+              }}
+              block={true}
+              onClick={async (e) => Helper.copyText(objUser.referral_url)}
+            >
+              {objUser && objUser.referral_url}
+            </Button>
+          </Card>
+        </Col>
+
+        <Col xs={24} sm={12} md={8} className="mb-2">
+          <StatCard
+            type=""
+            title="Total Downline"
+            value={`${Helper.toRp(
+              parseFloat(loading ? 0 : data.jumlah_downline).toFixed(0),
+              true
+            )} Orang`}
+            icon={<ApartmentOutlined style={{ fontSize: "20px" }} />}
+            color={theme.primaryColor}
+          />
+        </Col>
+        <Col xs={24} sm={12} md={8} className="mb-2">
+          <StatCard
+            type=""
+            title="Total Saldo"
+            value={Helper.toRp(parseFloat(loading ? 0 : data.saldo).toFixed(0))}
+            icon={<WalletOutlined style={{ fontSize: "20px" }} />}
+            color={theme.darkColor}
+          />
+        </Col>
+        <Col xs={24} sm={12} md={8} className="mb-2">
+          <StatCard
+            type=""
+            title="Total Penarikan"
+            value={Helper.toRp(
+              parseFloat(loading ? 0 : data.total_penarikan).toFixed(0)
+            )}
+            icon={<WalletOutlined style={{ fontSize: "20px" }} />}
+            color={theme.warningColor}
+          />
+        </Col>
+        <Col xs={24} sm={24} md={24} className="mb-2">
+          <Card title="Shorcut Menu">
+            <Row gutter={4}>
+              {arrBtn.map((v, i) => {
+                return (
+                  <Col xs={12} sm={8} md={4} className="mb-2" key={i}>
+                    <Button
+                      type="primary"
+                      style={{
+                        whiteSpace: "normal",
+                        height: "auto",
+                        width: "100%",
+                      }}
+                      onClick={async (e) => {
+                        Router.push(v.link);
+                      }}
+                    >
+                      {v.title}
+                    </Button>
+                  </Col>
+                );
+              })}
+            </Row>
+          </Card>
         </Col>
       </Row>
 
