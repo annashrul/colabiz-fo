@@ -23,7 +23,7 @@ const Genealogy = () => {
     setData([
       {
         hasChild: parseInt(user.jumlah_downline, 10) > 0,
-        id: "KOLABIZMASTER",
+        id: user.id,
         join_date: user.created_at,
         name: user.fullname,
         parentId: null,
@@ -36,11 +36,11 @@ const Genealogy = () => {
   };
 
   useEffect(() => {
-    getGenealogy(`${"KOLABIZMASTER"}?isfirst=true`);
+    getGenealogy(`${user.referral}?isfirst=true`);
   }, []);
+  console.log("keys", user);
 
   const onChange = async (val, keys) => {
-    console.log("keys", keys);
     setLoading(true);
     await handleGet("member/genealogy/" + val, (res, status) => {
       if (res.data.length > 0) {
@@ -111,29 +111,6 @@ const Genealogy = () => {
       </TabPane>
     </Tabs>
   );
-
-  return arrayToTree(data.length > 0 ? data : [], {
-    dataField: null,
-    childrenField: "children",
-  }).map((res, index) => {
-    return (
-      <span key={index}>
-        <Index
-          key={index}
-          isActive={res.isActive}
-          loading={loading}
-          joinDate={res.join_date}
-          picture={res.picture}
-          id={res.id}
-          name={`${res.name}`}
-          children={res.children}
-          callback={(val, keys) => {
-            onChange(val, index);
-          }}
-        />
-      </span>
-    );
-  });
 };
 
 export default Genealogy;

@@ -5071,7 +5071,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"payment_channel\":\"DIRECTBCA\",\n    \"ongkir\":\"15000\",\n    \"jasa_pengiriman\":\"COD\",\n    \"id_alamat\":\"2976b49e-6baf-4759-a1f0-209c2882d58b\",\n    \"id_paket\":\"c0ffd77b-37ad-4017-b2f7-a348fa673c72\",\n    \"member_pin\":\"123456\"\n}",
+									"raw": "{\n    \"metode_pembayaran\":\"\",\n    \"id_stockis\":\"\",\n    \"id_address\":\"\",\n    \"id_bank\":\"\",\n    \"detail\":{\n        \"id_paket\":\"\",\n        \"harga\":\"\",\n        \"qty\":\"\",\n        \"total\":\"\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5079,12 +5079,73 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}transaction/checkout",
+									"raw": "{{url}}penjualan/checkout",
 									"host": [
-										"{{url}}transaction"
+										"{{url}}penjualan"
 									],
 									"path": [
 										"checkout"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approval",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\":1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/approve/base64kdtrx",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"approve",
+										"base64kdtrx"
 									],
 									"query": [
 										{
@@ -5142,12 +5203,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}transaction/penjualan/report",
+									"raw": "{{url}}penjualan/report",
 									"host": [
-										"{{url}}transaction"
+										"{{url}}penjualan"
 									],
 									"path": [
-										"penjualan",
 										"report"
 									],
 									"query": [

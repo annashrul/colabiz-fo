@@ -36,11 +36,15 @@ const Overview = () => {
     } else {
       setObjUser(user);
     }
-    console.log("data info", data);
   }, [isData, state]);
   useEffect(() => {
     dispatch(getInfoAction());
   }, []);
+  useEffect(() => {
+    if (!loading) {
+      Action.setInfo(data);
+    }
+  }, [loading]);
 
   const arrBtn = [
     { title: "Register", link: StringLink.tambahMitra },
@@ -92,7 +96,7 @@ const Overview = () => {
             type=""
             title="Total Downline"
             value={`${Helper.toRp(
-              parseFloat(loading ? 0 : data.jumlah_downline).toFixed(0),
+              parseFloat(data.jumlah_downline).toFixed(0),
               true
             )} Orang`}
             icon={<ApartmentOutlined style={{ fontSize: "20px" }} />}
@@ -103,7 +107,7 @@ const Overview = () => {
           <StatCard
             type=""
             title="Total Saldo"
-            value={Helper.toRp(parseFloat(loading ? 0 : data.saldo).toFixed(0))}
+            value={Helper.toRp(parseFloat(data.saldo).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: "20px" }} />}
             color={theme.darkColor}
           />
@@ -112,14 +116,12 @@ const Overview = () => {
           <StatCard
             type=""
             title="Total Penarikan"
-            value={Helper.toRp(
-              parseFloat(loading ? 0 : data.total_penarikan).toFixed(0)
-            )}
+            value={Helper.toRp(parseFloat(data.total_penarikan).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: "20px" }} />}
             color={theme.warningColor}
           />
         </Col>
-        <Col xs={24} sm={24} md={24} className="mb-2">
+        {/* <Col xs={24} sm={24} md={24} className="mb-2">
           <Card title="Shorcut Menu">
             <Row gutter={4}>
               {arrBtn.map((v, i) => {
@@ -143,7 +145,7 @@ const Overview = () => {
               })}
             </Row>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
 
       {isData && (

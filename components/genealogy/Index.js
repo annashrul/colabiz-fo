@@ -79,7 +79,7 @@ const Index = ({
               );
             })
           : !loading && (
-              <Empty description={`${name} tidak mempunyai downline`} />
+              <Empty description={`${name} belum mempunyai downline`} />
             )}
       </Panel>
     </Collapse>

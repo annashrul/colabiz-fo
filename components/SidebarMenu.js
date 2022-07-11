@@ -108,6 +108,11 @@ const SidebarContent = ({
       >
         {appRoutes.map((route, index) => {
           // console.log(route);
+          if (route.path !== StringLink.checkout) {
+            // console.log("blos #######################");
+            // localStorage.removeItem("dataPaket");
+            // localStorage.removeItem("dataStokis");
+          }
 
           if (state.mobile && route.path === StringLink.profile) {
             delete appRoutes[index];

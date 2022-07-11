@@ -1,3 +1,4 @@
+// import "tailwindcss/dist/base.css";
 import "../assets/styles.less";
 import App from "next/app";
 import AppProvider from "../components/shared/AppProvider";
