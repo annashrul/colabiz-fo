@@ -166,6 +166,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Resend Verifikasi",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"imsui99\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/resend/verifikasi",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"resend",
+								"verifikasi"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1310,18 +1337,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}member/genealogy?page=1",
+									"raw": "{{url}}member/genealogy/KOLABIZMASTER",
 									"host": [
 										"{{url}}member"
 									],
 									"path": [
-										"genealogy"
+										"genealogy",
+										"KOLABIZMASTER"
 									],
 									"query": [
-										{
-											"key": "page",
-											"value": "1"
-										},
 										{
 											"key": "parpage",
 											"value": "1",
@@ -1802,7 +1826,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id_address\":\"-\", //mun kosong/buat baru isi strip\n    \"id_bank\":\"-\", //mun kosong/buat baru isi strip\n    \"name\": \"\", //nama admin\n    \"mobile_no\":\"\",\n    \"long\":\"\",\n    \"lat\":\"\",\n    \"pin\":\"\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"Syaiful Hamid\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
+									"raw": "{\n    \"id_address\":\"-\", //mun kosong/buat baru isi strip\n    \"id_bank\":\"-\", //mun kosong/buat baru isi strip\n    \"name\": \"\", //nama admin\n    \"mobile_no\":\"\",\n    \"email\":\"\",\n    \"long\":\"\",\n    \"lat\":\"\",\n    \"pin\":\"\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"Syaiful Hamid\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2053,7 +2077,7 @@
 					]
 				},
 				{
-					"name": "Paket Tipe",
+					"name": "Alokasi",
 					"item": [
 						{
 							"name": "List",
@@ -2082,9 +2106,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}paket_type",
+									"raw": "{{url}}alokasi",
 									"host": [
-										"{{url}}paket_type"
+										"{{url}}alokasi"
 									],
 									"query": [
 										{
@@ -2130,57 +2154,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}paket_type/get/1610f041-8488-4380-bec9-26ced86cf206",
+									"raw": "{{url}}alokasi/get/1610f041-8488-4380-bec9-26ced86cf206",
 									"host": [
-										"{{url}}paket_type"
+										"{{url}}alokasi"
 									],
 									"path": [
 										"get",
 										"1610f041-8488-4380-bec9-26ced86cf206"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "create",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "X-Project-ID",
-										"value": "{{project_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Requested-From",
-										"value": "{{source}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"title\":\"RO TES POST\",\n    \"bonus_sponsor\":\"100000\",\n    \"minimal_wd\":\"2000000\",\n    \"limit_bonus_nasional\":\"15000000\",\n    \"max_wd\":\"10\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}paket_type",
-									"host": [
-										"{{url}}paket_type"
 									]
 								}
 							},
@@ -2214,7 +2194,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"title\":\"\",\n    \"bonus_sponsor\":\"\",\n    \"minimal_wd\":\"\",\n    \"limit_bonus_nasional\":\"\",\n    \"max_wd\":\"\"\n}",
+									"raw": "{\n    \"sponsor\":\"\",\n    \"monoleg\":\"\",\n    \"leadership\":\"\",\n    \"poin_reward\":\"\",\n    \"generasi\":\"\",\n    \"hpp\":\"\",\n    \"it\":\"\",\n    \"support\":\"\",\n    \"distribution_point\":\"\",\n    \"subsidi_ongkir\":\"\",\n    \"profit\":\"\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2222,50 +2202,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}paket_type/c0ffd77b-37ad-4017-b2f7-a348fa673c72",
+									"raw": "{{url}}alokasi/c0ffd77b-37ad-4017-b2f7-a348fa673c72",
 									"host": [
-										"{{url}}paket_type"
+										"{{url}}alokasi"
 									],
 									"path": [
 										"c0ffd77b-37ad-4017-b2f7-a348fa673c72"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "X-Project-ID",
-										"value": "{{project_id}}",
-										"type": "text"
-									},
-									{
-										"key": "X-Requested-From",
-										"value": "{{source}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{url}}paket_type/0f8b9e21-4130-4afd-ae1d-638b5a171a53",
-									"host": [
-										"{{url}}paket_type"
-									],
-									"path": [
-										"0f8b9e21-4130-4afd-ae1d-638b5a171a53"
 									]
 								}
 							},
@@ -2277,7 +2219,7 @@
 					"name": "Paket",
 					"item": [
 						{
-							"name": "List",
+							"name": "List paket register",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -2303,18 +2245,18 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}paket?page=1&perpage=10&category=5d96d9f0-49bd-49e2-895f-f8171ba3a9ea",
+									"raw": "{{url}}paket/list/REGISTER?page=1&perpage=10",
 									"host": [
 										"{{url}}paket"
+									],
+									"path": [
+										"list",
+										"REGISTER"
 									],
 									"query": [
 										{
 											"key": "page",
 											"value": "1"
-										},
-										{
-											"key": "perpage",
-											"value": "10"
 										},
 										{
 											"key": "searchby",
@@ -2328,8 +2270,128 @@
 											"disabled": true
 										},
 										{
-											"key": "category",
-											"value": "5d96d9f0-49bd-49e2-895f-f8171ba3a9ea"
+											"key": "perpage",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List paket happy shopping",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}paket/list/HAPPY_SHOPPING?page=1&perpage=10",
+									"host": [
+										"{{url}}paket"
+									],
+									"path": [
+										"list",
+										"HAPPY_SHOPPING"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "perpage",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List paket smart contract",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}paket/list/SMART_CONTRACT?page=1&perpage=10",
+									"host": [
+										"{{url}}paket"
+									],
+									"path": [
+										"list",
+										"SMART_CONTRACT"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "perpage",
+											"value": "10"
 										}
 									]
 								}

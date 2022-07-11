@@ -70,7 +70,7 @@ const CreateStockis = () => {
     objForm.alamat.replaceAll(" ", "");
     let lat = objForm.alamat.split(",")[1];
     let long = objForm.alamat.split(",")[0];
-    console.log(objAddress);
+    // console.log(objAddress);
     const data = {
       id_address: parseInt(checkedAdress, 10) === 1 ? "-" : objAddress.id,
       id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
@@ -92,9 +92,9 @@ const CreateStockis = () => {
         parseInt(checkedAdress, 10) === 1
           ? {
               main_address: objAddress.main_address,
-              kd_prov: objAddress.kd_prov,
-              kd_kota: objAddress.kd_kota,
-              kd_kec: objAddress.kd_kec,
+              kd_prov: objAddress.prov,
+              kd_kota: objAddress.kota,
+              kd_kec: objAddress.kecamatan,
             }
           : {},
     };
