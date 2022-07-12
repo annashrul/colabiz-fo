@@ -12,8 +12,15 @@ import {
   Form,
   Select,
   Input,
+  Pagination,
 } from "antd";
-import { HomeOutlined, CheckOutlined, FilterOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  CheckOutlined,
+  FilterOutlined,
+  CaretRightOutlined,
+  CaretLeftOutlined,
+} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getStockisAction } from "../../redux/actions/stockis.action";
@@ -41,6 +48,7 @@ const ListProduct = () => {
   const [queryString, setQueryString] = useState("");
   const [indexStockis, setIndexStockis] = useState(0);
   const [isModalFilter, setIsModalFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { loadingData, data, pagination } = useSelector(
     (state) => state.stockisReducer
   );
@@ -193,6 +201,40 @@ const ListProduct = () => {
             ) : (
               <Empty />
             )}
+          </Row>
+          <Row justify="end" gutter={16}>
+            <Col>
+              <Button
+                disabled={currentPage === 1}
+                onClick={(e) => {
+                  if (currentPage > 1) {
+                    let page = currentPage;
+                    page -= 1;
+                    setCurrentPage(page);
+                    dispatch(getStockisAction(`page=${page}`));
+                  }
+                }}
+              >
+                <CaretLeftOutlined />
+              </Button>
+              <Button className="mr-2 ml-2">{currentPage}</Button>
+              <Button
+                disabled={pagination.to >= parseInt(pagination.total, 10)}
+                onClick={(e) => {
+                  console.log(pagination);
+                  if (pagination.to >= parseInt(pagination.total, 10)) {
+                    Message.info("data stokis habis");
+                  } else {
+                    let page = currentPage;
+                    page += 1;
+                    setCurrentPage(page);
+                    dispatch(getStockisAction(`page=${page}&perpage=12`));
+                  }
+                }}
+              >
+                <CaretRightOutlined />
+              </Button>
+            </Col>
           </Row>
         </Spin>
       </Card>

@@ -66,8 +66,6 @@ const SidebarContent = ({
 
   useEffect(() => {
     let users = authAction.getUser();
-    // let infos = authAction.getInfo();
-    // setInfo(infos);
     setUser(users);
     appRoutes.forEach((route, index) => {
       if (Object.keys(users).length > 0) {

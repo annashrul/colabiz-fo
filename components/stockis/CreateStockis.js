@@ -44,7 +44,6 @@ const CreateStockis = () => {
     forceUpdate({});
     setStep(1);
     let banks = Action.getBank();
-    // console.log("banks", banks);
     let adress = Action.getAddress();
     setObjAddress(adress);
     setObjBanks(banks);
