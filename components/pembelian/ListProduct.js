@@ -122,6 +122,7 @@ const ListProduct = () => {
     setIsModalFilter(false);
     setTimeout(() => {
       dispatch(getStockisAction(objFilter));
+      setIndexStockis(0);
     }, 200);
   };
   const handleChangeAddress = (value, col = "") => {
@@ -147,14 +148,14 @@ const ListProduct = () => {
       <Card
         title="Stokis"
         extra={
-          <span
-            style={{ cursor: "pointer" }}
+          <Button
+            type="dashed"
             onClick={() => {
               setIsModalFilter(true);
             }}
           >
-            <FilterOutlined />
-          </span>
+            <FilterOutlined /> Cari Stokis
+          </Button>
         }
       >
         <Spin spinning={loadingData}>

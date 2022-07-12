@@ -7,6 +7,9 @@ import { stockisReducer } from "./reducers/stockis.reducer";
 import { memberReducer } from "./reducers/member.reducer";
 import { infoReducer } from "./reducers/info.reducer";
 import { paketReducer } from "./reducers/paket.reducer";
+import { walletReducer } from "./reducers/wallet.reducer";
+import { paymentChannelReducer } from "./reducers/paymentChannel.reducer";
+import { invoiceReducer } from "./reducers/invoice.reducer";
 export default combineReducers({
   loginReducer,
   authUserReducer,
@@ -16,4 +19,7 @@ export default combineReducers({
   memberReducer,
   infoReducer,
   paketReducer,
+  walletReducer,
+  paymentChannelReducer,
+  invoiceReducer,
 });

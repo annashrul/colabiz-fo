@@ -17,8 +17,12 @@ import React, { useEffect, useState } from "react";
 import Router from "next/router";
 import { handleGet, handlePut } from "../action/baseAction";
 import Helper from "../helper/general_helper";
+import { useDispatch, useSelector } from "react-redux";
+import { invoiceAction } from "../redux/actions/invoice.action";
+
 const { Panel } = Collapse;
 const { Dragger } = Upload;
+
 const InvoiceComponent = () => {
   const [state] = useAppState();
   const [objData, setObjData] = useState({});
@@ -26,6 +30,8 @@ const InvoiceComponent = () => {
   const [showModalUpload, setShowModalUpload] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const { data, loading } = useSelector((state) => state.invoiceReducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let kdTrx = localStorage.getItem("kdTrx");
@@ -42,17 +48,8 @@ const InvoiceComponent = () => {
     if (state.mobile) {
       setFontSize("80%");
     }
-    handleGetInvoice();
+    dispatch(invoiceAction(kdTrx));
   }, []);
-
-  const handleGetInvoice = async () => {
-    await handleGet(
-      `transaction/deposit/${btoa(localStorage.getItem("kdTrx"))}/invoice`,
-      (res, status, msg) => {
-        setObjData(res.data);
-      }
-    );
-  };
 
   const rmStorageLocal = () => {
     localStorage.removeItem("kdTrx");
@@ -60,14 +57,17 @@ const InvoiceComponent = () => {
   };
 
   const handleBack = () => {
-    rmStorageLocal();
     if (
       localStorage.getItem("linkBack") === null ||
       localStorage.getItem("linkBack") === undefined
     ) {
-      Router.back();
+      Router.back().then(() => {
+        rmStorageLocal();
+      });
     } else {
-      Router.push(localStorage.getItem("linkBack"));
+      Router.push(localStorage.getItem("linkBack")).then(() => {
+        rmStorageLocal();
+      });
     }
   };
 
@@ -148,182 +148,155 @@ const InvoiceComponent = () => {
     );
   };
 
+  console.log("data invoice", data);
+
   return (
     <>
-      <Row type="flex" justify="center" gutter={10}>
-        <Col md={8} xs={24}>
-          <Card>
-            <PageHeader
-              className="site-page-header"
-              onBack={handleBack}
-              title={`Invoice ${localStorage.typeTrx}`}
-            >
-              <div align="middle">
-                <Image
-                  style={{ verticalAlign: "middle" }}
-                  width={200}
-                  src={Helper.imgDefault}
-                />
-              </div>
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
-              {tempRow("Kode Transaksi", objData && objData.kd_trx, false)}
-              {tempRow(
-                "Kode Pembayaran",
-                objData.transaction_data && objData.transaction_data.pay_code,
-                false
-              )}
-              <hr />
-              <small style={{ fontSize: fontSize }}>
-                Silahkan transfer sebesar
-              </small>
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
-              <Button
-                style={{ width: "100%", marginBottom: "2px" }}
-                type="dashed"
-                danger
-                size={"large"}
+      <Spin spinning={loading}>
+        <Row type="flex" justify="center" gutter={10}>
+          <Col md={8} xs={24}>
+            <Card>
+              <PageHeader
+                className="site-page-header"
+                onBack={handleBack}
+                title={`Invoice ${localStorage.getItem("kdTrx")}`}
               >
-                {Helper.toRp(
-                  objData.transaction_data && objData.transaction_data.total_pay
+                <div align="middle">
+                  <Image
+                    style={{ verticalAlign: "middle" }}
+                    width={200}
+                    src={Helper.imgDefault}
+                  />
+                </div>
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+                {tempRow("Kode Transaksi", data && data.invoice_no, false)}
+                {tempRow("Kode Pembayaran", data && data.pay_code, false)}
+                <hr />
+                <small style={{ fontSize: fontSize }}>
+                  Silahkan transfer sebesar
+                </small>
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+                <Button
+                  style={{ width: "100%", marginBottom: "2px" }}
+                  type="dashed"
+                  danger
+                  size={"large"}
+                >
+                  {Helper.toRp(data && data.total_pay)}
+                </Button>
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+                <small style={{ fontSize: fontSize }}>
+                  Pembayaran dapat dilakukan ke rekening berikut :
+                </small>
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+                {tempRow(
+                  "Metode Pembayaran",
+                  data && data.payment_method,
+                  false
                 )}
-              </Button>
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
-              <small style={{ fontSize: fontSize }}>
-                Pembayaran dapat dilakukan ke rekening berikut :
-              </small>
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
-              {tempRow(
-                "Metode Pembayaran",
-                objData.transaction_data &&
-                  objData.transaction_data.payment_method,
-                false
-              )}
-              {tempRow(
-                "Bank",
-                objData.transaction_data &&
-                  objData.transaction_data.payment_name,
-                false
-              )}
-              {tempRow(
-                "Atas Nama",
-                objData.transaction_data && objData.transaction_data.acc_name,
-                false
-              )}
-              {tempRow(
-                "No.Rekening",
-                objData.transaction_data && objData.transaction_data.pay_code,
-                false
-              )}
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
-              <Collapse bordered={false}>
-                {objData.transaction_data && (
-                  <Panel
-                    header={
-                      <small style={{ fontSize: fontSize }}>
-                        Rincian Biaya
-                      </small>
-                    }
-                    key={"0"}
-                  >
-                    {tempRow("Kode Unik", objData && objData.unique_code)}
-                    {tempRow(
-                      "Biaya Admin",
-                      objData.transaction_data && objData.transaction_data.admin
-                    )}
-                    {tempRow(
-                      "Total",
-                      objData.transaction_data &&
-                        objData.transaction_data.total_pay
-                    )}
-                  </Panel>
-                )}
-              </Collapse>
-              <Collapse bordered={false}>
-                {objData.detail_paket_join && (
-                  <Panel
-                    header={
-                      <small style={{ fontSize: fontSize }}>
-                        Informasi Paket
-                      </small>
-                    }
-                    key={"0"}
-                  >
-                    {tempRow("Barang", objData.detail_paket_join.title, false)}
-                    {tempRow("Harga", objData.detail_paket_join.price)}
-                  </Panel>
-                )}
-              </Collapse>
-              <Collapse bordered={false}>
-                {objData.transaction_data &&
-                  objData.transaction_data.instruction.map((val, key) => {
-                    return (
-                      <Panel
-                        header={
-                          <small style={{ fontSize: fontSize }}>
-                            {val.title}
-                          </small>
-                        }
-                        key={key}
-                      >
+                {tempRow("Bank", data && data.payment_name, false)}
+                {tempRow("Atas Nama", data && data.acc_name, false)}
+                {tempRow("No.Rekening", data && data.pay_code, false)}
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+                <Collapse bordered={false}>
+                  {data && (
+                    <Panel
+                      header={
                         <small style={{ fontSize: fontSize }}>
-                          <ol style={{ paddingLeft: "35px" }}>
-                            {val.steps.map((row, i) => {
-                              return <li key={i}>{row}</li>;
-                            })}
-                          </ol>
+                          Rincian Biaya
                         </small>
-                      </Panel>
-                    );
-                  })}
-              </Collapse>
-              <Row style={{ margin: "5px" }}>
-                <Col />
-              </Row>
+                      }
+                      key={"0"}
+                    >
+                      {tempRow("Kode Unik", data && data.kode_unik)}
+                      {tempRow("Biaya Admin", data && data.admin)}
+                      {tempRow("Total", data && data.total_pay)}
+                    </Panel>
+                  )}
+                </Collapse>
 
-              <Row>
-                <Col md={24} xs={24} sm={24}>
-                  {objData.payment_slip === "-" ? (
+                <Collapse bordered={false}>
+                  {!loading
+                    ? data !== undefined &&
+                      data.instruction.map((val, key) => {
+                        return (
+                          <Panel
+                            header={
+                              <small style={{ fontSize: fontSize }}>
+                                {val.title}
+                              </small>
+                            }
+                            key={key}
+                          >
+                            <small style={{ fontSize: fontSize }}>
+                              <ol style={{ paddingLeft: "35px" }}>
+                                {val.steps.map((row, i) => {
+                                  return <li key={i}>{row}</li>;
+                                })}
+                              </ol>
+                            </small>
+                          </Panel>
+                        );
+                      })
+                    : ""}
+                </Collapse>
+                <Row style={{ margin: "5px" }}>
+                  <Col />
+                </Row>
+
+                <Row gutter={16}>
+                  <Col md={12} xs={12} sm={12}>
                     <Button
-                      onClick={() => setShowModalUpload(true)}
+                      onClick={handleBack}
                       style={{ width: "100%" }}
-                      type="primary"
+                      type="dashed"
+                      primary
                       size="medium"
                     >
-                      Upload Bukti Transfer
+                      {" "}
+                      Kembali
                     </Button>
-                  ) : (
-                    "Bukti Transfer Terkirim"
-                  )}
-                  {/* <Row style={{margin:"5px"}}><Col/></Row> */}
-                  {/* <Button style={{width:"100%"}} type="primary" danger size="medium">Batalkan Transfer</Button>  */}
-                  <Row style={{ margin: "5px" }}>
-                    <Col />
-                  </Row>
-                  <Button
-                    onClick={handleBack}
-                    style={{ width: "100%" }}
-                    type="dashed"
-                    primary
-                    size="medium"
-                  >
-                    Kembali
-                  </Button>
-                </Col>
-              </Row>
-            </PageHeader>
-          </Card>
-        </Col>
-      </Row>
+                  </Col>
+                  <Col md={12} xs={12} sm={12}>
+                    {localStorage.getItem("typeTrx").toLowerCase() ===
+                    "deposit" ? (
+                      <Button
+                        onClick={() => setShowModalUpload(true)}
+                        style={{ width: "100%" }}
+                        type="primary"
+                        size="medium"
+                      >
+                        Upload Bukti Transfer
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          console.log("konfirmasi ke stokis");
+                        }}
+                        style={{ width: "100%" }}
+                        type="primary"
+                        size="medium"
+                      >
+                        Konfirmasi Ke Stokis
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </PageHeader>
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
       {showModalUpload && (
         <Modal
           title="Upload Bukti Transfer"

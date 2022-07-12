@@ -29,7 +29,7 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
           </p>
           <ReactCodeInput
             inputStyle={{
-              margin: "4px",
+              marginRight: "3px",
               height: "30px",
               width: "30px",
               paddingLeft: "0px",

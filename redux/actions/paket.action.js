@@ -65,22 +65,25 @@ export const checkout = (e) => {
   return (dispatch) => {
     dispatch(setLoadingCheckout(true));
     handlePost("penjualan/checkout", e, (res, status, msg) => {
-      console.log("checkout", res);
-      console.log("status", status);
+      // console.log("checkout", res);
+      // console.log("status", status);
 
       if (status) {
         console.log(e.metode_pembayaran);
         if (e.metode_pembayaran === "TRANSFER") {
-          Message.success(msg).then(() =>
-            Router.push(StringLink.pembelian).then(() =>
-              dispatch(setLoadingCheckout(false))
-            )
-          );
+          Message.success(msg).then(() => {
+            localStorage.setItem("typeTrx", "Produk");
+            localStorage.setItem("kdTrx", res.data.insertId);
+            localStorage.setItem("linkBack", "/");
+            Router.push(StringLink.invoiceProduct).then(() => {
+              dispatch(setLoadingCheckout(false));
+            });
+          });
         } else {
           Message.success(msg).then(() =>
-            Router.push(StringLink.pembelian).then(() =>
-              dispatch(setLoadingCheckout(false))
-            )
+            Router.push(StringLink.pembelian).then(() => {
+              dispatch(setLoadingCheckout(false));
+            })
           );
         }
       } else {
