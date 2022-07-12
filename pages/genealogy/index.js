@@ -23,7 +23,7 @@ const Genealogy = () => {
     setData([
       {
         hasChild: parseInt(user.jumlah_downline, 10) > 0,
-        id: user.id,
+        id: user.referral,
         join_date: user.created_at,
         name: user.fullname,
         parentId: null,
