@@ -166,7 +166,7 @@ const ListProduct = () => {
                     key={key}
                     xs={24}
                     sm={12}
-                    md={6}
+                    md={8}
                     className="mb-2"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -180,7 +180,7 @@ const ListProduct = () => {
                         setIndexStockis(key);
                       }}
                       type={indexStockis === key ? "fill" : ""}
-                      title={val.mobile_no}
+                      title={`${val.mobile_no}, ${val.kota}, ${val.kecamatan}`}
                       value={`${val.name}`}
                       icon={
                         indexStockis === key ? (
