@@ -148,8 +148,6 @@ const InvoiceComponent = () => {
     );
   };
 
-  console.log("data invoice", data);
-
   return (
     <>
       <Spin spinning={loading}>
@@ -227,7 +225,7 @@ const InvoiceComponent = () => {
 
                 <Collapse bordered={false}>
                   {!loading
-                    ? data !== undefined &&
+                    ? data.instruction !== undefined &&
                       data.instruction.map((val, key) => {
                         return (
                           <Panel

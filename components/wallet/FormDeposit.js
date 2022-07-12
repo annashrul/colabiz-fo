@@ -38,11 +38,11 @@ const FormDeposit = () => {
     dispatch(paymentChannelAction());
     setUser(authAction.getUser());
   }, []);
-  useEffect(() => {
-    if (data.length > 0) {
-      form.setFieldsValue({ payment_channel: data[0].code });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data !== undefined && data.length > 0) {
+  //     form.setFieldsValue({ payment_channel: data[0].code });
+  //   }
+  // }, [data]);
 
   const onChange = (e) => {
     let val = e.target.value;
@@ -85,7 +85,7 @@ const FormDeposit = () => {
     "500000",
     "1000000",
   ];
-  console.log(data);
+  console.log("payment", data);
   return (
     <Spin spinning={loading}>
       <Form
@@ -129,7 +129,7 @@ const FormDeposit = () => {
                 </Row>
               </Form.Item>
               <Form.Item
-                label="Nominal Yang Akan Ditarik"
+                label="Nominal"
                 hasFeedback
                 onChange={onChange}
                 name="amount"
@@ -170,7 +170,7 @@ const FormDeposit = () => {
                   }
                   onSearch={() => {}}
                 >
-                  {data !== undefined &&
+                  {data.length > 0 &&
                     data.map((val, key) => {
                       return (
                         <Option key={key} value={val.code}>
