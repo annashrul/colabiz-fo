@@ -48,7 +48,7 @@ const InvoiceComponent = () => {
     if (state.mobile) {
       setFontSize("80%");
     }
-    dispatch(invoiceAction(kdTrx));
+    dispatch(invoiceAction(kdTrx, typeTrx));
   }, []);
 
   const rmStorageLocal = () => {

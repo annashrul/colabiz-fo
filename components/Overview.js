@@ -93,10 +93,11 @@ const Overview = () => {
 
         <Col xs={24} sm={12} md={8} className="mb-2">
           <StatCard
-            type=""
             title="Total Downline"
             value={`${Helper.toRp(
-              parseFloat(data.jumlah_downline).toFixed(0),
+              parseFloat(data === undefined ? 0 : data.jumlah_downline).toFixed(
+                0
+              ),
               true
             )} Orang`}
             icon={<ApartmentOutlined style={{ fontSize: "20px" }} />}
@@ -105,18 +106,22 @@ const Overview = () => {
         </Col>
         <Col xs={24} sm={12} md={8} className="mb-2">
           <StatCard
-            type=""
             title="Total Saldo"
-            value={Helper.toRp(parseFloat(data.saldo).toFixed(0))}
+            value={Helper.toRp(
+              parseFloat(data === undefined ? 0 : data.saldo).toFixed(0)
+            )}
             icon={<WalletOutlined style={{ fontSize: "20px" }} />}
             color={theme.darkColor}
           />
         </Col>
         <Col xs={24} sm={12} md={8} className="mb-2">
           <StatCard
-            type=""
             title="Total Penarikan"
-            value={Helper.toRp(parseFloat(data.total_penarikan).toFixed(0))}
+            value={Helper.toRp(
+              parseFloat(data === undefined ? 0 : data.total_penarikan).toFixed(
+                0
+              )
+            )}
             icon={<WalletOutlined style={{ fontSize: "20px" }} />}
             color={theme.warningColor}
           />

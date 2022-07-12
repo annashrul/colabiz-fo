@@ -13,13 +13,17 @@ import {
   Select,
   Input,
   Pagination,
+  Badge,
+  Alert,
 } from "antd";
+import Marquee from "react-fast-marquee";
 import {
   HomeOutlined,
   CheckOutlined,
   FilterOutlined,
   CaretRightOutlined,
   CaretLeftOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,11 +35,18 @@ import {
   cityAction,
   districtsAction,
 } from "../../redux/actions/address.action";
-import { getPaket } from "../../redux/actions/paket.action";
+import {
+  cartAction,
+  getCartAction,
+  getPaket,
+} from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
 import Router from "next/router";
 import general_helper from "../../helper/general_helper";
 import { StringLink } from "../../helper/string_link_helper";
+import { ar } from "date-fns/locale";
+import { useAppState } from "../shared/AppProvider";
+// import { Badge } from "reactour";
 
 const { Option } = Select;
 const { Meta } = Card;
@@ -46,9 +57,13 @@ const ListProduct = () => {
   const [formFilter] = Form.useForm();
   const [dataStokis, setDataStokis] = useState({});
   const [queryString, setQueryString] = useState("");
-  const [indexStockis, setIndexStockis] = useState(0);
+  const [indexStockis, setIndexStockis] = useState("");
   const [isModalFilter, setIsModalFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [qty, setQty] = useState(0);
+  const [cartData, setCartData] = useState([]);
+  const [state] = useAppState();
+
   const { loadingData, data, pagination } = useSelector(
     (state) => state.stockisReducer
   );
@@ -56,9 +71,10 @@ const ListProduct = () => {
     loadingRegister,
     dataRegister,
     paginationRegister,
-    loadingSmartContract,
-    dataSmartContract,
-    paginationSmartContract,
+    loadingHappyShopping,
+    dataHappyShopping,
+    paginationHappyShopping,
+    dataCart,
   } = useSelector((state) => state.paketReducer);
 
   const {
@@ -73,11 +89,11 @@ const ListProduct = () => {
   useEffect(() => {
     dispatch(getStockisAction("page=1"));
     dispatch(getPaket("page=1", "REGISTER"));
-    dispatch(getPaket("page=1", "SMART_CONTRACT"));
+    dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
   }, []);
   useEffect(() => {
     if (!loadingData) {
-      if (data.length > 0) {
+      if (data !== undefined || data.length > 0) {
         setDataStokis(data[0]);
       }
     }
@@ -86,6 +102,41 @@ const ListProduct = () => {
   useEffect(() => {
     dispatch(provinceAction());
   }, []);
+  useEffect(() => {
+    dispatch(getCartAction());
+  }, []);
+  useEffect(() => {
+    if (dataCart !== undefined && dataCart.length > 0) {
+      const filteredData = dataCart.filter(
+        (value, index, self) =>
+          self.findIndex((v) => v.id === value.id) === index
+      );
+      setCartData(filteredData);
+      dispatch(cartAction(filteredData));
+    }
+  }, []);
+
+  useEffect(() => {
+    // let arrRegist = dataRegister;
+    // let arrSc = dataSmartContract;
+    // if (dataCart !== undefined && dataCart.length > 0) {
+    //   dataCart.map((res) => {
+    //     arrRegist.map((val) => {
+    //       if (val.id === res.id) {
+    //         Object.assign(val, { qty: res.qty });
+    //       }
+    //     });
+    //     arrSc.map((val) => {
+    //       if (val.id === res.id) {
+    //         Object.assign(val, { qty: res.qty });
+    //       }
+    //     });
+    //   });
+    // }
+    // console.log("sc", arrSc);
+    // console.log("reg", arrSc);
+    // console.log("redux", dataCart);
+  }, [loadingRegister]);
 
   useEffect(() => {
     if (!loadingCity && dataCity !== undefined) {
@@ -143,6 +194,29 @@ const ListProduct = () => {
     }, 300);
   };
 
+  const addToCart = (val) => {
+    let datas = cartData;
+    datas.push(val);
+    const filteredData = datas.filter(
+      (value, index, self) => self.findIndex((v) => v.id === value.id) === index
+    );
+    let newData = [];
+    filteredData.map((res) => {
+      if (res.id === val.id) {
+        if (res.qty > val.qty) {
+          Object.assign(res, { qty: res.qty + 1 });
+        } else {
+          Object.assign(res, { qty: val.qty });
+        }
+        newData.push(res);
+      } else {
+        newData.push(res);
+      }
+    });
+    setCartData(newData);
+    dispatch(cartAction(newData));
+  };
+
   return (
     <>
       <Card
@@ -160,6 +234,17 @@ const ListProduct = () => {
       >
         <Spin spinning={loadingData}>
           <Row gutter={16}>
+            <Col md={24} sm={24} xs={24}>
+              <Alert
+                banner
+                message={
+                  <Marquee pauseOnHover gradient={false}>
+                    &nbsp;Icon X dan background warna merah menandakan bahwa
+                    stokis tidak aktif melayani.
+                  </Marquee>
+                }
+              />
+            </Col>
             {data !== undefined && data.length > 0 ? (
               data.map((val, key) => {
                 return (
@@ -169,29 +254,46 @@ const ListProduct = () => {
                     sm={12}
                     md={8}
                     className="mb-2"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor:
+                        val.status_layanan === 0 ? "not-allowed" : "pointer",
+                    }}
                     onClick={() => {
-                      setDataStokis(val);
-                      setIndexStockis(key);
+                      if (val.status_layanan !== 0) {
+                        setDataStokis(val);
+                        setIndexStockis(key);
+                      }
                     }}
                   >
                     <StatCard
                       clickHandler={() => {
-                        setDataStokis(val);
-                        setIndexStockis(key);
+                        if (val.status_layanan !== 0) {
+                          setDataStokis(val);
+                          setIndexStockis(key);
+                        }
                       }}
                       type={indexStockis === key ? "fill" : ""}
                       title={`${val.mobile_no}, ${val.kota}, ${val.kecamatan}`}
-                      value={`${val.name}`}
+                      value={<span>{val.name} </span>}
                       icon={
-                        indexStockis === key ? (
-                          <CheckOutlined style={{ fontSize: "20px" }} />
+                        val.status_layanan === 0 ? (
+                          <CloseOutlined
+                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
+                          />
+                        ) : indexStockis === key ? (
+                          <CheckOutlined
+                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
+                          />
                         ) : (
-                          <HomeOutlined style={{ fontSize: "20px" }} />
+                          <HomeOutlined
+                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
+                          />
                         )
                       }
                       color={
-                        indexStockis === key
+                        val.status_layanan === 0
+                          ? "red"
+                          : indexStockis === key
                           ? theme.primaryColor
                           : theme.darkColor
                       }
@@ -203,40 +305,44 @@ const ListProduct = () => {
               <Empty />
             )}
           </Row>
-          <Row justify="end" gutter={16}>
-            <Col>
-              <Button
-                disabled={currentPage === 1}
-                onClick={(e) => {
-                  if (currentPage > 1) {
-                    let page = currentPage;
-                    page -= 1;
-                    setCurrentPage(page);
-                    dispatch(getStockisAction(`page=${page}`));
-                  }
-                }}
-              >
-                <CaretLeftOutlined />
-              </Button>
-              <Button className="mr-2 ml-2">{currentPage}</Button>
-              <Button
-                disabled={pagination.to >= parseInt(pagination.total, 10)}
-                onClick={(e) => {
-                  console.log(pagination);
-                  if (pagination.to >= parseInt(pagination.total, 10)) {
-                    Message.info("data stokis habis");
-                  } else {
-                    let page = currentPage;
-                    page += 1;
-                    setCurrentPage(page);
-                    dispatch(getStockisAction(`page=${page}&perpage=12`));
-                  }
-                }}
-              >
-                <CaretRightOutlined />
-              </Button>
-            </Col>
-          </Row>
+          {pagination && (
+            <Row justify="end" gutter={16}>
+              <Col>
+                <Button
+                  type="primary"
+                  disabled={currentPage === 1}
+                  onClick={(e) => {
+                    if (currentPage > 1) {
+                      let page = currentPage;
+                      page -= 1;
+                      setCurrentPage(page);
+                      dispatch(getStockisAction(`page=${page}`));
+                    }
+                  }}
+                >
+                  <CaretLeftOutlined />
+                </Button>
+                <Button className="mr-2 ml-2">{currentPage}</Button>
+                <Button
+                  type="primary"
+                  disabled={pagination.to >= parseInt(pagination.total, 10)}
+                  onClick={(e) => {
+                    console.log(pagination);
+                    if (pagination.to >= parseInt(pagination.total, 10)) {
+                      Message.info("data stokis habis");
+                    } else {
+                      let page = currentPage;
+                      page += 1;
+                      setCurrentPage(page);
+                      dispatch(getStockisAction(`page=${page}&perpage=12`));
+                    }
+                  }}
+                >
+                  <CaretRightOutlined />
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Spin>
       </Card>
       <Row gutter={16} className={"mt-3"}>
@@ -244,7 +350,7 @@ const ListProduct = () => {
           <Card title="PAKET REGISTER">
             <Spin spinning={loadingRegister}>
               <CardPaket
-                callback={(val) => goToCheckout(val)}
+                callback={(val) => addToCart(val)}
                 loading={loadingRegister}
                 data={dataRegister}
                 pagination={paginationRegister}
@@ -253,12 +359,12 @@ const ListProduct = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} md={12}>
-          <Card title="PAKET SMART CONTRACT">
+          <Card title="PAKET HAPPY SHOPPING">
             <CardPaket
-              callback={(val) => goToCheckout(val)}
-              loading={loadingSmartContract}
-              data={dataSmartContract}
-              pagination={paginationSmartContract}
+              callback={(val) => addToCart(val)}
+              loading={loadingHappyShopping}
+              data={dataHappyShopping}
+              pagination={paginationHappyShopping}
             />
           </Card>
         </Col>

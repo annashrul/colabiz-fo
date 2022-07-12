@@ -54,9 +54,9 @@ const CheckoutProduct = () => {
   const [info, setInfo] = useState({});
   const [loadingPage, setLoadingPage] = useState(true);
   const [visible, setVisible] = useState(false);
-  //   const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
-  //   const dataPaket = JSON.parse(localStorage.getItem("dataPaket"));
-  const { loadingCheckout } = useSelector((state) => state.paketReducer);
+  const loadingCheckout = useSelector(
+    (state) => state.paketReducer.loadingCheckout
+  );
   useEffect(() => {
     let storagePaket = JSON.parse(localStorage.getItem("dataPaket"));
     let storageStokis = JSON.parse(localStorage.getItem("dataStokis"));
@@ -81,18 +81,18 @@ const CheckoutProduct = () => {
     if (!loadingPage) {
       setDataMetodePembayaran([
         {
-          metode_pembayaran: "SALDO",
-          id_bank: "-",
-          bank_name: general_helper.toRp(info.saldo),
-          acc_no: "",
-          acc_name: "SALDO",
-        },
-        {
           metode_pembayaran: "TRANSFER",
           id_bank: dataStokis.id_bank,
           bank_name: dataStokis.bank_name,
           acc_no: dataStokis.acc_no,
           acc_name: dataStokis.acc_name,
+        },
+        {
+          metode_pembayaran: "SALDO",
+          id_bank: "-",
+          bank_name: general_helper.toRp(info.saldo),
+          acc_no: "",
+          acc_name: "SALDO",
         },
       ]);
     }
@@ -168,7 +168,9 @@ const CheckoutProduct = () => {
                   <StatCard
                     clickHandler={() => setIndexMetodePembayaran(key)}
                     type={"fill"}
-                    title={val.bank_name}
+                    title={`${val.bank_name}${
+                      val.acc_no !== "" ? "- " + val.acc_no : ""
+                    }`}
                     value={val.acc_name}
                     icon={
                       indexMetodePembayaran === key ? (
@@ -177,7 +179,11 @@ const CheckoutProduct = () => {
                         <WalletOutlined style={{ fontSize: "20px" }} />
                       )
                     }
-                    color={theme.darkColor}
+                    color={
+                      indexMetodePembayaran === key
+                        ? theme.primaryColor
+                        : theme.darkColor
+                    }
                   />
                   <br />
                 </span>

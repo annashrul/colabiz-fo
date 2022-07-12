@@ -30,6 +30,8 @@ import { useAppState } from "./shared/AppProvider";
 import { withRouter } from "next/router";
 import general_helper from "../helper/general_helper";
 import { StringLink } from "../helper/string_link_helper";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartAction } from "../redux/actions/paket.action";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -56,7 +58,7 @@ const SidebarContent = ({
   const [isStockis, setIsStockis] = useState(true);
   const [appRoutes] = useState(Routes);
   const { pathname } = router;
-
+  const dataCart = useSelector((state) => state.paketReducer.dataCart);
   const badgeTemplate = (badge) => (
     <Badge
       count={badge.value}
@@ -323,6 +325,33 @@ const SidebarContent = ({
             </Inner>
           </Drawer>
         )}
+        <Drawer
+          title="Settings"
+          placement={`${state.direction === "rtl" ? "left" : "right"}`}
+          closable={true}
+          width={300}
+          onClose={() => dispatch({ type: "options" })}
+          visible={state.optionDrawer}
+        >
+          {dataCart !== undefined && dataCart.length > 0
+            ? dataCart.map((res, key) => {
+                return (
+                  <List.Item key={key}>
+                    <span
+                      css={`
+                        -webkit-box-flex: 1;
+                        -webkit-flex: 1 0;
+                        -ms-flex: 1 0;
+                        flex: 1 0;
+                      `}
+                    >
+                      Boxed view
+                    </span>
+                  </List.Item>
+                );
+              })
+            : ""}
+        </Drawer>
       </Inner>
     </>
   );

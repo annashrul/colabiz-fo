@@ -16,10 +16,14 @@ export const setLoading = (load) => {
   };
 };
 
-export const invoiceAction = (kdTrx) => {
+export const invoiceAction = (kdTrx, type = "produk") => {
   return (dispatch) => {
     dispatch(setLoading(true));
-    handleGet(`transaction/deposit/${btoa(kdTrx)}/invoice`, (res, status) => {
+    let url = `penjualan/invoice/${btoa(kdTrx)}`;
+    if (type.toLowerCase() === "deposit") {
+      url = `transaction/deposit/${btoa(kdTrx)}/invoice`;
+    }
+    handleGet(url, (res, status) => {
       dispatch(setData(res.data));
       dispatch(setLoading(false));
     });

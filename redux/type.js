@@ -83,6 +83,12 @@ export const WALLET = {
 };
 
 export const INVOICE = {
-  LOADING: "LOADING",
-  DATA: "DATA",
+  LOADING: "LOADING_INVOICE",
+  DATA: "DATA_INVOICE",
+};
+
+export const CART = {
+  ADD: "ADD_CART",
+  DATA: "DATA_CART",
+  MIN: "MIN_CART",
 };
