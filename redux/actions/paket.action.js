@@ -2,6 +2,8 @@ import { PAKET } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
 import { StringLink } from "../../helper/string_link_helper";
+import { Message } from "antd";
+import Router from "next/router";
 
 export const setDataRegister = (data) => {
   return {
@@ -63,8 +65,12 @@ export const checkout = (e) => {
   return (dispatch) => {
     dispatch(setLoadingCheckout(true));
     handlePost("penjualan/checkout", e, (res, status, msg) => {
+      console.log("checkout", res);
+      console.log("status", status);
+
       if (status) {
-        if (e.metode_pembayara === "TRANSFER") {
+        console.log(e.metode_pembayaran);
+        if (e.metode_pembayaran === "TRANSFER") {
           Message.success(msg).then(() =>
             Router.push(StringLink.pembelian).then(() =>
               dispatch(setLoadingCheckout(false))
@@ -78,8 +84,26 @@ export const checkout = (e) => {
           );
         }
       } else {
+        console.log("gagal");
         dispatch(setLoadingCheckout(false));
       }
+      // if (status) {
+      //   if (e.metode_pembayaran === "TRANSFER") {
+      // Message.success(res.message).then(() =>
+      //   Router.push(StringLink.pembelian).then(() =>
+      //     dispatch(setLoadingCheckout(false))
+      //   )
+      // );
+      //   } else {
+      // Message.success(res.message).then(() =>
+      //   Router.push(StringLink.pembelian).then(() =>
+      //     dispatch(setLoadingCheckout(false))
+      //   )
+      // );
+      //   }
+      // } else {
+      //   dispatch(setLoadingCheckout(false));
+      // }
     });
   };
 };
