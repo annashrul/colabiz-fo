@@ -63,54 +63,75 @@ const Genealogy = () => {
     });
   };
 
-  return (
-    <Tabs defaultActiveKey="1" onChange={(e) => setStep(parseInt(e, 10))}>
-      <TabPane tab="Satu Arah" key="1">
-        {arrayToTree(data.length > 0 ? data : [], {
-          dataField: null,
-          childrenField: "children",
-        }).map((res, index) => {
-          return (
-            <Index
-              key={index}
-              isActive={res.isActive}
-              loading={loading}
-              joinDate={res.join_date}
-              picture={res.picture}
-              id={res.id}
-              name={`${res.name}`}
-              children={res.children}
-              callback={(val, keys) => {
-                onChange(val, index);
-              }}
-            />
-          );
-        })}
-      </TabPane>
-      <TabPane tab="Matahari" key="2">
-        {arrayToTree(data.length > 0 ? data : [], {
-          dataField: null,
-          childrenField: "children",
-        }).map((res, index) => {
-          return (
-            <Matahari
-              key={index}
-              isActive={res.isActive}
-              loading={loading}
-              joinDate={res.join_date}
-              picture={res.picture}
-              id={res.id}
-              name={`${res.name}`}
-              children={res.children}
-              callback={(val, keys) => {
-                onChange(val, index);
-              }}
-            />
-          );
-        })}
-      </TabPane>
-    </Tabs>
-  );
+  return arrayToTree(data.length > 0 ? data : [], {
+    dataField: null,
+    childrenField: "children",
+  }).map((res, index) => {
+    return (
+      <Index
+        key={index}
+        isActive={res.isActive}
+        loading={loading}
+        joinDate={res.join_date}
+        picture={res.picture}
+        id={res.id}
+        name={`${res.name}`}
+        children={res.children}
+        callback={(val, keys) => {
+          onChange(val, index);
+        }}
+      />
+    );
+  });
+
+  // return (
+  //   <Tabs defaultActiveKey="1" onChange={(e) => setStep(parseInt(e, 10))}>
+  //     <TabPane tab="Satu Arah" key="1">
+  //       {arrayToTree(data.length > 0 ? data : [], {
+  //         dataField: null,
+  //         childrenField: "children",
+  //       }).map((res, index) => {
+  //         return (
+  //           <Index
+  //             key={index}
+  //             isActive={res.isActive}
+  //             loading={loading}
+  //             joinDate={res.join_date}
+  //             picture={res.picture}
+  //             id={res.id}
+  //             name={`${res.name}`}
+  //             children={res.children}
+  //             callback={(val, keys) => {
+  //               onChange(val, index);
+  //             }}
+  //           />
+  //         );
+  //       })}
+  //     </TabPane>
+  //     <TabPane tab="Matahari" key="2">
+  //       {arrayToTree(data.length > 0 ? data : [], {
+  //         dataField: null,
+  //         childrenField: "children",
+  //       }).map((res, index) => {
+  //         return (
+  //           <Matahari
+  //             key={index}
+  //             isActive={res.isActive}
+  //             loading={loading}
+  //             joinDate={res.join_date}
+  //             picture={res.picture}
+  //             id={res.id}
+  //             name={`${res.name}`}
+  //             children={res.children}
+  //             callback={(val, keys) => {
+  //               onChange(val, index);
+  //             }}
+  //           />
+  //         );
+  //       })}
+  //     </TabPane>
+  //   </Tabs>
+  // );
 };
 
 export default Genealogy;
