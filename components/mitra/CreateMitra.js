@@ -26,12 +26,15 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
+// import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
 const TambahMitra = () => {
   const dispatch = useDispatch();
+  const [value, setValue] = useState();
   const [state] = useAppState();
   const [form] = Form.useForm();
   const [iconLoading, setIconLoading] = useState(false);
@@ -99,6 +102,7 @@ const TambahMitra = () => {
 
   const handleStep = async (e) => {
     if (step === 1) {
+      setValue(value.replaceAll("+", ""));
       dispatch(validateUsernameAction(e.username));
       Object.assign(dataForm, e);
       setDataForm(dataForm);
@@ -120,7 +124,7 @@ const TambahMitra = () => {
   const onFinish = async () => {
     const data = {
       fullname: dataForm.fullname,
-      mobile_no: dataForm.mobile_no,
+      mobile_no: value,
       username: dataForm.username,
       email: dataForm.email,
       sponsor: user.referral,
@@ -194,6 +198,7 @@ const TambahMitra = () => {
                   <Col md={24} xs={24} sm={24}>
                     <h5>Lengkapi Form Data Diri Anda</h5>
                     <br />
+
                     <Form.Item
                       hasFeedback
                       name={"fullname"}
@@ -213,10 +218,10 @@ const TambahMitra = () => {
                       label="No Telepon"
                       rules={[
                         { required: true, message: "Tidak Boleh Kosong" },
-                        {
-                          pattern: new RegExp(/^[0-9]*$/),
-                          message: "Harus Berupa Angka",
-                        },
+                        // {
+                        //   pattern: new RegExp(/^[0-9]*$/),
+                        //   message: "Harus Berupa Angka",
+                        // },
                         { min: 9, message: "no handphone tidak valid" },
                         { max: 14, message: "no handphone tidak valid" },
                       ]}
@@ -225,7 +230,14 @@ const TambahMitra = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <Input prefix={"+62"} placeholder="81223165XXXX" />
+                      <PhoneInput
+                        international
+                        defaultCountry="ID"
+                        placeholder="81223165XXXX"
+                        value={value}
+                        onChange={setValue}
+                      />
+                      {/* <Input prefix={"+62"} placeholder="81223165XXXX" /> */}
                     </Form.Item>
                     <Form.Item
                       hasFeedback

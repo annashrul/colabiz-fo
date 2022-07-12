@@ -23,10 +23,13 @@ import PlacesAutocomplete, {
 import FormAddress from "../address/formAddress";
 import FormBank from "../bank/formBank";
 import { createStockisAction } from "../../redux/actions/stockis.action";
+import PhoneInput from "react-phone-number-input";
 
 const msgInput = "Tidak Boleh Kosong";
 
 const CreateStockis = () => {
+  const [value, setValue] = useState();
+
   const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
@@ -57,7 +60,7 @@ const CreateStockis = () => {
   const handleStep = async (e) => {
     let dataForm = Object.assign(objForm, e);
     setObjForm(dataForm);
-
+    setValue(value.replaceAll("+", ""));
     if (step == 2) {
       onFinish();
     } else {
@@ -74,7 +77,7 @@ const CreateStockis = () => {
       id_address: parseInt(checkedAdress, 10) === 1 ? "-" : objAddress.id,
       id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
       name: objForm.name,
-      mobile_no: objForm.mobile_no,
+      mobile_no: value,
       email: objForm.email,
       long: long,
       lat: lat,
@@ -168,7 +171,14 @@ const CreateStockis = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <Input prefix={"+62"} />
+                      <PhoneInput
+                        international
+                        defaultCountry="ID"
+                        placeholder="81223165XXXX"
+                        value={value}
+                        onChange={setValue}
+                      />
+                      {/* <Input prefix={"+62"} /> */}
                     </Form.Item>
 
                     <Form.Item
