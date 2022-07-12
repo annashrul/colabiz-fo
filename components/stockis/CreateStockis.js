@@ -159,10 +159,10 @@ const CreateStockis = () => {
                       label="No Telepon"
                       rules={[
                         { required: true, message: "Tidak Boleh Kosong" },
-                        {
-                          pattern: new RegExp(/^[0-9]*$/),
-                          message: "Harus Berupa Angka",
-                        },
+                        // {
+                        //   pattern: new RegExp(/^[0-9]*$/),
+                        //   message: "Harus Berupa Angka",
+                        // },
                         { min: 9, message: "no handphone tidak valid" },
                         { max: 14, message: "no handphone tidak valid" },
                       ]}

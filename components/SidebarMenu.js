@@ -71,7 +71,7 @@ const SidebarContent = ({
       if (Object.keys(users).length > 0) {
         if (route.name === "Daftar Stokis") {
           if (users.stockis !== 0) {
-            delete appRoutes[index];
+            // delete appRoutes[index];
           }
         }
       }
