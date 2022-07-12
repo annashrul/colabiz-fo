@@ -56,7 +56,7 @@ const Overview = () => {
 
   return (
     <div>
-      <Row className="mb-2">
+      {/* <Row className="mb-2">
         <Col xs={24} sm={24} md={24}>
           <Button
             type="dashed"
@@ -71,7 +71,7 @@ const Overview = () => {
             <br /> Mohon maaf,Konten lainnya masih dalam tahap pengembangan
           </Button>
         </Col>
-      </Row>
+      </Row> */}
       <Row gutter={4}>
         <Col xs={24} sm={24} md={24} className="mb-2">
           <Card title="Kirimkan Link Referral Anda">

@@ -77,6 +77,11 @@ class MyApp extends App {
           )}
 
           <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDqD1Z03FoLnIGJTbpAgRvjcchrR-NiICk"></script>
+          <link
+            rel="stylesheet"
+            href="https://unpkg.com/react-phone-number-input@3.x/bundle/style.css"
+          />
+
           {/* <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqD1Z03FoLnIGJTbpAgRvjcchrR-NiICk&libraries=places"
             async
