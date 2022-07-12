@@ -9,7 +9,7 @@ import {
   Popconfirm,
   Radio,
 } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Action from "../../action/auth.action";
 import { useAppState } from "../shared/AppProvider";
@@ -44,7 +44,6 @@ const CreateStockis = () => {
     forceUpdate({});
     setStep(1);
     let banks = Action.getBank();
-    // console.log("banks", banks);
     let adress = Action.getAddress();
     setObjAddress(adress);
     setObjBanks(banks);
@@ -58,6 +57,7 @@ const CreateStockis = () => {
   const handleStep = async (e) => {
     let dataForm = Object.assign(objForm, e);
     setObjForm(dataForm);
+
     if (step == 2) {
       onFinish();
     } else {
@@ -69,7 +69,7 @@ const CreateStockis = () => {
     objForm.alamat.replaceAll(" ", "");
     let lat = objForm.alamat.split(",")[1];
     let long = objForm.alamat.split(",")[0];
-    console.log(objAddress);
+    // console.log(objAddress);
     const data = {
       id_address: parseInt(checkedAdress, 10) === 1 ? "-" : objAddress.id,
       id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
@@ -91,12 +91,13 @@ const CreateStockis = () => {
         parseInt(checkedAdress, 10) === 1
           ? {
               main_address: objAddress.main_address,
-              kd_prov: objAddress.kd_prov,
-              kd_kota: objAddress.kd_kota,
-              kd_kec: objAddress.kd_kec,
+              kd_prov: objAddress.prov,
+              kd_kota: objAddress.kota,
+              kd_kec: objAddress.kecamatan,
             }
           : {},
     };
+    // console.log(data);
     dispatch(createStockisAction(data));
   };
   const handleSelect = (address) => {
@@ -214,7 +215,7 @@ const CreateStockis = () => {
                     <Form.Item
                       hasFeedback
                       name="alamat"
-                      label="Longitude & Latitude"
+                      label="Tag Lokasi"
                       tooltip={{
                         title:
                           "ketikan nama jalan untuk mendapatkan longitude dan latitude",
@@ -281,12 +282,29 @@ const CreateStockis = () => {
                       name="checkedAddress"
                       label="Gunakan alamat yang sudah ada ?"
                       onChange={(e) => {
-                        console.log("sadasd,", e.target.value);
                         if (e.target.value === "1") {
                           dispatch(provinceAction());
                         }
                         setCheckedAddress(parseInt(e.target.value, 10));
                       }}
+                      tooltip={
+                        parseInt(checkedAdress, 10) === 1
+                          ? {
+                              title: "ubah alamat",
+                              icon: (
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    console.log(objAddress);
+                                    setCheckedAddress(1);
+                                  }}
+                                >
+                                  <EditOutlined />
+                                </span>
+                              ),
+                            }
+                          : null
+                      }
                     >
                       <Radio.Group
                         buttonStyle="outline"
@@ -306,6 +324,23 @@ const CreateStockis = () => {
                       onChange={(e) => {
                         setCheckedBanks(parseInt(e.target.value, 10));
                       }}
+                      tooltip={
+                        parseInt(checkedBanks, 10) === 1
+                          ? {
+                              title: "ubah akun bank",
+                              icon: (
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    setCheckedBanks(1);
+                                  }}
+                                >
+                                  <EditOutlined />
+                                </span>
+                              ),
+                            }
+                          : null
+                      }
                     >
                       <Radio.Group
                         buttonStyle="outline"
@@ -400,7 +435,9 @@ const CreateStockis = () => {
           footer={null}
         >
           <FormAddress
+            dataOld={objAddress}
             callback={(param, e) => {
+              console.log(e);
               if (param !== "cancel") {
                 setObjAddress(e);
               }
@@ -423,7 +460,9 @@ const CreateStockis = () => {
           footer={null}
         >
           <FormBank
+            dataOld={objBanks}
             callback={(param, e) => {
+              console.log(e);
               if (param !== "cancel") {
                 setObjBanks(e);
               }

@@ -6,6 +6,16 @@
   border: 1px solid rgba(0, 0, 0,.05);
   padding: 1rem;
 }
+.ant-collapse > .ant-collapse-item{
+  border-bottom: none!important;
+}
+.ant-collapse-content > .ant-collapse-content-box{
+  padding: 10px!important;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header{
+
+  /* padding-left: 0px !important; */
+}
 .layout-demo [class*="col-"] {
   background-color: #e9ecef;
   border: 1px solid rgba(0, 0, 0,.05);

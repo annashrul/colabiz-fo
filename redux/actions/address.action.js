@@ -45,7 +45,6 @@ export const provinceAction = () => {
   return (dispatch) => {
     dispatch(setLoadingProvince(true));
     handleGet("kurir/get/provinsi", (res, status) => {
-      console.log("province", res.data);
       dispatch(setDataProvince(res.data));
       dispatch(setLoadingProvince(false));
     });

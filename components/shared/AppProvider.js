@@ -118,7 +118,7 @@ const AppProvider = (props) => {
     sidebarPopup: false,
     sidebarIcons: true,
     collapsed: false,
-    weakColor: true,
+    weakColor: false,
     optionDrawer: false,
     mobileDrawer: false,
     fullscreen: false,

@@ -43,11 +43,10 @@ const { Panel } = Collapse;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
-const FormAddress = ({ callback }) => {
+const FormAddress = ({ dataOld, callback }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [data, setData] = useState({});
-
   const {
     dataProvince,
     loadingProvince,
@@ -71,13 +70,26 @@ const FormAddress = ({ callback }) => {
 
   useEffect(() => {
     dispatch(provinceAction());
+    if (Object.keys(dataOld).length === 4) {
+      setData(dataOld);
+      dispatch(cityAction(dataOld.prov));
+      dispatch(districtsAction(dataOld.kota));
+      form.setFieldsValue({ kd_prov: dataOld.prov });
+      form.setFieldsValue({ kd_kota: dataOld.kota });
+      form.setFieldsValue({ kd_kec: dataOld.kecamatan });
+      form.setFieldsValue({ main_address: dataOld.main_address });
+    }
   }, []);
+
   return (
     <>
       <Form
         form={form}
         layout="vertical"
-        onFinish={(e) => callback("submit", data)}
+        onFinish={(e) => {
+          // console.log("data", data);
+          callback("submit", data);
+        }}
       >
         <Form.Item
           hasFeedback

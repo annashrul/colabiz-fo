@@ -99,6 +99,7 @@ export const loginAction = (data) => {
       } else {
         dispatch(setLoadingLogin(false));
       }
+      dispatch(setLoadingLogin(false));
     });
   };
 };
@@ -165,10 +166,31 @@ export const userDetailAction = (id) => {
     handleGet(`member/get/${id}`, (res, status) => {
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
+      console.log(res);
       console.log(res.data);
       Action.setUser(actUser);
       Action.setBank(res.data.bank);
-      Action.setAddress(res.data.address);
+      Action.setAddress(
+        res.data.address !== undefined
+          ? res.data.address
+          : {
+              created_at: "2022-07-06T01:26:44.989Z",
+              id: "51885392-d897-4c3c-b867-ff2ec30e3bcf",
+              id_member: "92bee49a-20a2-4137-a005-bbec32f81816",
+              ismain: 1,
+              kd_kec: "6984",
+              kd_kota: "501",
+              kd_prov: "5",
+              kecamatan: "Gondomanan",
+              kota: "Yogyakarta",
+              main_address: "Alamat Utama",
+              no_hp: "6285711868824",
+              penerima: "Alamat Utama",
+              provinsi: "DI Yogyakarta",
+              title: "Alamat Utama",
+              updated_at: "2022-07-06T01:26:44.989Z",
+            }
+      );
       dispatch(setDataUserDetail(res.data));
     });
   };

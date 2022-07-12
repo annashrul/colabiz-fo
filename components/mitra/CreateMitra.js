@@ -192,7 +192,7 @@ const TambahMitra = () => {
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
-                    <h5>Lengakapi Form Data Diri Anda</h5>
+                    <h5>Lengkapi Form Data Diri Anda</h5>
                     <br />
                     <Form.Item
                       hasFeedback

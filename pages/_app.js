@@ -1,3 +1,4 @@
+// import "tailwindcss/dist/base.css";
 import "../assets/styles.less";
 import App from "next/app";
 import AppProvider from "../components/shared/AppProvider";
@@ -9,6 +10,7 @@ import Router from "next/router";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../redux/store";
+// import "tailwindcss/tailwind.css";
 
 axios.defaults.headers.common[
   "Content-Type"
@@ -54,7 +56,7 @@ class MyApp extends App {
           />
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link rel="shortcut icon" href="/images/triangle.png" />
+          <link rel="shortcut icon" href="/logo.png" />
           <title>Kolabiz Member</title>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
