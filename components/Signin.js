@@ -1,5 +1,10 @@
 import { Button, Form, Input, Spin, Message, Row } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LockOutlined,
+  UserOutlined,
+  ScheduleOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
 import Router from "next/router";
 import styled from "styled-components";
@@ -11,6 +16,7 @@ import general_helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
 import ModalResendEmail from "./modalResendEmail";
+import Routes from "../lib/routes";
 
 const FormItem = Form.Item;
 
@@ -32,38 +38,40 @@ const Signin = () => {
 
   const resLogin = useSelector((state) => state.authUserReducer.dataLogin);
   const resLoading = useSelector((state) => state.authUserReducer.loadingLogin);
+  const [appRoutes] = useState(Routes);
 
   useEffect(() => {
     forceUpdate({});
   }, []);
 
   useEffect(() => {
-    // if (form.getFieldValue("username") !== undefined) {
-    //   if (resLogin.pin === "-") {
-    //     Message.success("Anda Belum Mempunya Pin").then(() =>
-    //       setShowModalPin(true)
-    //     );
-    //   } else if (resLogin.status === 3) {
-    //     if (resLogin.kd_trx === "" || resLogin.kd_trx === "-") {
-    //       Router.push(StringLink.transactionRecycle).then(() => {
-    //         dispatch(setLoadingLogin(false));
-    //       });
-    //     } else {
-    //       localStorage.setItem("linkBack", "/signin");
-    //       localStorage.setItem("typeTrx", "Recycle");
-    //       localStorage.setItem("kdTrx", resLogin.kd_trx);
-    //       Router.push(StringLink.invoiceRecycle).then(() =>
-    //         dispatch(setLoadingLogin(false))
-    //       );
+    // appRoutes.map((res, index) => {
+    //   if (resLogin.id !== undefined && resLogin.stockis !== 1) {
+    //     if (res.name === "Order") {
+    //       delete appRoutes[index];
     //     }
-    //   } else {
-    //     Message.success(
-    //       "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-    //     ).then(() =>
-    //       Router.push("/").then(() => dispatch(setLoadingLogin(false)))
-    //     );
     //   }
-    //   setDataUser(resLogin);
+    //   if (resLogin.id !== undefined && resLogin.stockis !== 0) {
+    //     if (res.name === "Daftar Stokis") {
+    //       delete appRoutes[index];
+    //     }
+    //   }
+    // });
+    // if (resLogin.id !== undefined) {
+    //   if (resLogin === 0) {
+    //     appRoutes.push({
+    //       path: StringLink.stockis,
+    //       name: "Daftar Stokis",
+    //       icon: <UnorderedListOutlined style={{ fontSize: "16px" }} />,
+    //     });
+    //   }
+    //   if (resLogin === 1) {
+    //     appRoutes.push({
+    //       path: StringLink.orderStockis,
+    //       name: "Order",
+    //       icon: <ScheduleOutlined style={{ fontSize: "16px" }} />,
+    //     });
+    //   }
     // }
   }, [resLogin]);
 

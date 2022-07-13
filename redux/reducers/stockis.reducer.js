@@ -8,6 +8,9 @@ const initialState = {
   dataOrder: [],
   paginationOrder: [],
   loadingOrder: true,
+  loadingApprove: false,
+  loadingCancel: false,
+  loadingTake: false,
 };
 
 export const stockisReducer = (state = initialState, action) => {
@@ -35,6 +38,18 @@ export const stockisReducer = (state = initialState, action) => {
     case STOCKIS.LOADING:
       return Object.assign({}, state, {
         loading: action.load,
+      });
+    case STOCKIS.LOADING_APPROVE_ORDER:
+      return Object.assign({}, state, {
+        loadingApprove: action.load,
+      });
+    case STOCKIS.LOADING_CANCEL_ORDER:
+      return Object.assign({}, state, {
+        loadingCancel: action.load,
+      });
+    case STOCKIS.LOADING_TAKE_ORDER:
+      return Object.assign({}, state, {
+        loadingTake: action.load,
       });
     default:
       return state;

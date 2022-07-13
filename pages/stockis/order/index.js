@@ -1,4 +1,15 @@
-import { Table, Select, Row, Col, Input, Form } from "antd";
+import {
+  Table,
+  Select,
+  Row,
+  Col,
+  Popconfirm,
+  Space,
+  Input,
+  Form,
+  message,
+  Tooltip,
+} from "antd";
 const { Column, ColumnGroup } = Table;
 import { CopyOutlined } from "@ant-design/icons";
 import Helper from "../../../helper/general_helper";
@@ -9,7 +20,10 @@ const Option = Select.Option;
 const Search = Input.Search;
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { orderStockisAction } from "../../../redux/actions/stockis.action";
+import {
+  approveStockisAction,
+  orderStockisAction,
+} from "../../../redux/actions/stockis.action";
 import general_helper from "../../../helper/general_helper";
 
 moment.locale("id");
@@ -28,13 +42,21 @@ const IndexOrderStockis = () => {
   const [searchby, setSearchBy] = useState("kd_trx");
   const [where, setWhere] = useState("");
   const [loading, setLoading] = useState(false);
+  const [visible1, setVisible1] = useState(false);
+  const [visible2, setVisible2] = useState(false);
+  const [visible3, setVisible3] = useState(false);
   const [arrDatum, setArrDatum] = useState([]);
   const [meta, setMeta] = useState({});
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { loadingOrder, dataOrder, paginationOrder } = useSelector(
-    (state) => state.stockisReducer
-  );
+  const {
+    loadingApprove,
+    loadingCancel,
+    loadingTake,
+    loadingOrder,
+    dataOrder,
+    paginationOrder,
+  } = useSelector((state) => state.stockisReducer);
   const user = authAction.getUser();
 
   useEffect(() => {
@@ -61,6 +83,23 @@ const IndexOrderStockis = () => {
       </Select>
     </Form.Item>
   );
+
+  const tempAction = (status, kdTrx, title, loading, desc) => {
+    return (
+      <Popconfirm
+        title={`Anda yakin akan ${desc} transaksi ini ?`}
+        onConfirm={(e) => dispatch(approveStockisAction(kdTrx, status))}
+        okText="Oke"
+        cancelText="Batal"
+        onCancel={() => {}}
+        okButtonProps={{
+          loading: loading,
+        }}
+      >
+        <a>{title}</a>
+      </Popconfirm>
+    );
+  };
 
   return (
     <div>
@@ -91,7 +130,7 @@ const IndexOrderStockis = () => {
         scroll={{ x: 400 }}
         bordered={true}
         dataSource={dataOrder}
-        loading={loadingOrder}
+        loading={loadingOrder || loadingApprove || loadingCancel || loadingTake}
         pagination={{
           defaultPageSize: 10,
           hideOnSinglePage: false,
@@ -116,6 +155,54 @@ const IndexOrderStockis = () => {
               i,
               paginationOrder !== undefined ? paginationOrder.current_page : 0
             );
+          }}
+        />
+        <Column
+          title="#"
+          key="action"
+          render={(_, record, i) => {
+            Object.assign(record, { visible: false });
+            let menuAction;
+            if (record.status === 0) {
+              menuAction = (
+                <Space size="middle">
+                  {tempAction(
+                    1,
+                    record.kd_trx,
+                    "Konfirmasi",
+                    loadingApprove,
+                    "mengkonfirmasi"
+                  )}
+                  {tempAction(
+                    2,
+                    record.kd_trx,
+                    "Tolak",
+                    loadingCancel,
+                    "menolak"
+                  )}
+                </Space>
+              );
+            } else {
+              menuAction = (
+                <Space size="middle">
+                  {record.status === 3 ? (
+                    tempAction(
+                      3,
+                      record.kd_trx,
+                      "Ambil Barang",
+                      loadingTake,
+                      "mengambil barang pada"
+                    )
+                  ) : (
+                    <Tooltip title="anda belum bisa mengambil barang ini">
+                      <a style={{ cursor: "not-allowed" }}>Ambil Barang</a>
+                    </Tooltip>
+                  )}
+                </Space>
+              );
+            }
+
+            return menuAction;
           }}
         />
 

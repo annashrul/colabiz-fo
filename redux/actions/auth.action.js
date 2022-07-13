@@ -107,8 +107,8 @@ export const resendEmailAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingResendEmail(true));
     handlePost("auth/resend/verifikasi", data, (res, status, msg) => {
-      console.log("resed", status);
-      console.log("resed", res.length);
+      // console.log("resed", status);
+      // console.log("resed", res.length);
 
       if (status && res.length === undefined) {
         Message.success(res.meta.message).then(() => {
@@ -166,8 +166,6 @@ export const userDetailAction = (id) => {
     handleGet(`member/get/${id}`, (res, status) => {
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
-      console.log(res);
-      console.log(res.data);
       Action.setUser(actUser);
       Action.setBank(res.data.bank);
       Action.setAddress(

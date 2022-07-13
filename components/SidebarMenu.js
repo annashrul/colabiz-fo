@@ -16,6 +16,8 @@ import {
   FolderTwoTone,
   IdcardOutlined,
   PoweroffOutlined,
+  ScheduleOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { capitalize, lowercase } from "../lib/helpers";
 import { useEffect, useState } from "react";
@@ -70,13 +72,6 @@ const SidebarContent = ({
     let users = authAction.getUser();
     setUser(users);
     appRoutes.forEach((route, index) => {
-      if (Object.keys(users).length > 0) {
-        if (route.name === "Daftar Stokis") {
-          if (users.stockis !== 0) {
-            delete appRoutes[index];
-          }
-        }
-      }
       const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
       const key = getKey(route.name, index);
       rootSubMenuKeys.push(key);
@@ -107,17 +102,6 @@ const SidebarContent = ({
         onOpenChange={onOpenChange}
       >
         {appRoutes.map((route, index) => {
-          // console.log(route);
-          if (route.path !== StringLink.checkout) {
-            // console.log("blos #######################");
-            // localStorage.removeItem("dataPaket");
-            // localStorage.removeItem("dataStokis");
-          }
-
-          if (state.mobile && route.path === StringLink.profile) {
-            delete appRoutes[index];
-          }
-
           const hasChildren = !!route.children;
           if (!hasChildren) {
             return (
@@ -155,6 +139,54 @@ const SidebarContent = ({
                 }
               >
                 {route.children.map((subitem, index) => {
+                  console.log("user", user.stockis);
+                  let checkMenu;
+                  if (subitem.name === "Daftar" && user.stockis !== 0) {
+                    checkMenu = (
+                      <a
+                        onClick={() =>
+                          Message.info(
+                            "halaman ini tidak bisa diakses oleh anda"
+                          ).then(() => {
+                            Router.push("/");
+                          })
+                        }
+                      >
+                        <span className="mr-auto">
+                          {capitalize(subitem.name)}
+                        </span>
+                        {subitem.badge && badgeTemplate(subitem.badge)}
+                      </a>
+                    );
+                  } else if (subitem.name === "Order" && user.stockis !== 1) {
+                    checkMenu = (
+                      <a
+                        onClick={() =>
+                          Message.info(
+                            "halaman ini tidak bisa diakses oleh anda"
+                          ).then(() => {
+                            Router.push("/");
+                          })
+                        }
+                      >
+                        <span className="mr-auto">
+                          {capitalize(subitem.name)}
+                        </span>
+                        {subitem.badge && badgeTemplate(subitem.badge)}
+                      </a>
+                    );
+                  } else {
+                    checkMenu = (
+                      <Link href={`${subitem.path ? subitem.path : ""}`}>
+                        <a>
+                          <span className="mr-auto">
+                            {capitalize(subitem.name)}
+                          </span>
+                          {subitem.badge && badgeTemplate(subitem.badge)}
+                        </a>
+                      </Link>
+                    );
+                  }
                   return (
                     <Menu.Item
                       key={getKey(subitem.name, index)}
@@ -167,14 +199,7 @@ const SidebarContent = ({
                         if (state.mobile) dispatch({ type: "mobileDrawer" });
                       }}
                     >
-                      <Link href={`${subitem.path ? subitem.path : ""}`}>
-                        <a>
-                          <span className="mr-auto">
-                            {capitalize(subitem.name)}
-                          </span>
-                          {subitem.badge && badgeTemplate(subitem.badge)}
-                        </a>
-                      </Link>
+                      {checkMenu}
                     </Menu.Item>
                   );
                 })}
