@@ -23,6 +23,7 @@ export const getInfoAction = (where = "") => {
     dispatch(setLoading(true));
     handleGet("site/info", (res, status) => {
       dispatch(setData(res.data));
+      console.log("info", res);
       dispatch(setLoading(false));
     });
   };

@@ -12,12 +12,12 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
     <Col>
       <Button
         shape="circle"
-        size="large"
+        size={state.mobile ? "small" : "large"}
         type="primary"
         style={{ backgroundColor: color, borderColor: color }}
         className={
           type !== "fill"
-            ? `${state.direction === "rtl" ? "ml-4" : "mr-4"}`
+            ? `${state.direction === "rtl" ? "ml-2" : "mr-2"}`
             : null
         }
         onClick={clickHandler}
@@ -36,9 +36,16 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
       <Row type="flex" align="middle" justify="start">
         {before}
         <Col>
-          <h5 className={`mb-0 ${type === "fill" ? "text-white" : null}`}>
-            {value}
-          </h5>
+          {state.mobile ? (
+            <h6 className={`mb-0 ${type === "fill" ? "text-white" : null}`}>
+              {value}
+            </h6>
+          ) : (
+            <h5 className={`mb-0 ${type === "fill" ? "text-white" : null}`}>
+              {value}
+            </h5>
+          )}
+          {/* <br /> */}
           <small className={type === "fill" ? "text-white-50" : null}>
             {title}
           </small>
@@ -51,7 +58,7 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
 };
 
 StatCard.propTypes = {
-  type: PropTypes.oneOf(["fill"]),
+  type: PropTypes.string,
   title: PropTypes.string,
   value: PropTypes.any,
   icon: PropTypes.element,

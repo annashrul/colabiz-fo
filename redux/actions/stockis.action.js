@@ -26,7 +26,7 @@ export const getStockisAction = (where = "") => {
   return (dispatch) => {
     dispatch(setLoadingData(true));
 
-    handleGet(`stockis?status=1&perpage=12&${where}`, (res, status) => {
+    handleGet(`stockis?status=1&perpage=6&${where}`, (res, status) => {
       dispatch(setData(res));
       dispatch(setLoadingData(false));
     });
