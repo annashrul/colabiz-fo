@@ -81,7 +81,7 @@ const CreateStockis = () => {
       email: objForm.email,
       long: long,
       lat: lat,
-      pin: objForm.pin,
+      // pin: objForm.pin,
       data_bank:
         parseInt(checkedBanks, 10) === 1
           ? {
@@ -195,7 +195,7 @@ const CreateStockis = () => {
                     >
                       <Input placeholder="Contoh: gugel@gmail.com" />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                       hasFeedback
                       name="pin"
                       label="Pin"
@@ -214,7 +214,7 @@ const CreateStockis = () => {
                       }}
                     >
                       <Input.Password />
-                    </Form.Item>
+                    </Form.Item> */}
                   </Col>
                 </Row>
               )}

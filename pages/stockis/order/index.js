@@ -1,16 +1,33 @@
-import { Table, Select, Row, Col, Input, Form } from "antd";
-import React, { useEffect, useState } from "react";
-import authAction from "../../action/auth.action";
-import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
-import { reportPurchaseAction } from "../../redux/actions/report.action";
-import general_helper from "../../helper/general_helper";
-import { data } from "autoprefixer";
-
-moment.locale("id");
+import {
+  Table,
+  Select,
+  Row,
+  Col,
+  Popconfirm,
+  Space,
+  Input,
+  Form,
+  message,
+  Tooltip,
+} from "antd";
 const { Column, ColumnGroup } = Table;
+import { CopyOutlined } from "@ant-design/icons";
+import Helper from "../../../helper/general_helper";
+import React, { useEffect, useState } from "react";
+import { handleGet } from "../../../action/baseAction";
+import authAction from "../../../action/auth.action";
 const Option = Select.Option;
 const Search = Input.Search;
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  approveStockisAction,
+  orderStockisAction,
+} from "../../../redux/actions/stockis.action";
+import general_helper from "../../../helper/general_helper";
+
+moment.locale("id");
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -21,42 +38,34 @@ const formItemLayout = {
     sm: { span: 24 },
   },
 };
-const IndexPurchaseReport = () => {
-  const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState(moment());
-  const [endDate, setEndDate] = useState(moment());
+const IndexOrderStockis = () => {
   const [searchby, setSearchBy] = useState("kd_trx");
   const [where, setWhere] = useState("");
   const [form] = Form.useForm();
-  const { loadingPurchase, dataPurchase, paginationPurchase } = useSelector(
-    (state) => state.reportReducer
-  );
+  const dispatch = useDispatch();
+  const {
+    loadingApprove,
+    loadingCancel,
+    loadingTake,
+    loadingOrder,
+    dataOrder,
+    paginationOrder,
+  } = useSelector((state) => state.stockisReducer);
   const user = authAction.getUser();
+
   useEffect(() => {
-    dispatch(reportPurchaseAction(user.id, `&page=1`));
+    dispatch(orderStockisAction(user.id_stockis));
   }, []);
-  console.log(dataPurchase);
 
   const onFinish = (values) => {
-    setStartDate(moment(startDate).format("YYYY-MM-DD"));
-    setEndDate(moment(endDate).format("YYYY-MM-DD"));
-    let where = `&datefrom=${moment(startDate).format(
-      "YYYY-MM-DD"
-    )}&dateto=${moment(endDate).format("YYYY-MM-DD")}`;
+    let where = ``;
     if (values !== "") {
-      where += `&searchby=${searchby}&q=${
+      where += `page=1&searchby=${searchby}&q=${
         searchby === "kd_trx" ? btoa(values) : values
       }`;
     }
-
-    // let where = ``;
-    // if (values !== "") {
-    //   where += `page=1&searchby=${searchby}&q=${
-    //     searchby === "kd_trx" ? btoa(values) : values
-    //   }`;
-    // }
     setWhere(where);
-    dispatch(reportPurchaseAction(user.id, where));
+    dispatch(orderStockisAction(user.id_stockis, where));
   };
 
   const prefixSelector = (
@@ -68,7 +77,23 @@ const IndexPurchaseReport = () => {
       </Select>
     </Form.Item>
   );
-  const datas = [{ id: "sad" }];
+
+  const tempAction = (status, kdTrx, title, loading, desc) => {
+    return (
+      <Popconfirm
+        title={`Anda yakin akan ${desc} transaksi ini ?`}
+        onConfirm={(e) => dispatch(approveStockisAction(kdTrx, status))}
+        okText="Oke"
+        cancelText="Batal"
+        onCancel={() => {}}
+        okButtonProps={{
+          loading: loading,
+        }}
+      >
+        <a>{title}</a>
+      </Popconfirm>
+    );
+  };
 
   return (
     <div>
@@ -82,18 +107,6 @@ const IndexPurchaseReport = () => {
         }}
       >
         <Row gutter={16}>
-          <Col xs={24} sm={24} md={6}>
-            <Form.Item name="periode" label="Periode">
-              {general_helper.dateRange(
-                (dates, dateStrings) => {
-                  setStartDate(dateStrings[0]);
-                  setEndDate(dateStrings[1]);
-                },
-                false,
-                [startDate, endDate]
-              )}
-            </Form.Item>
-          </Col>
           <Col xs={24} sm={12} md={12}>
             <Form.Item name="any" label="Cari">
               <Search
@@ -106,23 +119,24 @@ const IndexPurchaseReport = () => {
           </Col>
         </Row>
       </Form>
-
       <Table
         style={{ whiteSpace: "nowrap " }}
         scroll={{ x: 400 }}
         bordered={true}
-        dataSource={dataPurchase}
-        loading={loadingPurchase}
+        dataSource={dataOrder}
+        loading={loadingOrder || loadingApprove || loadingCancel || loadingTake}
         pagination={{
           defaultPageSize: 10,
           hideOnSinglePage: false,
-          total: parseInt(paginationPurchase && paginationPurchase.total, 10),
+          total: parseInt(paginationOrder && paginationOrder.total, 10),
           current: parseInt(
-            paginationPurchase && paginationPurchase.current_page,
+            paginationOrder && paginationOrder.current_page,
             10
           ),
           onChange: (page, pageSize) => {
-            dispatch(reportPurchaseAction(user.id, `&page=${page}`));
+            console.log(page);
+            console.log(pageSize);
+            dispatch(orderStockisAction(user.id_stockis, `page=${page}`));
           },
         }}
       >
@@ -133,10 +147,56 @@ const IndexPurchaseReport = () => {
           render={(_, record, i) => {
             return general_helper.generateNo(
               i,
-              paginationPurchase !== undefined
-                ? paginationPurchase.current_page
-                : 0
+              paginationOrder !== undefined ? paginationOrder.current_page : 0
             );
+          }}
+        />
+        <Column
+          title="#"
+          key="action"
+          render={(_, record, i) => {
+            Object.assign(record, { visible: false });
+            let menuAction;
+            if (record.status === 0) {
+              menuAction = (
+                <Space size="middle">
+                  {tempAction(
+                    1,
+                    record.kd_trx,
+                    "Konfirmasi",
+                    loadingApprove,
+                    "mengkonfirmasi"
+                  )}
+                  {tempAction(
+                    2,
+                    record.kd_trx,
+                    "Tolak",
+                    loadingCancel,
+                    "menolak"
+                  )}
+                </Space>
+              );
+            } else {
+              menuAction = (
+                <Space size="middle">
+                  {record.status === 3 ? (
+                    tempAction(
+                      3,
+                      record.kd_trx,
+                      "Ambil Barang",
+                      loadingTake,
+                      "mengambil barang pada"
+                    )
+                  ) : (
+                    <Tooltip title="anda belum bisa mengambil barang ini">
+                      <a style={{ cursor: "not-allowed" }}>Ambil Barang</a>
+                    </Tooltip>
+                  )}
+                </Space>
+              );
+            }
+
+            return menuAction;
           }}
         />
 
@@ -239,4 +299,4 @@ const IndexPurchaseReport = () => {
   );
 };
 
-export default IndexPurchaseReport;
+export default IndexOrderStockis;

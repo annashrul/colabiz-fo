@@ -24,6 +24,7 @@ import {
   CaretRightOutlined,
   CaretLeftOutlined,
   CloseOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,11 +36,8 @@ import {
   cityAction,
   districtsAction,
 } from "../../redux/actions/address.action";
-import {
-  cartAction,
-  getCartAction,
-  getPaket,
-} from "../../redux/actions/paket.action";
+import { postCart } from "../../redux/actions/cart.action";
+import { getPaket } from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
 import Router from "next/router";
 import general_helper from "../../helper/general_helper";
@@ -65,6 +63,7 @@ const ListProduct = () => {
   const { loadingData, data, pagination } = useSelector(
     (state) => state.stockisReducer
   );
+  const loadingCart = useSelector((state) => state.cartReducer.loadingAdd);
   const {
     loadingRegister,
     dataRegister,
@@ -72,7 +71,6 @@ const ListProduct = () => {
     loadingHappyShopping,
     dataHappyShopping,
     paginationHappyShopping,
-    dataCart,
   } = useSelector((state) => state.paketReducer);
 
   const {
@@ -100,41 +98,6 @@ const ListProduct = () => {
   useEffect(() => {
     dispatch(provinceAction());
   }, []);
-  useEffect(() => {
-    dispatch(getCartAction());
-  }, []);
-  useEffect(() => {
-    if (dataCart !== undefined && dataCart.length > 0) {
-      const filteredData = dataCart.filter(
-        (value, index, self) =>
-          self.findIndex((v) => v.id === value.id) === index
-      );
-      setCartData(filteredData);
-      dispatch(cartAction(filteredData));
-    }
-  }, []);
-
-  useEffect(() => {
-    // let arrRegist = dataRegister;
-    // let arrSc = dataSmartContract;
-    // if (dataCart !== undefined && dataCart.length > 0) {
-    //   dataCart.map((res) => {
-    //     arrRegist.map((val) => {
-    //       if (val.id === res.id) {
-    //         Object.assign(val, { qty: res.qty });
-    //       }
-    //     });
-    //     arrSc.map((val) => {
-    //       if (val.id === res.id) {
-    //         Object.assign(val, { qty: res.qty });
-    //       }
-    //     });
-    //   });
-    // }
-    // console.log("sc", arrSc);
-    // console.log("reg", arrSc);
-    // console.log("redux", dataCart);
-  }, [loadingRegister]);
 
   useEffect(() => {
     if (!loadingCity && dataCity !== undefined) {
@@ -184,36 +147,13 @@ const ListProduct = () => {
     }
   };
 
-  const goToCheckout = (val) => {
-    localStorage.setItem("dataStokis", JSON.stringify(dataStokis));
-    localStorage.setItem("dataPaket", JSON.stringify(val));
-    setTimeout(() => {
-      Router.push(StringLink.checkout);
-    }, 300);
-  };
-
-  const addToCart = (val) => {
-    let datas = cartData;
-    datas.push(val);
-    const filteredData = datas.filter(
-      (value, index, self) => self.findIndex((v) => v.id === value.id) === index
-    );
-    let newData = [];
-    filteredData.map((res) => {
-      if (res.id === val.id) {
-        if (res.qty > val.qty) {
-          Object.assign(res, { qty: res.qty + 1 });
-        } else {
-          Object.assign(res, { qty: val.qty });
-        }
-        newData.push(res);
-      } else {
-        newData.push(res);
-      }
-    });
-    setCartData(newData);
-    dispatch(cartAction(newData));
-  };
+  // const goToCheckout = (val) => {
+  //   localStorage.setItem("dataStokis", JSON.stringify(dataStokis));
+  //   localStorage.setItem("dataPaket", JSON.stringify(val));
+  //   setTimeout(() => {
+  //     Router.push(StringLink.checkout);
+  //   }, 300);
+  // };
 
   return (
     <>
@@ -258,6 +198,7 @@ const ListProduct = () => {
                     }}
                     onClick={() => {
                       if (val.status_layanan !== 0) {
+                        localStorage.setItem("dataStokis", JSON.stringify(val));
                         setDataStokis(val);
                         setIndexStockis(key);
                       }
@@ -266,6 +207,10 @@ const ListProduct = () => {
                     <StatCard
                       clickHandler={() => {
                         if (val.status_layanan !== 0) {
+                          localStorage.setItem(
+                            "dataStokis",
+                            JSON.stringify(val)
+                          );
                           setDataStokis(val);
                           setIndexStockis(key);
                         }
@@ -313,6 +258,7 @@ const ListProduct = () => {
                     if (currentPage > 1) {
                       let page = currentPage;
                       page -= 1;
+                      setIndexStockis("");
                       setCurrentPage(page);
                       dispatch(getStockisAction(`page=${page}`));
                     }
@@ -325,6 +271,7 @@ const ListProduct = () => {
                   type="primary"
                   disabled={pagination.to >= parseInt(pagination.total, 10)}
                   onClick={(e) => {
+                    setIndexStockis("");
                     console.log(pagination);
                     if (pagination.to >= parseInt(pagination.total, 10)) {
                       Message.info("data stokis habis");
@@ -346,10 +293,12 @@ const ListProduct = () => {
       <Row gutter={16} className={"mt-3"}>
         <Col xs={24} sm={12} md={12} className="mb-3">
           <Card title="PAKET REGISTER">
-            <Spin spinning={loadingRegister}>
+            <Spin spinning={loadingRegister || loadingCart}>
               <CardPaket
-                callback={(val) => addToCart(val)}
-                loading={loadingRegister}
+                isButton={true}
+                callback={(val) => {
+                  dispatch(postCart(val.id));
+                }}
                 data={dataRegister}
                 pagination={paginationRegister}
               />

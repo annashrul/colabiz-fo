@@ -20,7 +20,7 @@ const removeCookie = (name) => {
   Cookies.remove(name);
 };
 const toRp = (angka, isInput = false) => {
-  if (angka === undefined) return 0;
+  if (angka === undefined || angka === null || angka === "") return 0;
   const number_string = angka.toString().replace(/[^,\d]/g, "");
   const split = number_string.split(".");
   const sisa = split[0].length % 3;

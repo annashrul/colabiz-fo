@@ -1,84 +1,74 @@
 import {
   Col,
   Button,
-  Skeleton,
   Card,
   Message,
-  PageHeader,
   Row,
   Empty,
-  Modal,
   Spin,
-  Form,
-  Select,
-  Input,
-  Badge,
   Popconfirm,
+  Tooltip,
+  Typography,
 } from "antd";
 import {
   MinusOutlined,
   PlusOutlined,
-  QuestionOutlined,
   CheckOutlined,
   WalletOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getStockisAction } from "../../redux/actions/stockis.action";
 import StatCard from "../shared/StatCard";
 import { theme } from "../styles/GlobalStyles";
-import {
-  provinceAction,
-  cityAction,
-  districtsAction,
-} from "../../redux/actions/address.action";
-import { checkout, getPaket } from "../../redux/actions/paket.action";
-import CardPaket from "../paket/CardPaket";
+import { checkout } from "../../redux/actions/paket.action";
 import Router from "next/router";
 import general_helper from "../../helper/general_helper";
 import { StringLink } from "../../helper/string_link_helper";
 import NotFound from "../NotFound";
 import authAction from "../../action/auth.action";
+import {
+  getCartAction,
+  postCart,
+  setLoading,
+} from "../../redux/actions/cart.action";
+import { useAppState } from "../shared/AppProvider";
 const ButtonGroup = Button.Group;
-const { Option } = Select;
-const { Meta } = Card;
-const Search = Input.Search;
-
+const { Text } = Typography;
 const CheckoutProduct = () => {
   const dispatch = useDispatch();
-  const [count, setCount] = useState(1);
   const [indexMetodePembayaran, setIndexMetodePembayaran] = useState(0);
   const [dataMetodePembayaran, setDataMetodePembayaran] = useState([]);
-  const [dataStokis, setDataStokis] = useState({});
-  const [dataPaket, setDataPaket] = useState({});
-  const [info, setInfo] = useState({});
-  const [loadingPage, setLoadingPage] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [idxCart, setIdxCart] = useState(0);
+  const [state] = useAppState();
+
   const loadingCheckout = useSelector(
     (state) => state.paketReducer.loadingCheckout
   );
+  const loadingCart = useSelector((state) => state.cartReducer.loading);
+  const loadingAdd = useSelector((state) => state.cartReducer.loadingAdd);
+  const loadingDelete = useSelector((state) => state.cartReducer.loadingDelete);
+  const dataCart = useSelector((state) => state.cartReducer.data);
+  const info = authAction.getInfo();
+  const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
   useEffect(() => {
-    let storagePaket = JSON.parse(localStorage.getItem("dataPaket"));
-    let storageStokis = JSON.parse(localStorage.getItem("dataStokis"));
-    if (storagePaket === null || storagePaket === undefined) {
-      Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
-        Router.push(StringLink.pembelian).then(() => setLoadingPage(false));
-      });
-    } else {
-      setLoadingPage(false);
-      setDataStokis(storageStokis);
-      setDataPaket(storagePaket);
-      let info = authAction.getInfo();
-      console.log("data info", info);
-      setInfo(info);
-    }
+    dispatch(getCartAction());
   }, []);
+
+  useEffect(() => {
+    if (dataCart !== undefined) {
+      if (dataCart.length < 1) {
+        Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
+          Router.push(StringLink.pembelian).then(() => setLoading(false));
+        });
+      }
+    }
+  }, [loadingCart]);
 
   useEffect(() => setVisible(loadingCheckout), [loadingCheckout]);
 
   useEffect(() => {
-    setCount(1);
-    if (!loadingPage) {
+    if (!loadingCart) {
       setDataMetodePembayaran([
         {
           metode_pembayaran: "TRANSFER",
@@ -96,24 +86,8 @@ const CheckoutProduct = () => {
         },
       ]);
     }
-  }, [loadingPage]);
+  }, [loadingCart]);
 
-  const increase = () => {
-    if (count >= parseInt(dataPaket.stock, 10)) {
-      setCount(parseInt(dataPaket.stock, 10));
-    } else {
-      setCount(count + 1);
-    }
-  };
-
-  const decline = () => {
-    let newCount = count - 1;
-    if (newCount < 1) {
-      newCount = 1;
-    }
-
-    setCount(newCount);
-  };
   const tempStokis = (title, desc, isRight = "") => {
     return (
       <Row>
@@ -132,21 +106,14 @@ const CheckoutProduct = () => {
       metode_pembayaran:
         dataMetodePembayaran[indexMetodePembayaran].metode_pembayaran,
       id_stockis: dataStokis.id,
-      id_address: dataStokis.id,
+      id_address: dataStokis.id_address,
       id_bank: dataMetodePembayaran[indexMetodePembayaran].id_bank,
-      detail: [
-        {
-          id_paket: dataPaket.id,
-          harga: dataPaket.price,
-          qty: count,
-          total: parseInt(dataPaket.price, 10) * count,
-        },
-      ],
     };
-
     dispatch(checkout(data));
   };
-  return !loadingPage ? (
+  let subtotal = 0;
+  let subQty = 0;
+  return !loadingCart ? (
     <>
       <Row gutter={16}>
         <Col md={12} xs={24} sm={24} className="mb-2">
@@ -193,43 +160,112 @@ const CheckoutProduct = () => {
         </Col>
         <Col md={12} xs={24} sm={24}>
           <Card title="Daftar Paket Anda" className="mb-2">
-            <CardPaket
-              callback={(val) => {}}
-              loading={false}
-              data={[JSON.parse(localStorage.getItem("dataPaket"))]}
-            />
+            <Spin spinning={false}>
+              {dataCart && dataCart.length > 0 ? (
+                dataCart.map((res, key) => {
+                  let qty = parseInt(res.qty, 10);
+                  subtotal += parseInt(res.price, 10) * qty;
+                  subQty += qty;
+                  return (
+                    <Row
+                      key={key}
+                      gutter={16}
+                      className={dataCart.length > 1 ? "mb-2" : ""}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Col md={5} xs={5} sm={8}>
+                        <img
+                          style={{
+                            height: state.mobile ? "50px" : "70px",
+                            width: "100%",
+                            borderRadius: "10px",
+                          }}
+                          alt={res.gambar}
+                          src={res.gambar}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; // prevents looping
+                            currentTarget.src = general_helper.imgDefault;
+                          }}
+                        />
+                      </Col>
+                      <Col md={19} xs={19} sm={16}>
+                        <Tooltip title={res.paket}>
+                          <Text style={{ width: 200 }} ellipsis={true}>
+                            <h5>{res.paket}</h5>
+                          </Text>
+                        </Tooltip>
 
-            <ButtonGroup style={{ float: "right", marginTop: "3px" }}>
-              <Button onClick={decline}>
-                <MinusOutlined />
-              </Button>
-              <Button>{count}</Button>
-              <Button onClick={increase}>
-                <PlusOutlined />
-              </Button>
-            </ButtonGroup>
+                        <Row>
+                          <Col md={12} xs={12} sm={12}>
+                            <p
+                              style={{
+                                fontSize: state.mobile ? "11px" : "14px",
+                              }}
+                            >
+                              {general_helper.toRp(res.price, true)} x {qty} ={" "}
+                              {general_helper.toRp(
+                                parseInt(res.price, 10) * qty,
+                                true
+                              )}
+                            </p>
+                          </Col>
+                          <Col md={12} xs={12} sm={12}>
+                            <ButtonGroup style={{ float: "right" }}>
+                              <Button
+                                loading={idxCart === key && loadingDelete}
+                                size="small"
+                                onClick={(e) => {
+                                  if (qty > 1) {
+                                    setIdxCart(key);
+                                    setTimeout(
+                                      () =>
+                                        dispatch(
+                                          postCart(res.id_paket, "delete")
+                                        ),
+                                      20
+                                    );
+                                  }
+                                }}
+                              >
+                                <MinusOutlined />
+                              </Button>
+                              <Button size="small">
+                                {parseInt(res.qty, 10)}
+                              </Button>
+                              <Button
+                                loading={idxCart === key && loadingAdd}
+                                size="small"
+                                onClick={(e) => {
+                                  if (parseInt(res.stock, 10) > qty) {
+                                    setIdxCart(key);
+                                    setTimeout(
+                                      () => dispatch(postCart(res.id_paket)),
+                                      20
+                                    );
+                                  }
+                                }}
+                              >
+                                <PlusOutlined />
+                              </Button>
+                            </ButtonGroup>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  );
+                })
+              ) : (
+                <Empty />
+              )}
+            </Spin>
           </Card>
           <Card title="Rincian Pembayaran">
             {tempStokis(
-              "Harga Paket",
-              general_helper.toRp(parseInt(dataPaket.price, 10)),
-              "right"
-            )}
-            {tempStokis(
               "Qty Dibeli",
-              general_helper.toRp(count, true),
+              general_helper.toRp(subQty, true),
               "right"
             )}
-            {tempStokis(
-              "Subtotal",
-              general_helper.toRp(parseInt(dataPaket.price, 10) * count),
-              "right"
-            )}
-            {tempStokis(
-              "Total",
-              general_helper.toRp(parseInt(dataPaket.price, 10) * count),
-              "right"
-            )}
+            {tempStokis("Total", general_helper.toRp(subtotal), "right")}
           </Card>
         </Col>
       </Row>
@@ -241,7 +277,6 @@ const CheckoutProduct = () => {
             onClick={(e) => {
               Router.push(StringLink.pembelian);
               localStorage.removeItem("dataStokis");
-              localStorage.removeItem("dataPaket");
             }}
           >
             Kembali
@@ -252,7 +287,7 @@ const CheckoutProduct = () => {
             onConfirm={(e) => handleCheckout()}
             okText="Oke"
             cancelText="Batal"
-            onCancel={() => {}}
+            onCancel={() => setVisible(false)}
             okButtonProps={{
               loading: loadingCheckout,
             }}
@@ -265,7 +300,7 @@ const CheckoutProduct = () => {
       </Row>
     </>
   ) : (
-    <Spin spinning={loadingPage}>
+    <Spin spinning={loadingCart}>
       <NotFound />
     </Spin>
   );

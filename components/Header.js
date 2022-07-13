@@ -1,4 +1,4 @@
-import { Layout, Menu, Avatar, Badge, Modal } from "antd";
+import { Layout, Menu, Avatar, Badge, Modal, Alert } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
@@ -9,7 +9,9 @@ import authAction from "../action/auth.action";
 import Router from "next/router";
 import { ClockCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getCartAction, setCountCart } from "../redux/actions/paket.action";
+import { getCartAction } from "../redux/actions/cart.action";
+// import { getCartAction, setCountCart } from "../redux/actions/paket.action";
+import Marquee from "react-fast-marquee";
 
 const { SubMenu } = Menu;
 
@@ -17,12 +19,12 @@ const { Header } = Layout;
 
 const MainHeader = () => {
   const [user, setUser] = useState({});
-  const dataCart = useSelector((state) => state.paketReducer.dataCart);
+  const { data } = useSelector((state) => state.cartReducer);
   const [state, dispatch] = useAppState();
   const dispatchs = useDispatch();
 
   useEffect(() => {
-    // dispatchs(getCartAction());
+    dispatchs(getCartAction());
     const users = authAction.getUser();
     if (users === undefined) {
       Router.push("/signin");
@@ -72,12 +74,29 @@ const MainHeader = () => {
                 </a>
               </Menu.Item>
             )}
-            <Menu.Item>
-              <img src={general_helper.imgDefault} style={{ width: "100px" }} />
-            </Menu.Item>
+            {!state.mobile && (
+              <Menu.Item>
+                <img
+                  src={general_helper.imgDefault}
+                  style={{ width: "100px" }}
+                />
+              </Menu.Item>
+            )}
+
             <span className="mr-auto" />
+            {user.stockis === 1 && (
+              <Alert
+                banner
+                message={
+                  <Marquee pauseOnHover gradient={false}>
+                    &nbsp; Saat ini status anda adalah stokis.
+                  </Marquee>
+                }
+              />
+            )}
+
             <Menu.Item onClick={() => Router.push(StringLink.checkout)}>
-              <Badge count={dataCart && dataCart.length}>
+              <Badge count={data && data.length}>
                 <ShoppingCartOutlined
                   style={{
                     fontSize: 20,

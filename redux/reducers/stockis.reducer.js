@@ -4,10 +4,25 @@ const initialState = {
   loadingData: true,
   data: [],
   pagination: [],
+
+  dataOrder: [],
+  paginationOrder: [],
+  loadingOrder: true,
+  loadingApprove: false,
+  loadingCancel: false,
+  loadingTake: false,
+
+  dataDetail: [],
+  loadingDetail: true,
 };
 
 export const stockisReducer = (state = initialState, action) => {
   switch (action.type) {
+    case STOCKIS.DETAIL:
+      return {
+        ...state,
+        data: action.data.data,
+      };
     case STOCKIS.DATA:
       return {
         ...state,
@@ -18,9 +33,35 @@ export const stockisReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         loadingData: action.load,
       });
+    case STOCKIS.ORDER:
+      return {
+        ...state,
+        dataOrder: action.data.data,
+        paginationOrder: action.data.pagination,
+      };
+    case STOCKIS.LOADING_ORDER:
+      return Object.assign({}, state, {
+        loadingOrder: action.load,
+      });
     case STOCKIS.LOADING:
       return Object.assign({}, state, {
         loading: action.load,
+      });
+    case STOCKIS.LOADING_APPROVE_ORDER:
+      return Object.assign({}, state, {
+        loadingApprove: action.load,
+      });
+    case STOCKIS.LOADING_CANCEL_ORDER:
+      return Object.assign({}, state, {
+        loadingCancel: action.load,
+      });
+    case STOCKIS.LOADING_TAKE_ORDER:
+      return Object.assign({}, state, {
+        loadingTake: action.load,
+      });
+    case STOCKIS.LOADING_DETAIL:
+      return Object.assign({}, state, {
+        loadingDetail: action.load,
       });
     default:
       return state;

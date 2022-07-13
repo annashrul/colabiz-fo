@@ -170,7 +170,7 @@ const InvoiceComponent = () => {
                   <Col />
                 </Row>
                 {tempRow("Kode Transaksi", data && data.invoice_no, false)}
-                {tempRow("Kode Pembayaran", data && data.pay_code, false)}
+
                 <hr />
                 <small style={{ fontSize: fontSize }}>
                   Silahkan transfer sebesar

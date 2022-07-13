@@ -1,4 +1,4 @@
-import { CART, PAKET } from "../type";
+import { PAKET } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
 import { StringLink } from "../../helper/string_link_helper";
@@ -35,31 +35,6 @@ export const setLoadingCheckout = (load) => {
   return {
     type: PAKET.LOADING_CHECKOUT,
     load,
-  };
-};
-export const setAddCart = (load) => {
-  return {
-    type: CART.ADD,
-    load,
-  };
-};
-export const setCountCart = (data) => {
-  return {
-    type: CART.DATA,
-    data,
-  };
-};
-
-export const getCartAction = (val) => {
-  return (dispatch) => {
-    dispatch(setCountCart(val));
-  };
-};
-
-export const cartAction = (val, type = "add") => {
-  return (dispatch) => {
-    dispatch(getCartAction(val));
-    console.log(val);
   };
 };
 

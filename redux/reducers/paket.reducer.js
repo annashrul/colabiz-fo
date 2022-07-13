@@ -7,27 +7,10 @@ const initialState = {
   paginationRegister: [],
   dataSmartContract: [],
   paginationSmartContract: [],
-  add: 0,
-  min: 0,
-  countCart: 0,
-  dataCart: [],
 };
 
 export const paketReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CART.ADD:
-      return {
-        ...state,
-        add: action.data,
-      };
-    case CART.DATA:
-      // dataCart.push(action.load);
-      // console.log("state cart", dataCart.length);
-
-      return {
-        ...state,
-        dataCart: action.data,
-      };
     case PAKET.DATA_REGISTER:
       return {
         ...state,
