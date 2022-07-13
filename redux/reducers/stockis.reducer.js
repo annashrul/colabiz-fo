@@ -11,10 +11,18 @@ const initialState = {
   loadingApprove: false,
   loadingCancel: false,
   loadingTake: false,
+
+  dataDetail: [],
+  loadingDetail: true,
 };
 
 export const stockisReducer = (state = initialState, action) => {
   switch (action.type) {
+    case STOCKIS.DETAIL:
+      return {
+        ...state,
+        data: action.data.data,
+      };
     case STOCKIS.DATA:
       return {
         ...state,
@@ -50,6 +58,10 @@ export const stockisReducer = (state = initialState, action) => {
     case STOCKIS.LOADING_TAKE_ORDER:
       return Object.assign({}, state, {
         loadingTake: action.load,
+      });
+    case STOCKIS.LOADING_DETAIL:
+      return Object.assign({}, state, {
+        loadingDetail: action.load,
       });
     default:
       return state;

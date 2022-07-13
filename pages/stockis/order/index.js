@@ -41,12 +41,6 @@ const formItemLayout = {
 const IndexOrderStockis = () => {
   const [searchby, setSearchBy] = useState("kd_trx");
   const [where, setWhere] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [visible1, setVisible1] = useState(false);
-  const [visible2, setVisible2] = useState(false);
-  const [visible3, setVisible3] = useState(false);
-  const [arrDatum, setArrDatum] = useState([]);
-  const [meta, setMeta] = useState({});
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const {

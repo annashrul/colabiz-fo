@@ -1,22 +1,12 @@
-import {
-  Table,
-  Select,
-  Row,
-  Col,
-  Popconfirm,
-  Space,
-  Input,
-  Form,
-  message,
-  Tooltip,
-} from "antd";
+import { Table, Select, Row, Col, Input, Form } from "antd";
 import React, { useEffect, useState } from "react";
 import authAction from "../../action/auth.action";
-
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { reportPurchaseAction } from "../../redux/actions/report.action";
 import general_helper from "../../helper/general_helper";
+import { data } from "autoprefixer";
+
 moment.locale("id");
 const { Column, ColumnGroup } = Table;
 const Option = Select.Option;
@@ -31,20 +21,21 @@ const formItemLayout = {
     sm: { span: 24 },
   },
 };
-const PurchaseReport = () => {
+const IndexPurchaseReport = () => {
+  const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(moment());
   const [endDate, setEndDate] = useState(moment());
   const [searchby, setSearchBy] = useState("kd_trx");
   const [where, setWhere] = useState("");
   const [form] = Form.useForm();
-  const dispatch = useDispatch();
-  const { loadingPurchase, dataPurchase, paginatioPurchase } = useSelector(
+  const { loadingPurchase, dataPurchase, paginationPurchase } = useSelector(
     (state) => state.reportReducer
   );
   const user = authAction.getUser();
   useEffect(() => {
     dispatch(reportPurchaseAction(user.id, `&page=1`));
   }, []);
+  console.log(dataPurchase);
 
   const onFinish = (values) => {
     setStartDate(moment(startDate).format("YYYY-MM-DD"));
@@ -77,6 +68,7 @@ const PurchaseReport = () => {
       </Select>
     </Form.Item>
   );
+  const datas = [{ id: "sad" }];
 
   return (
     <div>
@@ -114,6 +106,7 @@ const PurchaseReport = () => {
           </Col>
         </Row>
       </Form>
+
       <Table
         style={{ whiteSpace: "nowrap " }}
         scroll={{ x: 400 }}
@@ -123,13 +116,13 @@ const PurchaseReport = () => {
         pagination={{
           defaultPageSize: 10,
           hideOnSinglePage: false,
-          total: parseInt(paginatioPurchase && paginatioPurchase.total, 10),
+          total: parseInt(paginationPurchase && paginationPurchase.total, 10),
           current: parseInt(
-            paginatioPurchase && paginatioPurchase.current_page,
+            paginationPurchase && paginationPurchase.current_page,
             10
           ),
           onChange: (page, pageSize) => {
-            dispatch(reportPurchaseAction(user.id, `page=${page}`));
+            dispatch(reportPurchaseAction(user.id, `&page=${page}`));
           },
         }}
       >
@@ -140,8 +133,8 @@ const PurchaseReport = () => {
           render={(_, record, i) => {
             return general_helper.generateNo(
               i,
-              paginatioPurchase !== undefined
-                ? paginatioPurchase.current_page
+              paginationPurchase !== undefined
+                ? paginationPurchase.current_page
                 : 0
             );
           }}
@@ -246,4 +239,4 @@ const PurchaseReport = () => {
   );
 };
 
-export default PurchaseReport;
+export default IndexPurchaseReport;

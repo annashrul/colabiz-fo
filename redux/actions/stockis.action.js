@@ -3,6 +3,20 @@ import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import { Message } from "antd";
 import Router from "next/router";
 
+export const setLoadingDetail = (load) => {
+  return {
+    type: STOCKIS.LOADING_DETAIL,
+    load,
+  };
+};
+
+export const setDataDetail = (data) => {
+  return {
+    type: STOCKIS.DETAIL,
+    data,
+  };
+};
+
 export const setLoading = (load) => {
   return {
     type: STOCKIS.LOADING,
@@ -58,6 +72,16 @@ export const getStockisAction = (where = "") => {
     handleGet(`stockis?status=1&perpage=6&${where}`, (res, status) => {
       dispatch(setData(res));
       dispatch(setLoadingData(false));
+    });
+  };
+};
+
+export const getStockisDetailAction = (id) => {
+  return (dispatch) => {
+    dispatch(setLoadingDetail(true));
+    handleGet(`stockis/get/${id}`, (res, status) => {
+      dispatch(setDataDetail(res));
+      dispatch(setLoadingDetail(false));
     });
   };
 };

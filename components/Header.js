@@ -9,7 +9,8 @@ import authAction from "../action/auth.action";
 import Router from "next/router";
 import { ClockCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getCartAction, setCountCart } from "../redux/actions/paket.action";
+import { getCartAction } from "../redux/actions/cart.action";
+// import { getCartAction, setCountCart } from "../redux/actions/paket.action";
 import Marquee from "react-fast-marquee";
 
 const { SubMenu } = Menu;
@@ -18,12 +19,12 @@ const { Header } = Layout;
 
 const MainHeader = () => {
   const [user, setUser] = useState({});
-  const dataCart = useSelector((state) => state.paketReducer.dataCart);
+  const { data } = useSelector((state) => state.cartReducer);
   const [state, dispatch] = useAppState();
   const dispatchs = useDispatch();
 
   useEffect(() => {
-    // dispatchs(getCartAction());
+    dispatchs(getCartAction());
     const users = authAction.getUser();
     if (users === undefined) {
       Router.push("/signin");
@@ -95,7 +96,7 @@ const MainHeader = () => {
             )}
 
             <Menu.Item onClick={() => Router.push(StringLink.checkout)}>
-              <Badge count={dataCart && dataCart.length}>
+              <Badge count={data && data.length}>
                 <ShoppingCartOutlined
                   style={{
                     fontSize: 20,

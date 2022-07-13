@@ -11,6 +11,7 @@ import { walletReducer } from "./reducers/wallet.reducer";
 import { paymentChannelReducer } from "./reducers/paymentChannel.reducer";
 import { invoiceReducer } from "./reducers/invoice.reducer";
 import { reportReducer } from "./reducers/report.reducer";
+import { cartReducer } from "./reducers/cart.reducer";
 export default combineReducers({
   loginReducer,
   authUserReducer,
@@ -24,4 +25,5 @@ export default combineReducers({
   paymentChannelReducer,
   invoiceReducer,
   reportReducer,
+  cartReducer,
 });
