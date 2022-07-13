@@ -44,9 +44,7 @@ import CardPaket from "../paket/CardPaket";
 import Router from "next/router";
 import general_helper from "../../helper/general_helper";
 import { StringLink } from "../../helper/string_link_helper";
-import { ar } from "date-fns/locale";
 import { useAppState } from "../shared/AppProvider";
-// import { Badge } from "reactour";
 
 const { Option } = Select;
 const { Meta } = Card;

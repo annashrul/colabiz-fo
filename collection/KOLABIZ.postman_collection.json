@@ -1633,7 +1633,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}stockis?page=1",
+									"raw": "{{url}}stockis?page=1&status=1",
 									"host": [
 										"{{url}}stockis"
 									],
@@ -1657,6 +1657,10 @@
 											"key": "q",
 											"value": "tatang",
 											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "1"
 										}
 									]
 								}
@@ -5166,6 +5170,71 @@
 						},
 						{
 							"name": "History Pembelian",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}penjualan/report?id_member=92bee49a-20a2-4137-a005-bbec32f81816",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"report"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "datefrom",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "dateto",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "id_member",
+											"value": "92bee49a-20a2-4137-a005-bbec32f81816"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Order (stockis)",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -5203,12 +5272,90 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}penjualan/report",
+									"raw": "{{url}}penjualan/report?id_stockis=a267e585-fa16-4cad-919d-37437d1cae6a",
 									"host": [
 										"{{url}}penjualan"
 									],
 									"path": [
 										"report"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "datefrom",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "dateto",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "id_stockis",
+											"value": "a267e585-fa16-4cad-919d-37437d1cae6a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Invoice",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/invoice/SU5WL0RQLzIyMDcxMi8wMTA=",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"invoice",
+										"SU5WL0RQLzIyMDcxMi8wMTA="
 									],
 									"query": [
 										{
