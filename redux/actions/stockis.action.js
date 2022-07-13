@@ -21,14 +21,36 @@ export const setData = (data) => {
     data,
   };
 };
+export const setLoadingOder = (load) => {
+  return {
+    type: STOCKIS.LOADING_ORDER,
+    load,
+  };
+};
+export const setDataOrder = (data) => {
+  return {
+    type: STOCKIS.ORDER,
+    data,
+  };
+};
 
 export const getStockisAction = (where = "") => {
   return (dispatch) => {
     dispatch(setLoadingData(true));
-
     handleGet(`stockis?status=1&perpage=6&${where}`, (res, status) => {
       dispatch(setData(res));
       dispatch(setLoadingData(false));
+    });
+  };
+};
+
+export const orderStockisAction = (id, where = "") => {
+  return (dispatch) => {
+    dispatch(setLoadingOder(true));
+    handleGet(`penjualan/report?id_stockis=${id}&${where}`, (res, status) => {
+      console.log("action", res);
+      dispatch(setDataOrder(res));
+      dispatch(setLoadingOder(false));
     });
   };
 };

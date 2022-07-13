@@ -3,6 +3,7 @@ export const StringLink = {
   news: "/news",
   tambahMitra: "/register",
   stockis: "/stockis",
+  orderStockis: "/stockis/order",
   pembelian: "/pembelian",
   checkout: "/pembelian/checkout",
   invoiceMitra: "/mitra/invoice",

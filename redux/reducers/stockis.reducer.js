@@ -4,6 +4,10 @@ const initialState = {
   loadingData: true,
   data: [],
   pagination: [],
+
+  dataOrder: [],
+  paginationOrder: [],
+  loadingOrder: true,
 };
 
 export const stockisReducer = (state = initialState, action) => {
@@ -17,6 +21,16 @@ export const stockisReducer = (state = initialState, action) => {
     case STOCKIS.LOADING_DATA:
       return Object.assign({}, state, {
         loadingData: action.load,
+      });
+    case STOCKIS.ORDER:
+      return {
+        ...state,
+        dataOrder: action.data.data,
+        paginationOrder: action.data.pagination,
+      };
+    case STOCKIS.LOADING_ORDER:
+      return Object.assign({}, state, {
+        loadingOrder: action.load,
       });
     case STOCKIS.LOADING:
       return Object.assign({}, state, {
