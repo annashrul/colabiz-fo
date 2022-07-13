@@ -1,6 +1,6 @@
 import { CART } from "../type";
 import Action from "../../action/auth.action";
-import { handleGet, handlePost } from "../../action/baseAction";
+import { handleDelete, handleGet, handlePost } from "../../action/baseAction";
 
 export const setData = (data) => {
   return {
@@ -60,5 +60,15 @@ export const postCart = (idPaket, type = "tambah") => {
         dispatch(getCartAction());
       }
     );
+  };
+};
+
+export const deleteCartAction = (idPaket) => {
+  return (dispatch) => {
+    // setLoadingDelete(true);
+    handleDelete(`cart/${idPaket}`, (res, status, msg) => {
+      dispatch(getCartAction());
+      // setLoadingDelete(false);
+    });
   };
 };

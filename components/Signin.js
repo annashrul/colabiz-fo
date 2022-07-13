@@ -1,20 +1,14 @@
 import { Button, Form, Input, Spin, Message, Row } from "antd";
-import {
-  LockOutlined,
-  UserOutlined,
-  ScheduleOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import Router from "next/router";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { StringLink } from "../helper/string_link_helper";
 import ModalPin from "./ModalPin";
 import { handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
+import { loginAction } from "../redux/actions/auth.action";
 import ModalResendEmail from "./modalResendEmail";
 import Routes from "../lib/routes";
 
@@ -43,37 +37,6 @@ const Signin = () => {
   useEffect(() => {
     forceUpdate({});
   }, []);
-
-  useEffect(() => {
-    // appRoutes.map((res, index) => {
-    //   if (resLogin.id !== undefined && resLogin.stockis !== 1) {
-    //     if (res.name === "Order") {
-    //       delete appRoutes[index];
-    //     }
-    //   }
-    //   if (resLogin.id !== undefined && resLogin.stockis !== 0) {
-    //     if (res.name === "Daftar Stokis") {
-    //       delete appRoutes[index];
-    //     }
-    //   }
-    // });
-    // if (resLogin.id !== undefined) {
-    //   if (resLogin === 0) {
-    //     appRoutes.push({
-    //       path: StringLink.stockis,
-    //       name: "Daftar Stokis",
-    //       icon: <UnorderedListOutlined style={{ fontSize: "16px" }} />,
-    //     });
-    //   }
-    //   if (resLogin === 1) {
-    //     appRoutes.push({
-    //       path: StringLink.orderStockis,
-    //       name: "Order",
-    //       icon: <ScheduleOutlined style={{ fontSize: "16px" }} />,
-    //     });
-    //   }
-    // }
-  }, [resLogin]);
 
   const handleSubmit = async (values) => {
     dispatch(loginAction(values));

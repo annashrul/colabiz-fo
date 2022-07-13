@@ -1,49 +1,18 @@
-import {
-  Button,
-  PageHeader,
-  Popconfirm,
-  notification,
-  Form,
-  Row,
-  Col,
-  Select,
-  Radio,
-  Input,
-  Card,
-  message,
-  Space,
-  Modal,
-  Spin,
-} from "antd";
-import {
-  InfoCircleOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+import { Button, Form, Row, Col, Select, Input, Card } from "antd";
 
 import React, { useRef, useEffect, useState } from "react";
-import { theme } from "../styles/GlobalStyles";
-import Helper from "../../helper/general_helper";
-import { StringLink } from "../../helper/string_link_helper";
-
-import { handleGet, handlePost } from "../../action/baseAction";
 import ModalPin from "../ModalPin";
-import Action from "../../action/auth.action";
-import Router from "next/router";
 import { useAppState } from "../shared/AppProvider";
 import { useDispatch, useSelector } from "react-redux";
 import authAction from "../../action/auth.action";
 import general_helper from "../../helper/general_helper";
 import { withdrawAction } from "../../redux/actions/wallet.action";
 const { Option } = Select;
-const { confirm } = Modal;
 const FormWithdraw = () => {
   const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
-  const [visible, setVisible] = useState(false);
   const [modalPin, setModalPin] = useState(false);
-  const [fontSize, setFontSize] = useState("14px");
   const [isActiveAmount, setIsActiveAmount] = useState("");
   const [bank, setBank] = useState([]);
   const [user, setUser] = useState({});
@@ -57,9 +26,6 @@ const FormWithdraw = () => {
 
   const { loadingWithdraw } = useSelector((state) => state.walletReducer);
   useEffect(() => {
-    if (state.mobile) {
-      setFontSize("80%");
-    }
     nominalErrorRef.current = nominalError;
     if (nominalError.enable) {
       nominalInput.current.focus();
@@ -82,12 +48,6 @@ const FormWithdraw = () => {
   const onChange = (e) => {
     let val = e.target.value;
 
-    if (parseInt(val, 10) > parseInt(user.saldo, 10)) {
-      setNominalError({
-        enable: true,
-        helpText: "nominal penarikan melebihi saldo anda",
-      });
-    }
     for (let i = 0; i < caraCepat.length; i++) {
       if (parseInt(val, 10) === parseInt(caraCepat[i], 10)) {
         setIsActiveAmount(i);
@@ -106,13 +66,18 @@ const FormWithdraw = () => {
       acc_no: bank[0].acc_no,
     });
     dispatch(withdrawAction(dataWd));
-    console.log(dataWd);
   };
 
   const handleSubmit = async (e) => {
-    setModalPin(true);
-    setDataWd(e);
-    // dispatch(withdrawAction(e));
+    if (parseInt(e.amount, 10) > parseInt(user.saldo, 10)) {
+      setNominalError({
+        enable: true,
+        helpText: "nominal penarikan melebihi saldo anda",
+      });
+    } else {
+      setModalPin(true);
+      setDataWd(e);
+    }
   };
 
   const caraCepat = [
@@ -123,7 +88,6 @@ const FormWithdraw = () => {
     "500000",
     "1000000",
   ];
-  console.log(bank);
   return (
     <div>
       <Form

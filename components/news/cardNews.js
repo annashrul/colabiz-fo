@@ -1,12 +1,10 @@
 import {
   Col,
-  Tag,
   Button,
   Message,
   Row,
   Skeleton,
   Card,
-  PageHeader,
   Empty,
   Input,
   Form,
@@ -14,20 +12,18 @@ import {
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import Router from "next/router";
-const { Meta } = Card;
 import Helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
 const Search = Input.Search;
 
 const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
-  const [form] = Form.useForm();
   const [arrNews, setArrNews] = useState([]);
   const [pagination, setPagination] = useState([]);
   const [font, setFont] = useState("14px");
   const [state] = useAppState();
   const [loading, setLoading] = useState(true);
   const [loadingLoadMore, setLoadingLoadMore] = useState(false);
-  const [dummyData, setDummyData] = useState(["a", "a", "a", "a"]);
+  const dummyData = ["a", "a", "a", "a"];
   const [perpage, setPerpage] = useState(pagePer);
   let counterPerpage = 2;
 

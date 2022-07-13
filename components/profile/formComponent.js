@@ -4,12 +4,13 @@ import {
   InboxOutlined,
   SolutionOutlined,
   LockOutlined,
+  KeyOutlined,
 } from "@ant-design/icons";
 
 import { useState, useEffect } from "react";
 import general_helper from "../../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
-import { putMemberAction, setLoading } from "../../redux/actions/member.action";
+import { putMemberAction } from "../../redux/actions/member.action";
 
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
@@ -28,7 +29,6 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
   }, []);
 
   const handleSubmit = async (e) => {
-    // setLoading(true);
     let datas = {};
     if (step === 1) {
       Object.assign(datas, { fullname: e.fullname });
@@ -36,30 +36,12 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
         const img = await general_helper.convertBase64(fileList[0]);
         Object.assign(datas, { foto: img });
       }
-    }
-    // else if (step === 2) {
-    //   Object.assign(datas, { pin: e.pin, current_pin: e.current_pin });
-    // }
-    else {
+    } else if (step === 2) {
       Object.assign(datas, { password: e.password });
+    } else {
+      Object.assign(datas, { pin: e.pin, current_pin: e.current_pin });
     }
     dispatch(putMemberAction(userData.id, datas));
-    // dispatch(setLoading(false))
-    // await handlePut(`member/${userData.id}`, datas, (res, status, msg) => {
-    //   if (status) {
-    // Message.success(msg)
-    //   .then(() => Message.info("Anda akan dialikan ke halaman login"))
-    //   .then(() => {
-    //     Router.push("/signin").then(() => {
-    //       setLoading(false);
-    //       authAction.doLogout();
-    //       ok();
-    //     });
-    //   });
-    //   } else {
-    //     setLoading(false);
-    //   }
-    // });
   };
   return (
     <Modal
@@ -158,6 +140,90 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
                 }
                 tooltip={{
                   title: "Harus 6 Karakter",
+                  icon: <InfoCircleOutlined />,
+                }}
+              >
+                <Input.Password />
+              </Form.Item>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                  <KeyOutlined />
+                  PIN
+                </span>
+              }
+              key="3"
+            >
+              <Form.Item
+                hasFeedback
+                name="current_pin"
+                label="Pin Saat Ini"
+                rules={
+                  step === 3 && [
+                    { required: true, message: "Tidak Boleh Kosong" },
+                    { min: 6, message: "Harus 6 Angka" },
+                    { max: 6, message: "Harus 6 Angka" },
+                    {
+                      pattern: new RegExp(/^[0-9]*$/),
+                      message: "Harus Berupa Angka",
+                    },
+                  ]
+                }
+                tooltip={{
+                  title: "Harus 6 Angka",
+                  icon: <InfoCircleOutlined />,
+                }}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Form.Item
+                hasFeedback
+                name="pin"
+                label="Pin Baru"
+                rules={
+                  step === 3 && [
+                    { required: true, message: "Tidak Boleh Kosong" },
+                    { min: 6, message: "Harus 6 Angka" },
+                    { max: 6, message: "Harus 6 Angka" },
+                    {
+                      pattern: new RegExp(/^[0-9]*$/),
+                      message: "Harus Berupa Angka",
+                    },
+                  ]
+                }
+                tooltip={{
+                  title: "Harus 6 Angka",
+                  icon: <InfoCircleOutlined />,
+                }}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Form.Item
+                hasFeedback
+                name="confirm_pin"
+                label="Konfirmasi Pin Baru"
+                rules={
+                  step === 3 && [
+                    { required: true, message: "Tidak Boleh Kosong" },
+                    { min: 6, message: "Harus 6 Angka" },
+                    { max: 6, message: "Harus 6 Angka" },
+                    {
+                      pattern: new RegExp(/^[0-9]*$/),
+                      message: "Harus Berupa Angka",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("pin") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error("Pin Tidak Sama"));
+                      },
+                    }),
+                  ]
+                }
+                tooltip={{
+                  title: "Harus 6 Angka",
                   icon: <InfoCircleOutlined />,
                 }}
               >

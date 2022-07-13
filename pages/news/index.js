@@ -1,21 +1,12 @@
-import { Col, Tag, Button, Message, Row, Card, PageHeader } from "antd";
-import React, { useEffect, useState } from "react";
-import { handleGet } from "../../action/baseAction";
+import { Row, PageHeader } from "antd";
+import React, { useEffect } from "react";
 import Router from "next/router";
-const { Meta } = Card;
-import Helper from "../../helper/general_helper";
 import { useAppState } from "../../components/shared/AppProvider";
 import CardNews from "../../components/news/cardNews";
 const News = () => {
-  const [arrNews, setArrNews] = useState([]);
-  const [font, setFont] = useState("14px");
   const [state] = useAppState();
 
-  useEffect(() => {
-    if (state.mobile) {
-      setFont("80%");
-    }
-  }, [state]);
+  useEffect(() => {}, [state]);
 
   return state.mobile ? (
     <PageHeader

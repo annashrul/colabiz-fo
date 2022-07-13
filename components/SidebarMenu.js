@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Badge,
   Divider,
   Drawer,
@@ -8,17 +7,10 @@ import {
   Menu,
   Popconfirm,
   Row,
-  Switch,
   Tooltip,
   Message,
 } from "antd";
-import {
-  FolderTwoTone,
-  IdcardOutlined,
-  PoweroffOutlined,
-  ScheduleOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { IdcardOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { capitalize, lowercase } from "../lib/helpers";
 import { useEffect, useState } from "react";
 import authAction, { doLogout } from "../action/auth.action";
@@ -32,8 +24,7 @@ import { useAppState } from "./shared/AppProvider";
 import { withRouter } from "next/router";
 import general_helper from "../helper/general_helper";
 import { StringLink } from "../helper/string_link_helper";
-import { useDispatch, useSelector } from "react-redux";
-import { getCartAction } from "../redux/actions/paket.action";
+import { useSelector } from "react-redux";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -56,8 +47,6 @@ const SidebarContent = ({
   const [state, dispatch] = useAppState();
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
-  const [info, setInfo] = useState({});
-  const [isStockis, setIsStockis] = useState(true);
   const [appRoutes] = useState(Routes);
   const { pathname } = router;
   const dataCart = useSelector((state) => state.paketReducer.dataCart);
@@ -139,7 +128,6 @@ const SidebarContent = ({
                 }
               >
                 {route.children.map((subitem, index) => {
-                  console.log("user", user.stockis);
                   let checkMenu;
                   if (subitem.name === "Daftar" && user.stockis !== 0) {
                     checkMenu = (
@@ -147,9 +135,7 @@ const SidebarContent = ({
                         onClick={() =>
                           Message.info(
                             "halaman ini tidak bisa diakses oleh anda"
-                          ).then(() => {
-                            Router.push("/");
-                          })
+                          )
                         }
                       >
                         <span className="mr-auto">
@@ -164,9 +150,7 @@ const SidebarContent = ({
                         onClick={() =>
                           Message.info(
                             "halaman ini tidak bisa diakses oleh anda"
-                          ).then(() => {
-                            Router.push("/");
-                          })
+                          )
                         }
                       >
                         <span className="mr-auto">
@@ -233,7 +217,6 @@ const SidebarContent = ({
                 <a
                   onClick={() => {
                     Router.push(StringLink.profile);
-                    if (state.mobile) dispatch({ type: "mobileDrawer" });
                   }}
                   className={`px-3 ${
                     sidebarTheme === "dark" ? "text-white" : "text-body"
@@ -350,33 +333,6 @@ const SidebarContent = ({
             </Inner>
           </Drawer>
         )}
-        <Drawer
-          title="Settings"
-          placement={`${state.direction === "rtl" ? "left" : "right"}`}
-          closable={true}
-          width={300}
-          onClose={() => dispatch({ type: "options" })}
-          visible={state.optionDrawer}
-        >
-          {dataCart !== undefined && dataCart.length > 0
-            ? dataCart.map((res, key) => {
-                return (
-                  <List.Item key={key}>
-                    <span
-                      css={`
-                        -webkit-box-flex: 1;
-                        -webkit-flex: 1 0;
-                        -ms-flex: 1 0;
-                        flex: 1 0;
-                      `}
-                    >
-                      Boxed view
-                    </span>
-                  </List.Item>
-                );
-              })
-            : ""}
-        </Drawer>
       </Inner>
     </>
   );

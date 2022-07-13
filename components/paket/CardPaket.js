@@ -1,27 +1,13 @@
-import { Col, Row, Card, Empty, Input, Form, Button } from "antd";
-import React, { useEffect, useState } from "react";
-import { CheckOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Col, Row, Empty, Button } from "antd";
+import React from "react";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
-const { Meta } = Card;
 import Helper from "../../helper/general_helper";
-import { useAppState } from "../shared/AppProvider";
 import general_helper from "../../helper/general_helper";
-import { useDispatch, useSelector } from "react-redux";
-import { cartAction, getCartAction } from "../../redux/actions/paket.action";
+import { useAppState } from "../shared/AppProvider";
 
 const CardPaket = ({ isButton = false, callback, data, pagination }) => {
-  const [form] = Form.useForm();
-  const dispatch = useDispatch();
-
-  const [font, setFont] = useState("14px");
-  const [index, setIndex] = useState(0);
-  const [qty, setQty] = useState(0);
   const [state] = useAppState();
-  useEffect(() => {
-    if (state.mobile) {
-      setFont("80%");
-    }
-  }, [state]);
 
   return data !== undefined && data.length > 0 ? (
     data.map((val, key) => {

@@ -1,16 +1,19 @@
-import { Avatar, Button, Card, Col, Row, Tooltip } from "antd";
+import { Avatar, Button, Divider, Card, Col, Row, Tooltip, Alert } from "antd";
 import { useAppState } from "../shared/AppProvider";
 import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
-import { CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined, HomeOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
 import FormComponent from "./formComponent";
 import moment from "moment";
 import { handleGet } from "../../action/baseAction";
+import StatCard from "../shared/StatCard";
 moment.locale("id");
 const ProfileComponent = () => {
   const [state] = useAppState();
   const [user, setUser] = useState({});
+  const [bank, setBank] = useState({});
+  const [address, setAddress] = useState({});
   const [font, setFont] = useState("14px");
   const [showForm, setShowForm] = useState(false);
   useEffect(() => {
@@ -18,7 +21,11 @@ const ProfileComponent = () => {
       setFont("80%");
     }
     const users = authAction.getUser();
+    const banks = authAction.getBank();
+    const adresses = authAction.getAddress();
     setUser(users);
+    setBank(banks);
+    setAddress(adresses);
   }, [state, showForm]);
 
   const handleUser = async (isShow = false) => {
@@ -31,6 +38,8 @@ const ProfileComponent = () => {
       isShow && setShowForm(false);
     });
   };
+
+  console.log(authAction.getAddress());
 
   const tempRow = (title, desc, isRp = true) => {
     return (
@@ -58,7 +67,7 @@ const ProfileComponent = () => {
     <div>
       <Card
         headStyle={{
-          // backgroundImage: "url(/images/23.jpg)",
+          backgroundImage: "url(/images/23.jpg)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center center",
@@ -67,8 +76,7 @@ const ProfileComponent = () => {
         className="mb-4 overflow-hidden w-100"
         title={
           <Row type="flex" align="middle">
-            <Avatar src={user.foto}>
-              {" "}
+            <Avatar size={64} src={user.foto}>
               {user.fullname !== undefined &&
                 general_helper.getInitialName(user.fullname)}
             </Avatar>
@@ -78,17 +86,17 @@ const ProfileComponent = () => {
                 display: inline-block;
               `}
             >
-              <h6 className="my-0">
+              <h6 className="my-0 text-white">
                 <span className="my-0">{user.fullname}</span>
               </h6>
               <small
-                className="text-light"
+                className="text-light text-white"
                 style={{ cursor: "pointer", color: "white" }}
                 onClick={async () => general_helper.copyText(user.referral_url)}
               >
-                <span style={{ color: "red" }}>{user.referral_url}</span> &nbsp;
+                <span>{user.referral}</span> &nbsp;
                 <Tooltip title="copy kode referral">
-                  <CopyOutlined style={{ marginLeft: "1px", color: "red" }} />
+                  <CopyOutlined style={{ marginLeft: "1px" }} />
                 </Tooltip>
               </small>
             </div>
@@ -101,7 +109,7 @@ const ProfileComponent = () => {
             align="middle"
             className="p-4"
           >
-            <Button type="dashed" danger onClick={() => setShowForm(!showForm)}>
+            <Button type="primary" onClick={() => setShowForm(!showForm)}>
               Ubah Profile
             </Button>
           </Row>
@@ -131,8 +139,7 @@ const ProfileComponent = () => {
           <div>
             <Button
               style={{ width: "100%", marginTop: "10px" }}
-              type="dashed"
-              danger
+              type="primary"
               onClick={() => setShowForm(!showForm)}
             >
               Ubah Profile
@@ -140,6 +147,41 @@ const ProfileComponent = () => {
           </div>
         )}
       </Card>
+      <Row gutter={16}>
+        <Col md={12}>
+          <StatCard
+            clickHandler={() => {}}
+            value={bank.bank_name}
+            title={`${bank.acc_name}, ${bank.acc_no}`}
+            icon={
+              <HomeOutlined
+                style={{
+                  fontSize: state.mobile ? "14px" : "20px",
+                }}
+              />
+            }
+          />
+          <Alert
+            banner
+            message="klik atau sentuh untuk mengedit akun bank anda"
+          />
+        </Col>
+        <Col md={12}>
+          <StatCard
+            clickHandler={() => {}}
+            value={address.title}
+            title={`${address.main_address}, ${address.kecamatan}, ${address.kota}, ${address.provinsi}`}
+            icon={
+              <HomeOutlined
+                style={{
+                  fontSize: state.mobile ? "14px" : "20px",
+                }}
+              />
+            }
+            // color={theme.darkColor}
+          />
+        </Col>
+      </Row>
 
       <br />
       {showForm && (

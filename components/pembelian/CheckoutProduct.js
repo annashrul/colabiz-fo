@@ -11,6 +11,7 @@ import {
   Typography,
 } from "antd";
 import {
+  DeleteOutlined,
   MinusOutlined,
   PlusOutlined,
   CheckOutlined,
@@ -30,6 +31,7 @@ import {
   getCartAction,
   postCart,
   setLoading,
+  deleteCartAction,
 } from "../../redux/actions/cart.action";
 import { useAppState } from "../shared/AppProvider";
 const ButtonGroup = Button.Group;
@@ -39,7 +41,9 @@ const CheckoutProduct = () => {
   const [indexMetodePembayaran, setIndexMetodePembayaran] = useState(0);
   const [dataMetodePembayaran, setDataMetodePembayaran] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const [idxCart, setIdxCart] = useState(0);
+  const [dataStokis, setDataStokis] = useState(null);
   const [state] = useAppState();
 
   const loadingCheckout = useSelector(
@@ -50,7 +54,6 @@ const CheckoutProduct = () => {
   const loadingDelete = useSelector((state) => state.cartReducer.loadingDelete);
   const dataCart = useSelector((state) => state.cartReducer.data);
   const info = authAction.getInfo();
-  const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
   useEffect(() => {
     dispatch(getCartAction());
   }, []);
@@ -59,16 +62,23 @@ const CheckoutProduct = () => {
     if (dataCart !== undefined) {
       if (dataCart.length < 1) {
         Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
-          Router.push(StringLink.pembelian).then(() => setLoading(false));
+          Router.push(StringLink.pembelian).then(() => {
+            // setLoading(false);
+            setLoadingPage(false);
+          });
         });
+      } else {
+        setLoadingPage(false);
+        const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
+        setDataStokis(dataStokis);
       }
     }
-  }, [loadingCart]);
+  }, []);
 
   useEffect(() => setVisible(loadingCheckout), [loadingCheckout]);
 
   useEffect(() => {
-    if (!loadingCart) {
+    if (!loadingPage) {
       setDataMetodePembayaran([
         {
           metode_pembayaran: "TRANSFER",
@@ -86,7 +96,7 @@ const CheckoutProduct = () => {
         },
       ]);
     }
-  }, [loadingCart]);
+  }, [loadingPage]);
 
   const tempStokis = (title, desc, isRight = "") => {
     return (
@@ -113,7 +123,7 @@ const CheckoutProduct = () => {
   };
   let subtotal = 0;
   let subQty = 0;
-  return !loadingCart ? (
+  return !loadingPage ? (
     <>
       <Row gutter={16}>
         <Col md={12} xs={24} sm={24} className="mb-2">
@@ -212,6 +222,21 @@ const CheckoutProduct = () => {
                           <Col md={12} xs={12} sm={12}>
                             <ButtonGroup style={{ float: "right" }}>
                               <Button
+                                // loading={idxCart === key && loadingDelete}
+                                size="small"
+                                danger
+                                onClick={(e) => {
+                                  setIdxCart(key);
+                                  setTimeout(
+                                    () =>
+                                      dispatch(deleteCartAction(res.id_paket)),
+                                    20
+                                  );
+                                }}
+                              >
+                                <DeleteOutlined style={{ fontSize: "12px" }} />
+                              </Button>
+                              <Button
                                 loading={idxCart === key && loadingDelete}
                                 size="small"
                                 onClick={(e) => {
@@ -227,10 +252,11 @@ const CheckoutProduct = () => {
                                   }
                                 }}
                               >
-                                <MinusOutlined />
+                                <MinusOutlined style={{ fontSize: "12px" }} />
                               </Button>
+
                               <Button size="small">
-                                {parseInt(res.qty, 10)}
+                                <small>{parseInt(res.qty, 10)}</small>
                               </Button>
                               <Button
                                 loading={idxCart === key && loadingAdd}
@@ -245,7 +271,7 @@ const CheckoutProduct = () => {
                                   }
                                 }}
                               >
-                                <PlusOutlined />
+                                <PlusOutlined style={{ fontSize: "12px" }} />
                               </Button>
                             </ButtonGroup>
                           </Col>
@@ -300,7 +326,7 @@ const CheckoutProduct = () => {
       </Row>
     </>
   ) : (
-    <Spin spinning={loadingCart}>
+    <Spin spinning={loadingPage}>
       <NotFound />
     </Spin>
   );

@@ -113,37 +113,34 @@ export const createStockisAction = (e) => {
   };
 };
 
-export const approveStockisAction = (kdTrx, status) => {
+export const approveStockisAction = (kdTrx, stat, detail) => {
   return (dispatch) => {
-    if (status === 1) {
-      dispatch(setLoadingApprove(true));
-    } else if (status === 2) {
-      dispatch(setLoadingCancel(true));
-    } else {
-      dispatch(setLoadingTake(true));
-    }
     handlePut(
       `penjualan/approve/${btoa(kdTrx)}`,
-      { status: status },
+      { status: stat },
       (res, status, msg) => {
-        if (status === 1) {
-          dispatch(setLoadingApprove(false));
-        } else if (status === 2) {
-          dispatch(setLoadingCancel(false));
-        } else {
-          dispatch(setLoadingTake(false));
-        }
+        dispatch(orderStockisAction(detail.id, detail.where));
         Message.success(msg);
-        // if(status){
-        // Message.success(msg);
-        // }
-        // if (status) {
-        //   Message.success(res.meta.message).then(() =>
-        //     Router.push("/").then(() => dispatch(setLoading(false)))
-        //   );
-        // } else {
-        //   dispatch(setLoading(false));
-        // }
+      }
+    );
+  };
+};
+
+export const approveCodeAction = (kdTrx, data, detail) => {
+  return (dispatch) => {
+    dispatch(setLoadingApprove(true));
+    handlePut(
+      `penjualan/ambil/confirm/${btoa(kdTrx)}`,
+      data,
+      (res, status, msg) => {
+        if (status) {
+          Message.success(msg);
+          dispatch(orderStockisAction(detail.id, detail.where));
+        } else {
+          Message.info(msg);
+        }
+
+        dispatch(setLoadingApprove(false));
       }
     );
   };

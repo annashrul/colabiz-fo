@@ -7,25 +7,28 @@ import {
   Space,
   Input,
   Form,
-  message,
   Tooltip,
+  Modal,
+  Alert,
+  Tag,
+  Spin,
+  Dropdown,
+  Menu,
 } from "antd";
 const { Column, ColumnGroup } = Table;
-import { CopyOutlined } from "@ant-design/icons";
-import Helper from "../../../helper/general_helper";
 import React, { useEffect, useState } from "react";
-import { handleGet } from "../../../action/baseAction";
 import authAction from "../../../action/auth.action";
 const Option = Select.Option;
 const Search = Input.Search;
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  approveCodeAction,
   approveStockisAction,
   orderStockisAction,
 } from "../../../redux/actions/stockis.action";
 import general_helper from "../../../helper/general_helper";
-
+import { DownOutlined } from "@ant-design/icons";
 moment.locale("id");
 
 const formItemLayout = {
@@ -41,7 +44,10 @@ const formItemLayout = {
 const IndexOrderStockis = () => {
   const [searchby, setSearchBy] = useState("kd_trx");
   const [where, setWhere] = useState("");
+  const [isModal, setIsModal] = useState(false);
+  const [kodeTrx, setKodeTrx] = useState("");
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const dispatch = useDispatch();
   const {
     loadingApprove,
@@ -60,12 +66,12 @@ const IndexOrderStockis = () => {
   const onFinish = (values) => {
     let where = ``;
     if (values !== "") {
-      where += `page=1&searchby=${searchby}&q=${
+      where += `&searchby=${searchby}&q=${
         searchby === "kd_trx" ? btoa(values) : values
       }`;
     }
     setWhere(where);
-    dispatch(orderStockisAction(user.id_stockis, where));
+    dispatch(orderStockisAction(user.id_stockis, `page=1` + where));
   };
 
   const prefixSelector = (
@@ -82,7 +88,14 @@ const IndexOrderStockis = () => {
     return (
       <Popconfirm
         title={`Anda yakin akan ${desc} transaksi ini ?`}
-        onConfirm={(e) => dispatch(approveStockisAction(kdTrx, status))}
+        onConfirm={(e) =>
+          dispatch(
+            approveStockisAction(kdTrx, status, {
+              id: user.id_stockis,
+              where: where,
+            })
+          )
+        }
         okText="Oke"
         cancelText="Batal"
         onCancel={() => {}}
@@ -90,11 +103,31 @@ const IndexOrderStockis = () => {
           loading: loading,
         }}
       >
-        <a>{title}</a>
+        <Tag style={{ cursor: "pointer" }} color="#108ee9">
+          {title}
+        </Tag>
       </Popconfirm>
     );
   };
-
+  const menu = (
+    <Menu
+      // onClick={onMenuClick}
+      items={[
+        {
+          key: "1",
+          label: "1st item",
+        },
+        {
+          key: "2",
+          label: "2nd item",
+        },
+        {
+          key: "3",
+          label: "3rd item",
+        },
+      ]}
+    />
+  );
   return (
     <div>
       <Form
@@ -124,7 +157,7 @@ const IndexOrderStockis = () => {
         scroll={{ x: 400 }}
         bordered={true}
         dataSource={dataOrder}
-        loading={loadingOrder || loadingApprove || loadingCancel || loadingTake}
+        loading={loadingOrder}
         pagination={{
           defaultPageSize: 10,
           hideOnSinglePage: false,
@@ -134,9 +167,9 @@ const IndexOrderStockis = () => {
             10
           ),
           onChange: (page, pageSize) => {
-            console.log(page);
-            console.log(pageSize);
-            dispatch(orderStockisAction(user.id_stockis, `page=${page}`));
+            dispatch(
+              orderStockisAction(user.id_stockis, `page=${page}${where}`)
+            );
           },
         }}
       >
@@ -152,10 +185,10 @@ const IndexOrderStockis = () => {
           }}
         />
         <Column
-          title="#"
-          key="action"
+          title=""
+          dataIndex="operation"
+          key="operation"
           render={(_, record, i) => {
-            Object.assign(record, { visible: false });
             let menuAction;
             if (record.status === 0) {
               menuAction = (
@@ -180,16 +213,21 @@ const IndexOrderStockis = () => {
               menuAction = (
                 <Space size="middle">
                   {record.status === 3 ? (
-                    tempAction(
-                      3,
-                      record.kd_trx,
-                      "Ambil Barang",
-                      loadingTake,
-                      "mengambil barang pada"
-                    )
+                    <Tag
+                      onClick={(e) => {
+                        setIsModal(true);
+                        setKodeTrx(record.kd_trx);
+                      }}
+                      style={{ cursor: "pointer" }}
+                      color="#108ee9"
+                    >
+                      Ambil Barang
+                    </Tag>
                   ) : (
                     <Tooltip title="anda belum bisa mengambil barang ini">
-                      <a style={{ cursor: "not-allowed" }}>Ambil Barang</a>
+                      <Tag style={{ cursor: "not-allowed" }} color="#2db7f5">
+                        Ambil Barang
+                      </Tag>
                     </Tooltip>
                   )}
                 </Space>
@@ -199,43 +237,6 @@ const IndexOrderStockis = () => {
             return menuAction;
           }}
         />
-
-        <ColumnGroup title="Status">
-          <Column
-            title="Pengambilan"
-            dataIndex="status"
-            key="status"
-            render={(_, record, i) => {
-              let status = "";
-              if (record.status === 0) {
-                status = "Belum Diambil";
-              } else {
-                status = "Telah Diambil";
-              }
-              return status;
-            }}
-          />
-          <Column
-            title="Pembelian"
-            dataIndex="status_pembelian"
-            key="status_pembelian"
-            render={(_, record, i) => {
-              let status = "";
-              if (record.status_pengambilan === 0) {
-                status = "Menuggu Pembayaran";
-              } else if (record.status_pengambilan === 1) {
-                status = "Diproses";
-              } else if (record.status_pengambilan === 2) {
-                status = "Dikirim";
-              } else if (record.status_pengambilan === 3) {
-                status = "Diterima Stokis";
-              } else {
-                status = "Selesai";
-              }
-              return status;
-            }}
-          />
-        </ColumnGroup>
         <ColumnGroup title="Kode">
           <Column
             title="Resi"
@@ -247,6 +248,26 @@ const IndexOrderStockis = () => {
           />
           <Column title="Transaksi" dataIndex="kd_trx" key="kd_trx" />
         </ColumnGroup>
+
+        <ColumnGroup title="Status">
+          <Column
+            title="Pengambilan"
+            dataIndex="status"
+            key="status"
+            render={(_, record, i) =>
+              general_helper.labelStatusPengambilan(record.status)
+            }
+          />
+          <Column
+            title="Pembelian"
+            dataIndex="status_pembelian"
+            key="status_pembelian"
+            render={(_, record, i) =>
+              general_helper.labelStatusPembelian(record.status_pengambilan)
+            }
+          />
+        </ColumnGroup>
+
         <ColumnGroup title="Pembeli">
           <Column title="Nama" dataIndex="pembeli" key="pembeli" />
           <Column
@@ -295,6 +316,53 @@ const IndexOrderStockis = () => {
           }}
         />
       </Table>
+      {isModal && (
+        <Modal
+          title={`Konfirmasi #${kodeTrx}`}
+          visible={isModal}
+          onCancel={(e) => {
+            setIsModal(false);
+            setKodeTrx("");
+          }}
+          footer={null}
+        >
+          <Form
+            form={form1}
+            layout="vertical"
+            onFinish={(e) => {
+              dispatch(
+                approveCodeAction(kodeTrx, e, {
+                  id: user.id_stockis,
+                  where: where,
+                })
+              );
+            }}
+          >
+            <Alert
+              banner
+              message="tekan enter untuk menyimpan"
+              type="warning"
+            />
+            <br />
+            <Spin spinning={loadingApprove}>
+              <Form.Item
+                label="Kode Pengambilan"
+                hasFeedback
+                name="kode_ambil"
+                rules={[
+                  { required: true, message: "Tidak Boleh Kosong" },
+                  {
+                    pattern: new RegExp(/^[0-9]*$/),
+                    message: "Harus Berupa Angka",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Spin>
+          </Form>
+        </Modal>
+      )}
     </div>
   );
 };

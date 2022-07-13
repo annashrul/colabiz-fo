@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import moment from "moment";
-import { DatePicker, message } from "antd";
+import { DatePicker, message, Tag } from "antd";
 import copy from "copy-to-clipboard";
 
 const RangePicker = DatePicker.RangePicker;
@@ -173,7 +173,31 @@ const getPropsUpload = (fileList, callback) => {
   };
 };
 
+const labelStatusPembelian = (res) => {
+  if (res === 0) {
+    return <Tag color="purple">Menunggu Pembayaran</Tag>;
+  } else if (res === 1) {
+    return <Tag color="geekblue">Diproses</Tag>;
+  } else if (res === 2) {
+    return <Tag color="blue">Dikirim</Tag>;
+  } else if (res === 3) {
+    return <Tag color="cyan">Diterima Stokis</Tag>;
+  } else {
+    return <Tag color="green">Selesai</Tag>;
+  }
+};
+
+const labelStatusPengambilan = (res) => {
+  if (res === 0) {
+    return <Tag color="orange">Belum Diambil</Tag>;
+  } else {
+    return <Tag color="gold">Sudah Diambil</Tag>;
+  }
+};
+
 export default {
+  labelStatusPengambilan,
+  labelStatusPembelian,
   copyText,
   getPropsUpload,
   convertBase64,

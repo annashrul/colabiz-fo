@@ -1,10 +1,8 @@
 import {
   Col,
   Button,
-  Skeleton,
   Card,
   Message,
-  PageHeader,
   Row,
   Empty,
   Modal,
@@ -12,9 +10,9 @@ import {
   Form,
   Select,
   Input,
-  Pagination,
-  Badge,
   Alert,
+  Badge,
+  Tooltip,
 } from "antd";
 import Marquee from "react-fast-marquee";
 import {
@@ -24,7 +22,6 @@ import {
   CaretRightOutlined,
   CaretLeftOutlined,
   CloseOutlined,
-  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,14 +36,8 @@ import {
 import { postCart } from "../../redux/actions/cart.action";
 import { getPaket } from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
-import Router from "next/router";
-import general_helper from "../../helper/general_helper";
-import { StringLink } from "../../helper/string_link_helper";
 import { useAppState } from "../shared/AppProvider";
-
 const { Option } = Select;
-const { Meta } = Card;
-const Search = Input.Search;
 
 const ListProduct = () => {
   const dispatch = useDispatch();
@@ -56,8 +47,6 @@ const ListProduct = () => {
   const [indexStockis, setIndexStockis] = useState("");
   const [isModalFilter, setIsModalFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [qty, setQty] = useState(0);
-  const [cartData, setCartData] = useState([]);
   const [state] = useAppState();
 
   const { loadingData, data, pagination } = useSelector(
@@ -79,7 +68,6 @@ const ListProduct = () => {
     dataCity,
     loadingCity,
     dataDistricts,
-    loadingDistricts,
   } = useSelector((state) => state.addressReducer);
 
   useEffect(() => {
@@ -87,13 +75,6 @@ const ListProduct = () => {
     dispatch(getPaket("page=1", "REGISTER"));
     dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
   }, []);
-  useEffect(() => {
-    if (!loadingData) {
-      if (data !== undefined || data.length > 0) {
-        setDataStokis(data[0]);
-      }
-    }
-  }, [loadingData]);
 
   useEffect(() => {
     dispatch(provinceAction());
@@ -147,6 +128,12 @@ const ListProduct = () => {
     }
   };
 
+  const handleSetStockis = (val, key) => {
+    localStorage.setItem("dataStokis", JSON.stringify(val));
+    setDataStokis(val);
+    setIndexStockis(key);
+  };
+
   // const goToCheckout = (val) => {
   //   localStorage.setItem("dataStokis", JSON.stringify(dataStokis));
   //   localStorage.setItem("dataPaket", JSON.stringify(val));
@@ -172,17 +159,6 @@ const ListProduct = () => {
       >
         <Spin spinning={loadingData}>
           <Row gutter={16}>
-            <Col md={24} sm={24} xs={24}>
-              <Alert
-                banner
-                message={
-                  <Marquee pauseOnHover gradient={false}>
-                    &nbsp;Icon X dan background warna merah menandakan bahwa
-                    stokis tidak aktif melayani.
-                  </Marquee>
-                }
-              />
-            </Col>
             {data !== undefined && data.length > 0 ? (
               data.map((val, key) => {
                 return (
@@ -198,47 +174,65 @@ const ListProduct = () => {
                     }}
                     onClick={() => {
                       if (val.status_layanan !== 0) {
-                        localStorage.setItem("dataStokis", JSON.stringify(val));
-                        setDataStokis(val);
-                        setIndexStockis(key);
+                        handleSetStockis(val, key);
                       }
                     }}
                   >
-                    <StatCard
-                      clickHandler={() => {
-                        if (val.status_layanan !== 0) {
-                          localStorage.setItem(
-                            "dataStokis",
-                            JSON.stringify(val)
-                          );
-                          setDataStokis(val);
-                          setIndexStockis(key);
-                        }
-                      }}
-                      type={indexStockis === key ? "fill" : ""}
-                      title={`${val.mobile_no}, ${val.kota}, ${val.kecamatan}`}
-                      value={<span>{val.name} </span>}
-                      icon={
-                        val.status_layanan === 0 ? (
-                          <CloseOutlined
-                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
-                          />
-                        ) : indexStockis === key ? (
-                          <CheckOutlined
-                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
-                          />
-                        ) : (
-                          <HomeOutlined
-                            style={{ fontSize: state.mobile ? "16px" : "20px" }}
-                          />
-                        )
-                      }
-                      color={
+                    <Badge.Ribbon
+                      text={
                         val.status_layanan === 0
-                          ? "red"
-                          : indexStockis === key
-                          ? theme.primaryColor
-                          : theme.darkColor
+                          ? "Tidak Melayani"
+                          : "Aktif Melayani"
+                      }
+                      color={val.status_layanan === 0 ? "orange" : "cyan"}
+                    >
+                      <StatCard
+                        clickHandler={() => {
+                          if (val.status_layanan !== 0) {
+                            handleSetStockis(val, key);
+                          }
+                        }}
+                        type={indexStockis === key ? "fill" : ""}
+                        title={`${val.mobile_no}`}
+                        value={val.name}
+                        icon={
+                          indexStockis === key ? (
+                            <CheckOutlined
+                              style={{
+                                fontSize: state.mobile ? "14px" : "20px",
+                              }}
+                            />
+                          ) : (
+                            <HomeOutlined
+                              style={{
+                                fontSize: state.mobile ? "14px" : "20px",
+                              }}
+                            />
+                          )
+                        }
+                        color={
+                          indexStockis === key
+                            ? theme.primaryColor
+                            : theme.darkColor
+                        }
+                      />
+                    </Badge.Ribbon>
+                    <Alert
+                      banner
+                      message={
+                        <Marquee pauseOnHover gradient={false}>
+                          {state.mobile ? (
+                            <small>
+                              &nbsp; {val.main_address}, {val.provinsi},{" "}
+                              {val.kota}, {val.kecamatan}
+                            </small>
+                          ) : (
+                            <span>
+                              &nbsp; {val.main_address}, {val.provinsi},{" "}
+                              {val.kota}, {val.kecamatan}
+                            </span>
+                          )}
+                        </Marquee>
                       }
                     />
                   </Col>
@@ -297,7 +291,11 @@ const ListProduct = () => {
               <CardPaket
                 isButton={true}
                 callback={(val) => {
-                  dispatch(postCart(val.id));
+                  if (indexStockis !== "") {
+                    dispatch(postCart(val.id));
+                  } else {
+                    Message.info("Silahkan pilih stokis terlebih dahulu");
+                  }
                 }}
                 data={dataRegister}
                 pagination={paginationRegister}
@@ -308,8 +306,13 @@ const ListProduct = () => {
         <Col xs={24} sm={12} md={12}>
           <Card title="PAKET HAPPY SHOPPING">
             <CardPaket
-              callback={(val) => addToCart(val)}
-              loading={loadingHappyShopping}
+              callback={(val) => {
+                if (indexStockis !== "") {
+                  dispatch(postCart(val.id));
+                } else {
+                  Message.info("Silahkan pilih stokis terlebih dahulu");
+                }
+              }}
               data={dataHappyShopping}
               pagination={paginationHappyShopping}
             />

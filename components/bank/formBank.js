@@ -1,45 +1,8 @@
-import {
-  Col,
-  Collapse,
-  Message,
-  Row,
-  Modal,
-  Input,
-  Card,
-  Button,
-  Form,
-  Select,
-  Popconfirm,
-  Radio,
-  Spin,
-} from "antd";
+import { Col, Row, Input, Button, Form, Select } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import React, { useEffect, useState, useRef } from "react";
-import { handleGet, handlePost } from "../../action/baseAction";
-import Action from "../../action/auth.action";
-import Router from "next/router";
-import { StringLink } from "../../helper/string_link_helper";
-import general_helper from "../../helper/general_helper";
-import { useAppState } from "../shared/AppProvider";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLoadingValidateUsername,
-  setValidateUsername,
-  signUpAction,
-  validateUsernameAction,
-} from "../../redux/actions/auth.action";
-import {
-  cityAction,
-  districtsAction,
-  provinceAction,
-} from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
-
-const { Panel } = Collapse;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 

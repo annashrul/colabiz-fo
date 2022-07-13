@@ -12,7 +12,7 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
     <Col>
       <Button
         shape="circle"
-        size={state.mobile ? "small" : "large"}
+        size={state.mobile ? "medium" : "large"}
         type="primary"
         style={{ backgroundColor: color, borderColor: color }}
         className={
@@ -58,11 +58,11 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
 };
 
 StatCard.propTypes = {
-  type: PropTypes.string,
-  title: PropTypes.string,
+  type: PropTypes.any,
+  title: PropTypes.any,
   value: PropTypes.any,
   icon: PropTypes.element,
-  color: PropTypes.string,
+  color: PropTypes.any,
 };
 
 export default StatCard;

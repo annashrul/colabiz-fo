@@ -1,4 +1,3 @@
-// import "tailwindcss/dist/base.css";
 import "../assets/styles.less";
 import App from "next/app";
 import AppProvider from "../components/shared/AppProvider";
@@ -10,7 +9,6 @@ import Router from "next/router";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../redux/store";
-// import "tailwindcss/tailwind.css";
 
 axios.defaults.headers.common[
   "Content-Type"

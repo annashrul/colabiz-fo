@@ -5,7 +5,6 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { reportPurchaseAction } from "../../redux/actions/report.action";
 import general_helper from "../../helper/general_helper";
-import { data } from "autoprefixer";
 
 moment.locale("id");
 const { Column, ColumnGroup } = Table;
