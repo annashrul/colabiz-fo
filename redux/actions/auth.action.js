@@ -99,7 +99,7 @@ export const loginAction = (data) => {
       } else {
         dispatch(setLoadingLogin(false));
       }
-      dispatch(setLoadingLogin(false));
+      // dispatch(setLoadingLogin(false));
     });
   };
 };
@@ -179,13 +179,13 @@ export const userDetailAction = (id) => {
               kd_kec: "6984",
               kd_kota: "501",
               kd_prov: "5",
-              kecamatan: "Gondomanan",
-              kota: "Yogyakarta",
+              kecamatan: "-",
+              kota: "-",
               main_address: "Alamat Utama",
-              no_hp: "6285711868824",
-              penerima: "Alamat Utama",
-              provinsi: "DI Yogyakarta",
-              title: "Alamat Utama",
+              no_hp: "-",
+              penerima: "-",
+              provinsi: "-",
+              title: "-",
               updated_at: "2022-07-06T01:26:44.989Z",
             }
       );

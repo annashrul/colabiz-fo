@@ -1,4 +1,4 @@
-import { Layout, Menu, Badge, Alert } from "antd";
+import { Layout, Menu, Badge, Alert, message } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
@@ -94,7 +94,11 @@ const MainHeader = () => {
             <Menu.Item
               onClick={() => {
                 if (data.length > 0) {
-                  Router.push(StringLink.checkout);
+                  if (localStorage.getItem("dataStokis") === null) {
+                    message.info("silahkan pilih stokis terlebih dahulu");
+                  } else {
+                    Router.push(StringLink.checkout);
+                  }
                 }
               }}
             >

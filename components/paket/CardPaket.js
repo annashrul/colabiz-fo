@@ -1,10 +1,11 @@
-import { Col, Row, Empty, Button } from "antd";
+import { Typography, Col, Row, Empty, Button, Tooltip } from "antd";
 import React from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import Helper from "../../helper/general_helper";
 import general_helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
+const { Paragraph, Text } = Typography;
 
 const CardPaket = ({ isButton = false, callback, data, pagination }) => {
   const [state] = useAppState();
@@ -57,7 +58,7 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
             )}
             {state.mobile && <h5>{val.title}</h5>}
             <p>{general_helper.toRp(val.price)}</p>
-            {desc}
+            <Tooltip title={Helper.rmHtml(val.caption)}>{desc}</Tooltip>
           </Col>
         </Row>
       );

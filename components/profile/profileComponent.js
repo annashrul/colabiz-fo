@@ -1,21 +1,39 @@
-import { Avatar, Button, Divider, Card, Col, Row, Tooltip, Alert } from "antd";
+import {
+  Avatar,
+  Button,
+  Modal,
+  Card,
+  Col,
+  Row,
+  Tooltip,
+  Alert,
+  Spin,
+} from "antd";
 import { useAppState } from "../shared/AppProvider";
 import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
-import { CopyOutlined, HomeOutlined } from "@ant-design/icons";
+import { CopyOutlined, HomeOutlined, BankOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
 import FormComponent from "./formComponent";
 import moment from "moment";
 import { handleGet } from "../../action/baseAction";
 import StatCard from "../shared/StatCard";
+import FormBank from "../bank/formBank";
+import { useDispatch, useSelector } from "react-redux";
+import { putBankMemberAction } from "../../redux/actions/banks.action";
+
 moment.locale("id");
 const ProfileComponent = () => {
+  const dispatch = useDispatch();
+
   const [state] = useAppState();
   const [user, setUser] = useState({});
   const [bank, setBank] = useState({});
   const [address, setAddress] = useState({});
   const [font, setFont] = useState("14px");
   const [showForm, setShowForm] = useState(false);
+  const [showFormBank, setShowFormBank] = useState(false);
+  const { loadingBankMember } = useSelector((state) => state.banksReducer);
   useEffect(() => {
     if (state.mobile) {
       setFont("80%");
@@ -39,7 +57,7 @@ const ProfileComponent = () => {
     });
   };
 
-  console.log(authAction.getAddress());
+  console.log(authAction.getBank());
 
   const tempRow = (title, desc, isRp = true) => {
     return (
@@ -119,6 +137,10 @@ const ProfileComponent = () => {
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
+        {tempRow("Email", user.email)}
+        <Row>
+          <Col style={{ margin: "1px" }}></Col>
+        </Row>
         {tempRow("No Telepon", user.mobile_no)}
         <Row>
           <Col style={{ margin: "1px" }}></Col>
@@ -148,15 +170,24 @@ const ProfileComponent = () => {
         )}
       </Card>
       <Row gutter={16}>
-        <Col md={12}>
+        <Col
+          md={12}
+          style={{ cursor: "pointer", marginBottom: "10px" }}
+          onClick={(e) => {
+            setShowFormBank(true);
+          }}
+        >
           <StatCard
-            clickHandler={() => {}}
+            clickHandler={() => {
+              // console.log(bank);
+              setShowFormBank(true);
+            }}
             value={bank.bank_name}
             title={`${bank.acc_name}, ${bank.acc_no}`}
             icon={
-              <HomeOutlined
+              <BankOutlined
                 style={{
-                  fontSize: state.mobile ? "14px" : "20px",
+                  fontSize: "20px",
                 }}
               />
             }
@@ -166,6 +197,7 @@ const ProfileComponent = () => {
             message="klik atau sentuh untuk mengedit akun bank anda"
           />
         </Col>
+
         <Col md={12}>
           <StatCard
             clickHandler={() => {}}
@@ -174,7 +206,7 @@ const ProfileComponent = () => {
             icon={
               <HomeOutlined
                 style={{
-                  fontSize: state.mobile ? "14px" : "20px",
+                  fontSize: "20px",
                 }}
               />
             }
@@ -195,6 +227,35 @@ const ProfileComponent = () => {
           }}
           userData={user}
         />
+      )}
+
+      {showFormBank && (
+        <Modal
+          centered
+          title="Form Bank"
+          visible={showFormBank}
+          closable={false}
+          destroyOnClose={true}
+          maskClosable={false}
+          footer={null}
+        >
+          <Spin spinning={loadingBankMember}>
+            <FormBank
+              dataOld={bank}
+              callback={(param, e) => {
+                if (param !== "cancel") {
+                  dispatch(
+                    putBankMemberAction(e, bank.id, (par) => {
+                      // if (par) setShowFormBank(false);
+                    })
+                  );
+                } else {
+                  setShowFormBank(false);
+                }
+              }}
+            />
+          </Spin>
+        </Modal>
       )}
     </div>
   );

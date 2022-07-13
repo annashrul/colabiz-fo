@@ -193,19 +193,25 @@ const ListProduct = () => {
                           }
                         }}
                         type={indexStockis === key ? "fill" : ""}
-                        title={`${val.mobile_no}`}
-                        value={val.name}
+                        title={
+                          <span style={{ marginLeft: "10px" }}>
+                            {val.mobile_no}
+                          </span>
+                        }
+                        value={
+                          <span style={{ marginLeft: "10px" }}>{val.name}</span>
+                        }
                         icon={
                           indexStockis === key ? (
                             <CheckOutlined
                               style={{
-                                fontSize: state.mobile ? "14px" : "20px",
+                                fontSize: "20px",
                               }}
                             />
                           ) : (
                             <HomeOutlined
                               style={{
-                                fontSize: state.mobile ? "14px" : "20px",
+                                fontSize: "20px",
                               }}
                             />
                           )

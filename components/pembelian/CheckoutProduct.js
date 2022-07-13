@@ -59,18 +59,25 @@ const CheckoutProduct = () => {
   }, []);
 
   useEffect(() => {
-    if (dataCart !== undefined) {
-      if (dataCart.length < 1) {
-        Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
-          Router.push(StringLink.pembelian).then(() => {
-            // setLoading(false);
-            setLoadingPage(false);
-          });
+    if (localStorage.getItem("dataStokis") === null) {
+      Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
+        Router.push(StringLink.pembelian).then(() => {
+          setLoadingPage(false);
         });
-      } else {
-        setLoadingPage(false);
-        const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
-        setDataStokis(dataStokis);
+      });
+    } else {
+      if (dataCart !== undefined) {
+        if (dataCart.length < 1) {
+          Message.info("Anda akan dialihkan ke halaman pembelian").then(() => {
+            Router.push(StringLink.pembelian).then(() => {
+              setLoadingPage(false);
+            });
+          });
+        } else {
+          setLoadingPage(false);
+          const dataStokis = JSON.parse(localStorage.getItem("dataStokis"));
+          setDataStokis(dataStokis);
+        }
       }
     }
   }, []);

@@ -16,7 +16,8 @@ const FormBank = ({ dataOld, callback }) => {
 
   useEffect(() => {
     dispatch(bankGeneralAction());
-    if (Object.keys(dataOld).length === 3) {
+    if (Object.keys(dataOld).length > 3) {
+      console.log("data old", dataOld);
       setData(dataOld);
       form.setFieldsValue({ acc_name: dataOld.acc_name });
       form.setFieldsValue({ acc_no: dataOld.acc_no });
@@ -35,7 +36,13 @@ const FormBank = ({ dataOld, callback }) => {
       <Form
         form={form}
         layout="vertical"
-        onFinish={(e) => callback("submit", data)}
+        onFinish={(e) =>
+          callback("submit", {
+            id_bank: e.id_bank,
+            acc_name: e.acc_name,
+            acc_no: e.acc_no,
+          })
+        }
       >
         <Form.Item
           hasFeedback
