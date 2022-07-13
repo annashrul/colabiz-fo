@@ -39,7 +39,6 @@ const CardPaket = ({ callback, loading, data, pagination }) => {
           gutter={16}
           className={data.length > 1 ? "mb-2" : ""}
           style={{ cursor: "pointer" }}
-          // onClick={(e) => callback(val)}
         >
           <Col md={6} xs={8} sm={8}>
             <img

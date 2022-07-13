@@ -14,8 +14,8 @@ export default {
   put: axios.put,
   delete: axios.delete,
   noData: "https://www.napro.id/assets/images/placeholder-no-data.png",
-  // apiUrl: "https://api.kolabiz.id/",
-  // apiClient: "https://api.kolabiz.id/",
-  apiUrl: "http://ptnetindo.com:6701/",
-  apiClient: "http://ptnetindo.com:6701/",
+  apiUrl: "https://api-dev.kolabiz.id/",
+  apiClient: "https://api-dev.kolabiz.id/",
+  // apiUrl: "http://ptnetindo.com:6701/",
+  // apiClient: "http://ptnetindo.com:6701/",
 };
