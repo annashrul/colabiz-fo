@@ -281,7 +281,10 @@ const InvoiceComponent = () => {
                     ) : (
                       <Button
                         onClick={() => {
-                          console.log("konfirmasi ke stokis");
+                          message.info(
+                            "fitur ini masih dalam tahap development"
+                          );
+                          // console.log("konfirmasi ke stokis");
                         }}
                         style={{ width: "100%" }}
                         type="primary"

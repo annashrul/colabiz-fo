@@ -141,37 +141,21 @@ const IndexPurchaseReport = () => {
 
         <ColumnGroup title="Status">
           <Column
-            title="Pengambilan"
+            title="Pembelian"
             dataIndex="status"
             key="status"
             render={(_, record, i) => {
-              let status = "";
-              if (record.status === 0) {
-                status = "Belum Diambil";
-              } else {
-                status = "Telah Diambil";
-              }
-              return status;
+              return general_helper.labelStatusPembelian(record.status);
             }}
           />
           <Column
-            title="Pembelian"
-            dataIndex="status_pembelian"
-            key="status_pembelian"
+            title="Pengambilan"
+            dataIndex="status_pengambilan"
+            key="status_pengambilan"
             render={(_, record, i) => {
-              let status = "";
-              if (record.status_pengambilan === 0) {
-                status = "Menuggu Pembayaran";
-              } else if (record.status_pengambilan === 1) {
-                status = "Diproses";
-              } else if (record.status_pengambilan === 2) {
-                status = "Dikirim";
-              } else if (record.status_pengambilan === 3) {
-                status = "Diterima Stokis";
-              } else {
-                status = "Selesai";
-              }
-              return status;
+              return general_helper.labelStatusPengambilan(
+                record.status_pengambilan
+              );
             }}
           />
         </ColumnGroup>
@@ -194,25 +178,21 @@ const IndexPurchaseReport = () => {
             key="pembeli_mobile_no"
           />
         </ColumnGroup>
+        <ColumnGroup title="Stokis">
+          <Column title="Nama" dataIndex="stockis" key="stockis" />
+          <Column
+            title="Telepon"
+            dataIndex="stockis_mobile_no"
+            key="stockis_mobile_no"
+          />
+        </ColumnGroup>
         <ColumnGroup title="Pembayaran">
           <Column
             title="Metode"
             dataIndex="metode_pembayaran"
             key="metode_pembayaran"
           />
-          <Column
-            title="Ongkir"
-            dataIndex="ongkos_kirim"
-            key="ongkos_kirim"
-            align="right"
-            render={(_, record) => {
-              return general_helper.toRp(
-                parseFloat(
-                  record.ongkos_kirim !== null ? record.ongkos_kirim : 0
-                )
-              );
-            }}
-          />
+
           <Column
             title="Total"
             dataIndex="grand_total"

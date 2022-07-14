@@ -26,6 +26,7 @@ import {
   approveCodeAction,
   approveStockisAction,
   orderStockisAction,
+  sendCodeAction,
 } from "../../../redux/actions/stockis.action";
 import general_helper from "../../../helper/general_helper";
 import { DownOutlined } from "@ant-design/icons";
@@ -218,13 +219,28 @@ const IndexOrderStockis = () => {
                   {record.status === 3 ? (
                     <Tag
                       onClick={(e) => {
-                        setIsModal(true);
                         setKodeTrx(record.kd_trx);
+                        setTimeout(() => {
+                          dispatch(
+                            sendCodeAction(
+                              record.kd_trx,
+                              {
+                                id: user.id_stockis,
+                                where: where,
+                              },
+                              (par) => {
+                                setIsModal(par);
+                              }
+                            )
+                          );
+                        });
                       }}
                       style={{ cursor: "pointer" }}
                       color="#108ee9"
                     >
-                      Ambil Barang
+                      {kodeTrx === record.kd_trx && loadingApprove
+                        ? "loading ...."
+                        : "Ambil Barang"}
                     </Tag>
                   ) : (
                     <Tooltip title="anda belum bisa mengambil barang ini">
@@ -254,20 +270,22 @@ const IndexOrderStockis = () => {
 
         <ColumnGroup title="Status">
           <Column
-            title="Pengambilan"
+            title="Pembelian"
             dataIndex="status"
             key="status"
-            render={(_, record, i) =>
-              general_helper.labelStatusPengambilan(record.status)
-            }
+            render={(_, record, i) => {
+              return general_helper.labelStatusPembelian(record.status);
+            }}
           />
           <Column
-            title="Pembelian"
-            dataIndex="status_pembelian"
-            key="status_pembelian"
-            render={(_, record, i) =>
-              general_helper.labelStatusPembelian(record.status_pengambilan)
-            }
+            title="Pengambilan"
+            dataIndex="status_pengambilan"
+            key="status_pengambilan"
+            render={(_, record, i) => {
+              return general_helper.labelStatusPengambilan(
+                record.status_pengambilan
+              );
+            }}
           />
         </ColumnGroup>
 
@@ -322,10 +340,15 @@ const IndexOrderStockis = () => {
             layout="vertical"
             onFinish={(e) => {
               dispatch(
-                approveCodeAction(kodeTrx, e, {
-                  id: user.id_stockis,
-                  where: where,
-                })
+                approveCodeAction(
+                  kodeTrx,
+                  e,
+                  {
+                    id: user.id_stockis,
+                    where: where,
+                  },
+                  (par) => setIsModal(!par)
+                )
               );
             }}
           >

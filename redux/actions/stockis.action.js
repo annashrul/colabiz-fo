@@ -126,13 +126,35 @@ export const approveStockisAction = (kdTrx, stat, detail) => {
   };
 };
 
-export const approveCodeAction = (kdTrx, data, detail) => {
+export const approveCodeAction = (kdTrx, data, detail, callback) => {
   return (dispatch) => {
     dispatch(setLoadingApprove(true));
     handlePut(
       `penjualan/ambil/confirm/${btoa(kdTrx)}`,
       data,
       (res, status, msg) => {
+        callback(status);
+        if (status) {
+          Message.success(msg);
+          dispatch(orderStockisAction(detail.id, detail.where));
+        } else {
+          Message.info(msg);
+        }
+
+        dispatch(setLoadingApprove(false));
+      }
+    );
+  };
+};
+
+export const sendCodeAction = (kdTrx, detail, callback) => {
+  return (dispatch) => {
+    dispatch(setLoadingApprove(true));
+    handlePost(
+      `penjualan/ambil/send/${btoa(kdTrx)}`,
+      {},
+      (res, status, msg) => {
+        callback(status);
         if (status) {
           Message.success(msg);
           dispatch(orderStockisAction(detail.id, detail.where));

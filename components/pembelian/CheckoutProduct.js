@@ -297,36 +297,37 @@ const CheckoutProduct = () => {
               "right"
             )}
             {tempStokis("Total", general_helper.toRp(subtotal), "right")}
+
+            <Row justify="end" gutter={16} className="mt-5">
+              <Col>
+                <Button
+                  className="mr-2"
+                  type="dashed"
+                  onClick={(e) => {
+                    Router.push(StringLink.pembelian);
+                    localStorage.removeItem("dataStokis");
+                  }}
+                >
+                  Kembali
+                </Button>
+                <Popconfirm
+                  visible={visible}
+                  title="Anda yakin akan meneruskan transaksi ini ?"
+                  onConfirm={(e) => handleCheckout()}
+                  okText="Oke"
+                  cancelText="Batal"
+                  onCancel={() => setVisible(false)}
+                  okButtonProps={{
+                    loading: loadingCheckout,
+                  }}
+                >
+                  <Button type="primary" onClick={(e) => setVisible(true)}>
+                    Checkout
+                  </Button>
+                </Popconfirm>
+              </Col>
+            </Row>
           </Card>
-        </Col>
-      </Row>
-      <Row justify="end" gutter={16} className="mt-2">
-        <Col>
-          <Button
-            className="mr-2"
-            type="dashed"
-            onClick={(e) => {
-              Router.push(StringLink.pembelian);
-              localStorage.removeItem("dataStokis");
-            }}
-          >
-            Kembali
-          </Button>
-          <Popconfirm
-            visible={visible}
-            title="Anda yakin akan meneruskan transaksi ini ?"
-            onConfirm={(e) => handleCheckout()}
-            okText="Oke"
-            cancelText="Batal"
-            onCancel={() => setVisible(false)}
-            okButtonProps={{
-              loading: loadingCheckout,
-            }}
-          >
-            <Button type="primary" onClick={(e) => setVisible(true)}>
-              Checkout
-            </Button>
-          </Popconfirm>
         </Col>
       </Row>
     </>
