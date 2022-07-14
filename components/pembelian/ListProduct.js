@@ -298,10 +298,10 @@ const ListProduct = () => {
           )}
         </Spin>
       </Card>
-      <Row gutter={16} className={"mt-3"}>
-        <Col xs={24} sm={12} md={12} className="mb-3">
-          <Card title="PAKET REGISTER">
-            <Spin spinning={loadingRegister || loadingCart}>
+      <Spin spinning={loadingCart}>
+        <Row gutter={16} className={"mt-3"}>
+          <Col xs={24} sm={12} md={12} className="mb-3">
+            <Card title="PAKET REGISTER">
               <CardPaket
                 isButton={true}
                 callback={(val) => {
@@ -314,13 +314,12 @@ const ListProduct = () => {
                 data={dataRegister}
                 pagination={paginationRegister}
               />
-            </Spin>
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={12}>
-          <Card title="PAKET HAPPY SHOPPING">
-            <Spin spinning={loadingHappyShopping || loadingCart}>
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={12}>
+            <Card title="PAKET HAPPY SHOPPING">
               <CardPaket
+                isButton={true}
                 callback={(val) => {
                   if (indexStockis !== "") {
                     dispatch(postCart(val.id));
@@ -331,10 +330,10 @@ const ListProduct = () => {
                 data={dataHappyShopping}
                 pagination={paginationHappyShopping}
               />
-            </Spin>
-          </Card>
-        </Col>
-      </Row>
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
 
       <Modal
         centered
