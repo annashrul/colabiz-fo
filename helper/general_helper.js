@@ -182,8 +182,10 @@ const labelStatusPembelian = (res) => {
     return <Tag color="blue">Dikirim</Tag>;
   } else if (res === 3) {
     return <Tag color="cyan">Diterima Stokis</Tag>;
-  } else {
+  } else if (res === 3) {
     return <Tag color="green">Selesai</Tag>;
+  } else {
+    return <Tag color="red">Ditolak</Tag>;
   }
 };
 

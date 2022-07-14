@@ -205,7 +205,7 @@ const IndexOrderStockis = () => {
                     "mengkonfirmasi"
                   )}
                   {tempAction(
-                    2,
+                    5,
                     record.kd_trx,
                     "Tolak",
                     loadingCancel,
