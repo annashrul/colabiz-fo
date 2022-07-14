@@ -24,6 +24,8 @@ const Genealogy = () => {
         picture: user.foto,
         isActive: false,
         key: "0",
+        status: user.status,
+        activate: user.activate,
       },
     ]);
     setLoading(false);
@@ -53,7 +55,6 @@ const Genealogy = () => {
         setData(data.concat(res.data));
       }
       setLoading(false);
-      // setData(newData);
     });
   };
 
@@ -74,6 +75,8 @@ const Genealogy = () => {
         callback={(val, keys) => {
           onChange(val, index);
         }}
+        status={res.status}
+        activate={res.activate}
       />
     );
   });
