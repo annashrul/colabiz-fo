@@ -22,12 +22,13 @@ export const depositAction = (data) => {
   return (dispatch) => {
     dispatch(setLoadingDeposit(true));
     handlePost("transaction/deposit", data, (res, status, msg) => {
-      console.log("deposit", res);
       if (status) {
         Message.success(msg).then(() => {
           localStorage.setItem("typeTrx", "Deposit");
           localStorage.setItem("kdTrx", res.data.kd_trx);
           localStorage.setItem("linkBack", "/");
+          console.log(res.data.kd_trx);
+          dispatch(setLoadingDeposit(false));
           Router.push(StringLink.invoiceProduct).then(() => {
             dispatch(setLoadingDeposit(false));
           });

@@ -234,8 +234,7 @@ const CheckoutProduct = () => {
                                 onClick={(e) => {
                                   setIdxCart(key);
                                   setTimeout(
-                                    () =>
-                                      dispatch(deleteCartAction(res.id_paket)),
+                                    () => dispatch(deleteCartAction(res.id)),
                                     20
                                   );
                                 }}
