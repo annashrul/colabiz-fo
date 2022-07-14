@@ -1,16 +1,12 @@
-import { Button, Form, Input, Spin, Message, Row } from "antd";
+import { Button, Form, Input, Spin, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import Router from "next/router";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import ModalPin from "./ModalPin";
-import { handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../redux/actions/auth.action";
 import ModalResendEmail from "./modalResendEmail";
-import Routes from "../lib/routes";
 
 const FormItem = Form.Item;
 
@@ -23,16 +19,9 @@ const Content = styled.div`
 const Signin = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
   const [, forceUpdate] = useState();
-  const [loading, setLoading] = useState(false);
-  const [showModalPin, setShowModalPin] = useState(false);
   const [showModalResendEmail, setShowModalResendEmail] = useState(false);
-  const [dataUser, setDataUser] = useState({});
-
-  const resLogin = useSelector((state) => state.authUserReducer.dataLogin);
   const resLoading = useSelector((state) => state.authUserReducer.loadingLogin);
-  const [appRoutes] = useState(Routes);
 
   useEffect(() => {
     forceUpdate({});
@@ -40,29 +29,6 @@ const Signin = () => {
 
   const handleSubmit = async (values) => {
     dispatch(loginAction(values));
-  };
-
-  const handlePin = async (pin) => {
-    setLoading(true);
-    let data = Object.assign(dataUser, { pin: pin });
-    await handlePut(
-      `member/pin/${data.id}`,
-      { pin: pin },
-      (res, status, msg) => {
-        if (status) {
-          Message.success(
-            "Berhasil membuat Pin. anda akan dialihkan ke halaman dashboard!"
-          ).then(() => {
-            Router.push("/").then(() => {
-              setShowModalPin(false);
-              setLoading(false);
-            });
-          });
-        } else {
-          setLoading(false);
-        }
-      }
-    );
   };
 
   return (
@@ -139,18 +105,7 @@ const Signin = () => {
           </Form>
         </Spin>
       </Content>
-      {showModalPin && (
-        <ModalPin
-          loading={loading}
-          submit={(pin) => {
-            handlePin(pin);
-          }}
-          cancel={(isShow) => {
-            setShowModalPin(false);
-          }}
-          modalPin={showModalPin}
-        />
-      )}
+
       {showModalResendEmail && (
         <ModalResendEmail
           modal={showModalResendEmail}

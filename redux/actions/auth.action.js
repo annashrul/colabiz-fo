@@ -1,7 +1,7 @@
 import { AUTH_USER } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
-import { Message } from "antd";
+import { message, Message } from "antd";
 import Router from "next/router";
 
 export const setDataLogin = (data) => {
@@ -83,6 +83,7 @@ export const loginAction = (data) => {
   return (dispatch) => {
     dispatch(setLoadingLogin(true));
     handlePost("auth/signin", data, (res, status, msg) => {
+      // message.info(msg);
       if (status) {
         Action.http.axios.defaults.headers.common[
           "Authorization"
@@ -90,16 +91,18 @@ export const loginAction = (data) => {
         Action.setToken(res.data.token);
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
-        dispatch(userDetailAction(res.data.id));
+
         Message.success(
           "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
         ).then(() =>
-          Router.push("/").then(() => dispatch(setLoadingLogin(false)))
+          Router.push("/").then(() => {
+            dispatch(setLoadingLogin(false));
+            dispatch(userDetailAction(res.data.id));
+          })
         );
       } else {
         dispatch(setLoadingLogin(false));
       }
-      // dispatch(setLoadingLogin(false));
     });
   };
 };
