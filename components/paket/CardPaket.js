@@ -26,7 +26,7 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
         >
           <Col md={6} xs={8} sm={8}>
             <img
-              style={{ height: "110px", width: "100%", borderRadius: "10px" }}
+              style={{ height: "100px", width: "100%", borderRadius: "10px" }}
               alt={val.gambar}
               src={val.gambar}
               onError={({ currentTarget }) => {
@@ -60,6 +60,18 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
             <p>{general_helper.toRp(val.price)}</p>
             <Tooltip title={Helper.rmHtml(val.caption)}>{desc}</Tooltip>
           </Col>
+          {state.mobile && isButton && (
+            <Col xs={24}>
+              <Button
+                onClick={(e) => {
+                  callback(val);
+                }}
+                style={{ width: "100%", marginTop: "10px" }}
+              >
+                <ShoppingCartOutlined /> Tambah
+              </Button>
+            </Col>
+          )}
         </Row>
       );
     })
