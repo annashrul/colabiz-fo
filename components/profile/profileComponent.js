@@ -174,13 +174,13 @@ const ProfileComponent = () => {
           md={12}
           style={{ cursor: "pointer", marginBottom: "10px" }}
           onClick={(e) => {
-            setShowFormBank(true);
+            // setShowFormBank(true);
           }}
         >
           <StatCard
             clickHandler={() => {
               // console.log(bank);
-              setShowFormBank(true);
+              // setShowFormBank(true);
             }}
             value={bank.bank_name}
             title={`${bank.acc_name}, ${bank.acc_no}`}
@@ -192,10 +192,10 @@ const ProfileComponent = () => {
               />
             }
           />
-          <Alert
+          {/* <Alert
             banner
             message="klik atau sentuh untuk mengedit akun bank anda"
-          />
+          /> */}
         </Col>
 
         <Col md={12}>

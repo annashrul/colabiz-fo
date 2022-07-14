@@ -2,11 +2,15 @@ import { PAKET, CART } from "../type";
 const initialState = {
   loadingRegister: true,
   loadingSmartContract: true,
+  loadingHappyShopping: true,
   loadingCheckout: false,
+
   dataRegister: [],
   paginationRegister: [],
   dataSmartContract: [],
   paginationSmartContract: [],
+  dataHappyShopping: [],
+  paginationHappyShopping: [],
 };
 
 export const paketReducer = (state = initialState, action) => {
@@ -23,6 +27,16 @@ export const paketReducer = (state = initialState, action) => {
         dataSmartContract: action.data.data,
         paginationSmartContract: action.data.pagination,
       };
+    case PAKET.DATA_HAPPY_SHOPPING:
+      return {
+        ...state,
+        dataHappyShopping: action.data.data,
+        paginationHappyShopping: action.data.pagination,
+      };
+    case PAKET.LOADING_HAPPY_SHOPPING:
+      return Object.assign({}, state, {
+        loadingHappyShopping: action.load,
+      });
     case PAKET.LOADING_REGISTER:
       return Object.assign({}, state, {
         loadingRegister: action.load,

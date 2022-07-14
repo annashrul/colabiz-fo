@@ -20,6 +20,13 @@ export const setDataSmartContract = (data) => {
   };
 };
 
+export const setDataHappyShopping = (data) => {
+  return {
+    type: PAKET.DATA_HAPPY_SHOPPING,
+    data,
+  };
+};
+
 export const setLoadingRegister = (load) => {
   return {
     type: PAKET.LOADING_REGISTER,
@@ -32,6 +39,12 @@ export const setLoadingSmartContract = (load) => {
     load,
   };
 };
+export const setLoadingHappyShopping = (load) => {
+  return {
+    type: PAKET.LOADING_HAPPY_SHOPPING,
+    load,
+  };
+};
 export const setLoadingCheckout = (load) => {
   return {
     type: PAKET.LOADING_CHECKOUT,
@@ -41,8 +54,8 @@ export const setLoadingCheckout = (load) => {
 
 export const getPaket = (where = "", type = "REGISTER") => {
   return (dispatch) => {
-    if (type === "SMART_CONTRACT") {
-      dispatch(setLoadingSmartContract(true));
+    if (type === "HAPPY_SHOPPING") {
+      dispatch(setLoadingHappyShopping(true));
     } else {
       dispatch(setLoadingRegister(true));
     }
@@ -51,9 +64,9 @@ export const getPaket = (where = "", type = "REGISTER") => {
       url += `?${where}`;
     }
     handleGet(url, (res, status) => {
-      if (type === "SMART_CONTRACT") {
-        dispatch(setDataSmartContract(res));
-        dispatch(setLoadingSmartContract(false));
+      if (type === "HAPPY_SHOPPING") {
+        dispatch(setDataHappyShopping(res));
+        dispatch(setLoadingHappyShopping(false));
       } else {
         dispatch(setDataRegister(res));
         dispatch(setLoadingRegister(false));
