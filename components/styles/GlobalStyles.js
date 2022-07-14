@@ -16,6 +16,16 @@ const GlobalStyles = createGlobalStyle`
   @import url('/app.css');
   @import url('/nprogress.css');
 
+  .ant-collapse-icon-position-right > .ant-collapse-item > .ant-collapse-header{
+    padding: 3px 5px !important
+    padding-right: 40px!important;
+  }
+  .ant-collapse-content > .ant-collapse-content-box{
+    padding:5px!important;
+  }
+  .ant-collapse > .ant-collapse-item{
+    border-bottom:none!important;
+  }
   *, *:before, *:after {
     box-sizing: inherit;
     font-family: 'Signika Negative', sans-serif!important;

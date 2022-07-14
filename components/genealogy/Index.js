@@ -37,6 +37,7 @@ const Index = ({
     <Collapse
       bordered={false}
       style={{
+        boxShadow: "none",
         borderLeft: "1px solid green",
         borderBottom: "none",
         marginBottom: "10px",
@@ -53,22 +54,11 @@ const Index = ({
           <Badge.Ribbon
             color={status === 0 ? "#f50" : "#87d068"}
             text={
-              <Tag
-                icon={
-                  status === 0 ? <SyncOutlined spin /> : <CheckCircleOutlined />
-                }
-                style={{
-                  color: "white",
-                  backgroundColor: "transparent",
-                  border: "none",
-                  padding: "0px",
-                }}
-              >
+              <small>
+                {status === 0 ? <SyncOutlined spin /> : <CheckCircleOutlined />}
+                &nbsp;
                 {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
-              </Tag>
-              // <small>
-              //   {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
-              // </small>
+              </small>
             }
           >
             <Row type="flex" style={{ alignItems: "center" }}>
