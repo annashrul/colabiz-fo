@@ -1,19 +1,15 @@
-import { Layout, Menu, Avatar, Badge, Modal, Alert } from "antd";
+import { Layout, Menu, Badge, Alert, message } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { StringLink } from "../helper/string_link_helper";
 import authAction from "../action/auth.action";
 import Router from "next/router";
-import { ClockCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartAction } from "../redux/actions/cart.action";
-// import { getCartAction, setCountCart } from "../redux/actions/paket.action";
 import Marquee from "react-fast-marquee";
-
-const { SubMenu } = Menu;
 
 const { Header } = Layout;
 
@@ -95,7 +91,17 @@ const MainHeader = () => {
               />
             )}
 
-            <Menu.Item onClick={() => Router.push(StringLink.checkout)}>
+            <Menu.Item
+              onClick={() => {
+                if (data.length > 0) {
+                  if (localStorage.getItem("dataStokis") === null) {
+                    message.info("silahkan pilih stokis terlebih dahulu");
+                  } else {
+                    Router.push(StringLink.checkout);
+                  }
+                }
+              }}
+            >
               <Badge count={data && data.length}>
                 <ShoppingCartOutlined
                   style={{

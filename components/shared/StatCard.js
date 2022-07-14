@@ -3,16 +3,16 @@ import { Button, Card, Col, Row } from "antd";
 import PropTypes from "prop-types";
 import { useAppState } from "./AppProvider";
 
-const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
+const StatCard = ({ type, title, value, icon, color, clickHandler, col }) => {
   const [state] = useAppState();
   let before = null,
     after = null;
 
   const cardIcon = (
-    <Col>
+    <Col xs={4} md={3}>
       <Button
         shape="circle"
-        size={state.mobile ? "small" : "large"}
+        size={"large"}
         type="primary"
         style={{ backgroundColor: color, borderColor: color }}
         className={
@@ -35,7 +35,7 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
     <Card style={type === "fill" ? { backgroundColor: color } : null}>
       <Row type="flex" align="middle" justify="start">
         {before}
-        <Col>
+        <Col xs={20} md={21}>
           {state.mobile ? (
             <h6 className={`mb-0 ${type === "fill" ? "text-white" : null}`}>
               {value}
@@ -45,7 +45,6 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
               {value}
             </h5>
           )}
-          {/* <br /> */}
           <small className={type === "fill" ? "text-white-50" : null}>
             {title}
           </small>
@@ -58,11 +57,11 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
 };
 
 StatCard.propTypes = {
-  type: PropTypes.string,
-  title: PropTypes.string,
+  type: PropTypes.any,
+  title: PropTypes.any,
   value: PropTypes.any,
   icon: PropTypes.element,
-  color: PropTypes.string,
+  color: PropTypes.any,
 };
 
 export default StatCard;

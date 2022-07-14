@@ -1,8 +1,7 @@
-import { Avatar, Button, Form, Input, Row } from 'antd';
-
-import { EyeTwoTone } from '@ant-design/icons';
-import Link from 'next/link';
-import styled from 'styled-components';
+import { Avatar, Button, Form, Input, Row } from "antd";
+import { EyeTwoTone } from "@ant-design/icons";
+import Link from "next/link";
+import styled from "styled-components";
 
 const FormItem = Form.Item;
 
@@ -18,7 +17,7 @@ const LockScreen = ({ form }) => (
     align="middle"
     justify="center"
     className="px-3 bg-white"
-    style={{ minHeight: '100vh' }}
+    style={{ minHeight: "100vh" }}
   >
     <Content>
       <div className="text-center mb-4">
@@ -27,11 +26,12 @@ const LockScreen = ({ form }) => (
       </div>
 
       <Form layout="vertical">
-        <FormItem name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
+        <FormItem
+          name="password"
+          rules={[{ required: true, message: "Please input your Password!" }]}
+        >
           <Input
-            prefix={
-              <EyeTwoTone style={{fontSize: '16px'}} />
-            }
+            prefix={<EyeTwoTone style={{ fontSize: "16px" }} />}
             type="password"
             placeholder="Password"
           />

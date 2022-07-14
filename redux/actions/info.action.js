@@ -1,4 +1,4 @@
-import { INFO } from "../type";
+import { INFO, PIN } from "../type";
 import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction from "../../action/auth.action";
 import { Message } from "antd";
@@ -15,6 +15,36 @@ export const setData = (data) => {
   return {
     type: INFO.DATA,
     data,
+  };
+};
+
+export const setLoadingPinAktivasi = (load) => {
+  return {
+    type: PIN.LOADING_AKTIVASI,
+    load,
+  };
+};
+
+export const setLoadingPinHappyShopping = (load) => {
+  return {
+    type: PIN.LOADING_AKTIVASI_HAPPY_SHOPPING,
+    load,
+  };
+};
+
+export const setLoadingPinSmartContract = (load) => {
+  return {
+    type: PIN.LOADING_AKTIVASI_SMART_CONTRACT,
+    load,
+  };
+};
+
+export const aktivasiPinAction = (data) => {
+  return (dispatch) => {
+    dispatch(setLoadingPinAktivasi(true));
+    handlePost("pin/aktivasi/register", data, (res, status) => {
+      dispatch(setLoadingPinAktivasi(false));
+    });
   };
 };
 

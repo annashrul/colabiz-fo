@@ -38,21 +38,9 @@ const FormDeposit = () => {
     dispatch(paymentChannelAction());
     setUser(authAction.getUser());
   }, []);
-  // useEffect(() => {
-  //   if (data !== undefined && data.length > 0) {
-  //     form.setFieldsValue({ payment_channel: data[0].code });
-  //   }
-  // }, [data]);
 
   const onChange = (e) => {
     let val = e.target.value;
-
-    if (parseInt(val, 10) > parseInt(user.saldo, 10)) {
-      setNominalError({
-        enable: true,
-        helpText: "nominal penarikan melebihi saldo anda",
-      });
-    }
     for (let i = 0; i < caraCepat.length; i++) {
       if (parseInt(val, 10) === parseInt(caraCepat[i], 10)) {
         setIsActiveAmount(i);
@@ -74,7 +62,6 @@ const FormDeposit = () => {
   const handleSubmit = async (e) => {
     setModalPin(true);
     setDataDeposit(e);
-    // dispatch(withdrawAction(e));
   };
 
   const caraCepat = [
@@ -85,7 +72,6 @@ const FormDeposit = () => {
     "500000",
     "1000000",
   ];
-  console.log("payment", data);
   return (
     <Spin spinning={loading}>
       <Form

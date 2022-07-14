@@ -1,20 +1,14 @@
-import { Collapse, Spin, Message, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import { arrayToTree } from "performant-array-to-tree";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
 import Matahari from "../../components/genealogy/matahari";
-const { TabPane } = Tabs;
 
 moment.locale("id");
-const { Panel } = Collapse;
 
 const Genealogy = () => {
-  const [step, setStep] = useState(1);
-  const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   let user = authAction.getUser();

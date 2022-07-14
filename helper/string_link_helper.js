@@ -11,7 +11,7 @@ export const StringLink = {
   profile: "/profile",
   genealogy: "/genealogy",
   product: "/product",
-  invoiceProduct: "/product/invoice",
+  invoiceProduct: "/invoice",
   // checkout: "/product/checkout",
   withdraw: "/wallet/withdraw",
   deposit: "/wallet/deposit",

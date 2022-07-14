@@ -23,6 +23,8 @@ export function doLogout() {
   Helper.removeCookie(STRING_COOKIES.info);
   Helper.removeCookie(STRING_COOKIES.user);
   Helper.removeCookie(STRING_COOKIES.token);
+  Helper.removeCookie(STRING_COOKIES.bank);
+  Helper.removeCookie(STRING_COOKIES.address);
   http.axios.defaults.headers.common["Authorization"] = "";
 }
 function getUser() {

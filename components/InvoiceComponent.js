@@ -15,7 +15,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import { useAppState } from "./shared/AppProvider";
 import React, { useEffect, useState } from "react";
 import Router from "next/router";
-import { handleGet, handlePut } from "../action/baseAction";
+import { handlePut } from "../action/baseAction";
 import Helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
 import { invoiceAction } from "../redux/actions/invoice.action";
@@ -25,7 +25,6 @@ const { Dragger } = Upload;
 
 const InvoiceComponent = () => {
   const [state] = useAppState();
-  const [objData, setObjData] = useState({});
   const [fontSize, setFontSize] = useState("12px");
   const [showModalUpload, setShowModalUpload] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
@@ -54,6 +53,7 @@ const InvoiceComponent = () => {
   const rmStorageLocal = () => {
     localStorage.removeItem("kdTrx");
     localStorage.removeItem("typeTrx");
+    localStorage.removeItem("dataStokis");
   };
 
   const handleBack = () => {
@@ -64,6 +64,7 @@ const InvoiceComponent = () => {
       Router.back().then(() => {
         rmStorageLocal();
       });
+      rmStorageLocal();
     } else {
       Router.push(localStorage.getItem("linkBack")).then(() => {
         rmStorageLocal();

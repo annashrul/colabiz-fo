@@ -1,14 +1,4 @@
-import {
-  Col,
-  Collapse,
-  Row,
-  Input,
-  Card,
-  Button,
-  Form,
-  Select,
-  Popconfirm,
-} from "antd";
+import { Col, Row, Input, Card, Button, Form, Select, Popconfirm } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState, useRef } from "react";
 import Action from "../../action/auth.action";
@@ -26,7 +16,6 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
-// import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;

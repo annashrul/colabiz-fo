@@ -1,19 +1,8 @@
-import {
-  Collapse,
-  Spin,
-  Message,
-  Image,
-  Row,
-  Col,
-  Avatar,
-  Empty,
-  Tree,
-} from "antd";
-import React, { useEffect, useState } from "react";
+import { Message } from "antd";
+import React from "react";
 import moment from "moment";
 
 moment.locale("id");
-const { Panel } = Collapse;
 const people = [
   {
     name: "Calvin Hawkins",

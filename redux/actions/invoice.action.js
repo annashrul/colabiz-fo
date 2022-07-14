@@ -1,6 +1,7 @@
 import { INVOICE } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
+import { getCartAction } from "./cart.action";
 
 export const setData = (data) => {
   return {
@@ -24,6 +25,7 @@ export const invoiceAction = (kdTrx, type = "produk") => {
       url = `transaction/deposit/${btoa(kdTrx)}/invoice`;
     }
     handleGet(url, (res, status) => {
+      dispatch(getCartAction());
       dispatch(setData(res.data));
       dispatch(setLoading(false));
     });
