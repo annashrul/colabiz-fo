@@ -97,7 +97,7 @@ const FormDeposit = () => {
                 <Row gutter={4}>
                   {caraCepat.map((res, key) => {
                     return (
-                      <Col md={8} key={key} className="mb-2">
+                      <Col xs={8} sm={8} md={8} key={key} className="mb-2">
                         <Button
                           style={{ width: "100%" }}
                           type={isActiveAmount === key ? `danger` : `dashed`}

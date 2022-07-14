@@ -33,9 +33,6 @@ const FormWithdraw = () => {
     }
   }, [nominalError]);
   useEffect(() => {
-    if (state.mobile) {
-      setFontSize("80%");
-    }
     setUser(authAction.getUser());
     setBank([authAction.getBank()]);
   }, [state]);
