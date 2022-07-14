@@ -48,7 +48,7 @@ const ProfileCard = ({ callback }) => {
         className="mb-2 overflow-hidden w-100"
         title={
           <Row type="flex" align="middle">
-            <Avatar size={64} src={user.foto}>
+            <Avatar size={40} src={user.foto}>
               {user.fullname !== undefined &&
                 general_helper.getInitialName(user.fullname)}
             </Avatar>
@@ -64,10 +64,12 @@ const ProfileCard = ({ callback }) => {
               <small
                 className="text-light text-white"
                 style={{ cursor: "pointer", color: "white" }}
-                onClick={async () => general_helper.copyText(user.referral_url)}
+                onClick={async () =>
+                  general_helper.copyText(user.referral_url, "Link referral")
+                }
               >
-                <span>{user.referral_url}</span> &nbsp;
-                <Tooltip title="copy kode referral">
+                <span>{user.referral}</span> &nbsp;
+                <Tooltip title="copy link referral">
                   <CopyOutlined style={{ marginLeft: "1px" }} />
                 </Tooltip>
               </small>
