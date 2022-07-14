@@ -256,14 +256,6 @@ const IndexOrderStockis = () => {
             return menuAction;
           }}
         />
-        <ColumnGroup title="Pembeli">
-          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
-          <Column
-            title="Telepon"
-            dataIndex="pembeli_mobile_no"
-            key="pembeli_mobile_no"
-          />
-        </ColumnGroup>
         <Column
           title="Tanggal"
           dataIndex="created_at"
@@ -272,6 +264,15 @@ const IndexOrderStockis = () => {
             return moment(record.created_at).format("LLL");
           }}
         />
+        <ColumnGroup title="Pembeli">
+          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
+          <Column
+            title="Telepon"
+            dataIndex="pembeli_mobile_no"
+            key="pembeli_mobile_no"
+          />
+        </ColumnGroup>
+
         <ColumnGroup title="Kode">
           <Column
             title="Resi"

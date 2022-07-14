@@ -132,6 +132,62 @@ const IndexPurchaseReport = () => {
             );
           }}
         />
+        <Column
+          title="Tanggal"
+          dataIndex="created_at"
+          key="created_at"
+          render={(_, record) => {
+            return moment(record.created_at).format("LLL");
+          }}
+        />
+        <ColumnGroup title="Stokis">
+          <Column title="Nama" dataIndex="stockis" key="stockis" />
+          <Column
+            title="Telepon"
+            dataIndex="stockis_mobile_no"
+            key="stockis_mobile_no"
+          />
+        </ColumnGroup>
+        <ColumnGroup title="Pembeli">
+          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
+          <Column
+            title="Telepon"
+            dataIndex="pembeli_mobile_no"
+            key="pembeli_mobile_no"
+          />
+        </ColumnGroup>
+
+        <ColumnGroup title="Kode">
+          <Column
+            title="Resi"
+            dataIndex="resi"
+            key="resi"
+            render={(_, record, i) => {
+              return record.resi === null ? "-" : record.resi;
+            }}
+          />
+          <Column title="Transaksi" dataIndex="kd_trx" key="kd_trx" />
+        </ColumnGroup>
+
+        <ColumnGroup title="Pembayaran">
+          <Column
+            title="Metode"
+            dataIndex="metode_pembayaran"
+            key="metode_pembayaran"
+          />
+
+          <Column
+            title="Total"
+            dataIndex="grand_total"
+            key="grand_total"
+            align="right"
+            render={(_, record) => {
+              return general_helper.toRp(
+                parseFloat(record.grand_total !== null ? record.grand_total : 0)
+              );
+            }}
+          />
+        </ColumnGroup>
 
         <ColumnGroup title="Status">
           <Column
@@ -153,60 +209,6 @@ const IndexPurchaseReport = () => {
             }}
           />
         </ColumnGroup>
-        <ColumnGroup title="Kode">
-          <Column
-            title="Resi"
-            dataIndex="resi"
-            key="resi"
-            render={(_, record, i) => {
-              return record.resi === null ? "-" : record.resi;
-            }}
-          />
-          <Column title="Transaksi" dataIndex="kd_trx" key="kd_trx" />
-        </ColumnGroup>
-        <ColumnGroup title="Pembeli">
-          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
-          <Column
-            title="Telepon"
-            dataIndex="pembeli_mobile_no"
-            key="pembeli_mobile_no"
-          />
-        </ColumnGroup>
-        <ColumnGroup title="Stokis">
-          <Column title="Nama" dataIndex="stockis" key="stockis" />
-          <Column
-            title="Telepon"
-            dataIndex="stockis_mobile_no"
-            key="stockis_mobile_no"
-          />
-        </ColumnGroup>
-        <ColumnGroup title="Pembayaran">
-          <Column
-            title="Metode"
-            dataIndex="metode_pembayaran"
-            key="metode_pembayaran"
-          />
-
-          <Column
-            title="Total"
-            dataIndex="grand_total"
-            key="grand_total"
-            align="right"
-            render={(_, record) => {
-              return general_helper.toRp(
-                parseFloat(record.grand_total !== null ? record.grand_total : 0)
-              );
-            }}
-          />
-        </ColumnGroup>
-        <Column
-          title="Tanggal"
-          dataIndex="created_at"
-          key="created_at"
-          render={(_, record) => {
-            return moment(record.created_at).format("LLL");
-          }}
-        />
       </Table>
     </div>
   );

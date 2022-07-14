@@ -114,7 +114,7 @@ const ListProduct = () => {
     setQueryString(objFilter);
     setTimeout(() => {
       dispatch(getStockisAction("page=1" + objFilter));
-      setIndexStockis(0);
+      setIndexStockis("");
     }, 200);
   };
   const handleChangeAddress = (value, col = "") => {
