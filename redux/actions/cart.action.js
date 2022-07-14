@@ -1,6 +1,7 @@
 import { CART } from "../type";
 import Action from "../../action/auth.action";
 import { handleDelete, handleGet, handlePost } from "../../action/baseAction";
+import { message } from "antd";
 
 export const setData = (data) => {
   return {
@@ -54,8 +55,10 @@ export const postCart = (idPaket, type = "tambah") => {
       (res, status, msg) => {
         if (type !== "tambah") {
           dispatch(setLoadingDelete(false));
+          message.success("qty barang berhasil dikurangi");
         } else {
           dispatch(setLoadingAdd(false));
+          message.success("barang berhasil dimasukan ke dalam keranjang");
         }
         dispatch(getCartAction());
       }
