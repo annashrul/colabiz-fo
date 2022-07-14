@@ -172,6 +172,8 @@ const ProfileComponent = () => {
       <Row gutter={16}>
         <Col
           md={12}
+          xs={24}
+          sm={12}
           style={{ cursor: "pointer", marginBottom: "10px" }}
           onClick={(e) => {
             // setShowFormBank(true);
@@ -198,7 +200,7 @@ const ProfileComponent = () => {
           /> */}
         </Col>
 
-        <Col md={12}>
+        <Col md={12} xs={24} sm={12}>
           <StatCard
             clickHandler={() => {}}
             value={address.title}
