@@ -20,6 +20,7 @@ import {
   FilterOutlined,
   CaretRightOutlined,
   CaretLeftOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -108,10 +109,11 @@ const ListProduct = () => {
     } else {
       e.name = `&q=${e.name}`;
     }
-    let objFilter = `page=1${e.kd_prov}${e.kd_kota}${e.kd_kec}${e.name}`;
+    let objFilter = `${e.kd_prov}${e.kd_kota}${e.kd_kec}${e.name}`;
     setIsModalFilter(false);
+    setQueryString(objFilter);
     setTimeout(() => {
-      dispatch(getStockisAction(objFilter));
+      dispatch(getStockisAction("page=1" + objFilter));
       setIndexStockis(0);
     }, 200);
   };
@@ -135,14 +137,32 @@ const ListProduct = () => {
       <Card
         title="Stokis"
         extra={
-          <Button
-            type="dashed"
-            onClick={() => {
-              setIsModalFilter(true);
-            }}
-          >
-            <FilterOutlined /> Cari Stokis
-          </Button>
+          <Row gutter={4}>
+            <Col>
+              <Button
+                size="small"
+                type="dashed"
+                onClick={() => {
+                  setIsModalFilter(true);
+                }}
+              >
+                <FilterOutlined /> Cari Stokis
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                size="small"
+                type="dashed"
+                onClick={() => {
+                  setIndexStockis("");
+                  setQueryString("");
+                  dispatch(getStockisAction("page=1"));
+                }}
+              >
+                <CloseOutlined /> Reset
+              </Button>
+            </Col>
+          </Row>
         }
       >
         <Spin spinning={loadingData}>
@@ -248,7 +268,7 @@ const ListProduct = () => {
                       page -= 1;
                       setIndexStockis("");
                       setCurrentPage(page);
-                      dispatch(getStockisAction(`page=${page}`));
+                      dispatch(getStockisAction(`page=${page}&${queryString}`));
                     }
                   }}
                 >
@@ -260,14 +280,14 @@ const ListProduct = () => {
                   disabled={pagination.to >= parseInt(pagination.total, 10)}
                   onClick={(e) => {
                     setIndexStockis("");
-                    console.log(pagination);
+                    console.log(queryString);
                     if (pagination.to >= parseInt(pagination.total, 10)) {
                       Message.info("data stokis habis");
                     } else {
                       let page = currentPage;
                       page += 1;
                       setCurrentPage(page);
-                      dispatch(getStockisAction(`page=${page}&perpage=12`));
+                      dispatch(getStockisAction(`page=${page}&${queryString}`));
                     }
                   }}
                 >
