@@ -114,7 +114,7 @@ const TransactionReport = () => {
               )}
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} md={8}>
+          <Col xs={24} sm={12} md={12}>
             <Form.Item name="any" label="Cari">
               <Search
                 addonBefore={prefixSelector}
