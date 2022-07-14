@@ -47,6 +47,8 @@ const IndexOrderStockis = () => {
   const [where, setWhere] = useState("");
   const [isModal, setIsModal] = useState(false);
   const [kodeTrx, setKodeTrx] = useState("");
+  const [startDate, setStartDate] = useState(moment());
+  const [endDate, setEndDate] = useState(moment());
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const dispatch = useDispatch();
@@ -65,7 +67,11 @@ const IndexOrderStockis = () => {
   }, []);
 
   const onFinish = (values) => {
-    let where = ``;
+    setStartDate(moment(startDate).format("YYYY-MM-DD"));
+    setEndDate(moment(endDate).format("YYYY-MM-DD"));
+    let where = `&datefrom=${moment(startDate).format(
+      "YYYY-MM-DD"
+    )}&dateto=${moment(endDate).format("YYYY-MM-DD")}`;
     if (values !== "") {
       where += `&searchby=${searchby}&q=${
         searchby === "kd_trx" ? btoa(values) : values
@@ -113,25 +119,7 @@ const IndexOrderStockis = () => {
       </Popconfirm>
     );
   };
-  const menu = (
-    <Menu
-      // onClick={onMenuClick}
-      items={[
-        {
-          key: "1",
-          label: "1st item",
-        },
-        {
-          key: "2",
-          label: "2nd item",
-        },
-        {
-          key: "3",
-          label: "3rd item",
-        },
-      ]}
-    />
-  );
+
   return (
     <div>
       <Form
@@ -144,6 +132,18 @@ const IndexOrderStockis = () => {
         }}
       >
         <Row gutter={16}>
+          <Col xs={24} sm={24} md={6}>
+            <Form.Item name="periode" label="Periode">
+              {general_helper.dateRange(
+                (dates, dateStrings) => {
+                  setStartDate(dateStrings[0]);
+                  setEndDate(dateStrings[1]);
+                },
+                false,
+                [startDate, endDate]
+              )}
+            </Form.Item>
+          </Col>
           <Col xs={24} sm={12} md={12}>
             <Form.Item name="any" label="Cari">
               <Search
@@ -256,6 +256,22 @@ const IndexOrderStockis = () => {
             return menuAction;
           }}
         />
+        <ColumnGroup title="Pembeli">
+          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
+          <Column
+            title="Telepon"
+            dataIndex="pembeli_mobile_no"
+            key="pembeli_mobile_no"
+          />
+        </ColumnGroup>
+        <Column
+          title="Tanggal"
+          dataIndex="created_at"
+          key="created_at"
+          render={(_, record) => {
+            return moment(record.created_at).format("LLL");
+          }}
+        />
         <ColumnGroup title="Kode">
           <Column
             title="Resi"
@@ -266,6 +282,25 @@ const IndexOrderStockis = () => {
             }}
           />
           <Column title="Transaksi" dataIndex="kd_trx" key="kd_trx" />
+        </ColumnGroup>
+        <ColumnGroup title="Pembayaran">
+          <Column
+            title="Metode"
+            dataIndex="metode_pembayaran"
+            key="metode_pembayaran"
+          />
+
+          <Column
+            title="Total"
+            dataIndex="grand_total"
+            key="grand_total"
+            align="right"
+            render={(_, record) => {
+              return general_helper.toRp(
+                parseFloat(record.grand_total !== null ? record.grand_total : 0)
+              );
+            }}
+          />
         </ColumnGroup>
 
         <ColumnGroup title="Status">
@@ -288,42 +323,6 @@ const IndexOrderStockis = () => {
             }}
           />
         </ColumnGroup>
-
-        <ColumnGroup title="Pembeli">
-          <Column title="Nama" dataIndex="pembeli" key="pembeli" />
-          <Column
-            title="Telepon"
-            dataIndex="pembeli_mobile_no"
-            key="pembeli_mobile_no"
-          />
-        </ColumnGroup>
-        <ColumnGroup title="Pembayaran">
-          <Column
-            title="Metode"
-            dataIndex="metode_pembayaran"
-            key="metode_pembayaran"
-          />
-
-          <Column
-            title="Total"
-            dataIndex="grand_total"
-            key="grand_total"
-            align="right"
-            render={(_, record) => {
-              return general_helper.toRp(
-                parseFloat(record.grand_total !== null ? record.grand_total : 0)
-              );
-            }}
-          />
-        </ColumnGroup>
-        <Column
-          title="Tanggal"
-          dataIndex="created_at"
-          key="created_at"
-          render={(_, record) => {
-            return moment(record.created_at).format("LLL");
-          }}
-        />
       </Table>
       {isModal && (
         <Modal

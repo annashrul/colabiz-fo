@@ -48,12 +48,6 @@ const IndexPurchaseReport = () => {
       }`;
     }
 
-    // let where = ``;
-    // if (values !== "") {
-    //   where += `page=1&searchby=${searchby}&q=${
-    //     searchby === "kd_trx" ? btoa(values) : values
-    //   }`;
-    // }
     setWhere(where);
     dispatch(reportPurchaseAction(user.id, where));
   };
