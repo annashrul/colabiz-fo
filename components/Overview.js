@@ -30,16 +30,10 @@ const Overview = () => {
   const { loading, data, loadingPinAktivasi } = useSelector(
     (state) => state.infoReducer
   );
-  const { dataUserDetail } = useSelector((state) => state.authUserReducer);
-  useEffect(() => {
-    // if(dataUserDetail)
-  }, [dataUserDetail]);
-
   useEffect(() => {
     const user = Action.getUser();
     if (user !== undefined) {
       setObjUser(user);
-      dispatch(userDetailAction(user.id));
     } else {
       doLogout();
       Router.push("/signin");
@@ -53,9 +47,6 @@ const Overview = () => {
       Action.setInfo(data);
     }
   }, [loading]);
-
-  // console.log("info", data);
-  // console.log("user", objUser);
 
   let isDisableButton = false;
   if (data !== undefined) {
@@ -124,7 +115,7 @@ const Overview = () => {
             </Col>
           </Row>
         </Col>
-        <Col md={8}>
+        <Col md={8} xs={24} sm={12}>
           <Row>
             <Col xs={24} sm={12} md={24} className="mb-2">
               <Card title={"Pin Yang Anda Miliki"}>

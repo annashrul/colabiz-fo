@@ -96,6 +96,7 @@ export const loginAction = (data) => {
         ).then(() => {
           dispatch(setLoadingLogin(false));
           Router.push("/");
+          dispatch(userDetailAction(res.data.id));
         });
       } else {
         dispatch(setLoadingLogin(false));
