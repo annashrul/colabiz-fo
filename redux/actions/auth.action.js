@@ -91,15 +91,12 @@ export const loginAction = (data) => {
         Action.setToken(res.data.token);
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
-
         Message.success(
           "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-        ).then(() =>
-          Router.push("/").then(() => {
-            dispatch(setLoadingLogin(false));
-            dispatch(userDetailAction(res.data.id));
-          })
-        );
+        ).then(() => {
+          dispatch(setLoadingLogin(false));
+          Router.push("/");
+        });
       } else {
         dispatch(setLoadingLogin(false));
       }

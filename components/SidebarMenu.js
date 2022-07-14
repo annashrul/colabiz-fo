@@ -25,6 +25,7 @@ import { withRouter } from "next/router";
 import general_helper from "../helper/general_helper";
 import { StringLink } from "../helper/string_link_helper";
 import { useSelector } from "react-redux";
+// import Router from "next/router";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -59,13 +60,19 @@ const SidebarContent = ({
 
   useEffect(() => {
     let users = authAction.getUser();
-    setUser(users);
-    appRoutes.forEach((route, index) => {
-      const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
-      const key = getKey(route.name, index);
-      rootSubMenuKeys.push(key);
-      if (isCurrentPath) setOpenKeys([...openKeys, key]);
-    });
+    if (users === undefined) {
+      console.log(users);
+      // Router.push("/signin");
+      // authAction.doLogout();
+    } else {
+      setUser(users);
+      appRoutes.forEach((route, index) => {
+        const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
+        const key = getKey(route.name, index);
+        rootSubMenuKeys.push(key);
+        if (isCurrentPath) setOpenKeys([...openKeys, key]);
+      });
+    }
   }, [state, collapsed]);
 
   const onOpenChange = (openKeys) => {

@@ -17,10 +17,8 @@ const MainHeader = () => {
   const [user, setUser] = useState({});
   const { data } = useSelector((state) => state.cartReducer);
   const [state, dispatch] = useAppState();
-  const dispatchs = useDispatch();
 
   useEffect(() => {
-    dispatchs(getCartAction());
     const users = authAction.getUser();
     if (users === undefined) {
       Router.push("/signin");

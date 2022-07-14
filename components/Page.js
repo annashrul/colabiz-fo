@@ -12,7 +12,7 @@ import Routes from "next/router";
 import Cookies from "js-cookie";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { doLogout } from "../action/auth.action";
+import authAction, { doLogout } from "../action/auth.action";
 import { STRING_COOKIES } from "../redux/type";
 const { Content } = Layout;
 
@@ -33,20 +33,18 @@ const Page = ({ router, children }) => {
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
 
   useEffect(() => {
-    const coo = Cookies.get(STRING_COOKIES.token);
-    console.log("__KOLABIZ", coo);
+    const coo = authAction.getToken();
     setTimeout(() => {
+      // console.log("atob", atob(coo));
       if (coo !== undefined) {
         setLoading(false);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-        const decodedToken = jwt_decode(atob(coo));
-        const dateNow = new Date();
-        if (decodedToken.exp * 1000 < dateNow.getTime()) {
-          doLogout();
-        }
+        // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+        // const decodedToken = jwt_decode(atob(coo));
+        // const dateNow = new Date();
+        // if (decodedToken.exp * 1000 < dateNow.getTime()) {
+        //   doLogout();
+        // }
       } else {
-        // console.log("asdasdasdsadsad");
-        setLoading(true);
         doLogout();
         Routes.push("/signin").then(() => setLoading(false));
       }

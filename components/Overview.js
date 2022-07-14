@@ -19,6 +19,7 @@ import Form from "antd/lib/form/Form";
 import FormItem from "antd/lib/form/FormItem";
 import general_helper from "../helper/general_helper";
 import { info } from "logrocket";
+import { userDetailAction } from "../redux/actions/auth.action";
 const Overview = () => {
   const dispatch = useDispatch();
 
@@ -29,14 +30,19 @@ const Overview = () => {
   const { loading, data, loadingPinAktivasi } = useSelector(
     (state) => state.infoReducer
   );
+  const { dataUserDetail } = useSelector((state) => state.authUserReducer);
+  useEffect(() => {
+    // if(dataUserDetail)
+  }, [dataUserDetail]);
 
   useEffect(() => {
     const user = Action.getUser();
-    if (user === undefined) {
-      Router.push("/signin");
-      doLogout();
-    } else {
+    if (user !== undefined) {
       setObjUser(user);
+      dispatch(userDetailAction(user.id));
+    } else {
+      doLogout();
+      Router.push("/signin");
     }
   }, [isData, state]);
   useEffect(() => {
@@ -48,8 +54,8 @@ const Overview = () => {
     }
   }, [loading]);
 
-  console.log("info", data);
-  console.log("user", objUser);
+  // console.log("info", data);
+  // console.log("user", objUser);
 
   let isDisableButton = false;
   if (data !== undefined) {
