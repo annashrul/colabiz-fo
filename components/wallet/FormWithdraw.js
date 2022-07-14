@@ -62,9 +62,10 @@ const FormWithdraw = () => {
   const handleFinish = (pin) => {
     Object.assign(dataWd, {
       member_pin: pin,
-      acc_name: bank[0].acc_name,
-      acc_no: bank[0].acc_no,
+      // acc_name: bank[0].acc_name,
+      // acc_no: bank[0].acc_no,
     });
+    // console.log(dataWd);
     dispatch(withdrawAction(dataWd));
   };
 

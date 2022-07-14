@@ -92,9 +92,16 @@ const SidebarContent = ({
       >
         {appRoutes.map((route, index) => {
           const hasChildren = !!route.children;
+          let displayNone = "block";
+          if (user.stockis !== 0 && route.name === "Daftar Stokis") {
+            displayNone = "none";
+          }
+
+          // console.log(user);
           if (!hasChildren) {
             return (
               <Menu.Item
+                style={{ display: displayNone }}
                 key={getKey(route.name, index)}
                 className={
                   pathname === route.path ? "ant-menu-item-selected" : ""
@@ -114,10 +121,13 @@ const SidebarContent = ({
               </Menu.Item>
             );
           }
-
+          if (user.stockis !== 1 && route.name === "Stokis") {
+            displayNone = "none";
+          }
           if (hasChildren)
             return (
               <SubMenu
+                style={{ display: displayNone }}
                 key={getKey(route.name, index)}
                 icon={sidebarIcons && route.icon}
                 title={

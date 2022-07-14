@@ -103,7 +103,10 @@ const IndexOrderStockis = () => {
           loading: loading,
         }}
       >
-        <Tag style={{ cursor: "pointer" }} color="#108ee9">
+        <Tag
+          style={{ cursor: "pointer" }}
+          color={status === 2 ? "#f50" : `#108ee9`}
+        >
           {title}
         </Tag>
       </Popconfirm>
@@ -282,19 +285,7 @@ const IndexOrderStockis = () => {
             dataIndex="metode_pembayaran"
             key="metode_pembayaran"
           />
-          <Column
-            title="Ongkir"
-            dataIndex="ongkos_kirim"
-            key="ongkos_kirim"
-            align="right"
-            render={(_, record) => {
-              return general_helper.toRp(
-                parseFloat(
-                  record.ongkos_kirim !== null ? record.ongkos_kirim : 0
-                )
-              );
-            }}
-          />
+
           <Column
             title="Total"
             dataIndex="grand_total"

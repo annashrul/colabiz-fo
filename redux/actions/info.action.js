@@ -44,6 +44,9 @@ export const aktivasiPinAction = (data) => {
     dispatch(setLoadingPinAktivasi(true));
     handlePost("pin/aktivasi/register", data, (res, status) => {
       dispatch(setLoadingPinAktivasi(false));
+      if (status) {
+        dispatch(getInfoAction());
+      }
     });
   };
 };
