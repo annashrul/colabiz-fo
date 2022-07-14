@@ -106,7 +106,7 @@ const IndexOrderStockis = () => {
       >
         <Tag
           style={{ cursor: "pointer" }}
-          color={status === 2 ? "#f50" : `#108ee9`}
+          color={status === 5 ? "#f50" : `#108ee9`}
         >
           {title}
         </Tag>
