@@ -1,7 +1,7 @@
 import { INFO, PIN } from "../type";
 import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction from "../../action/auth.action";
-import { Message } from "antd";
+import { message, Message } from "antd";
 import Router from "next/router";
 
 export const setLoading = (load) => {
@@ -42,10 +42,11 @@ export const setLoadingPinSmartContract = (load) => {
 export const aktivasiPinAction = (data) => {
   return (dispatch) => {
     dispatch(setLoadingPinAktivasi(true));
-    handlePost("pin/aktivasi/register", data, (res, status) => {
+    handlePost("pin/aktivasi/register", data, (res, status, msg) => {
       dispatch(setLoadingPinAktivasi(false));
       if (status) {
         dispatch(getInfoAction());
+        message.success(msg);
       }
     });
   };

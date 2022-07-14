@@ -56,6 +56,8 @@ export const getPaket = (where = "", type = "REGISTER") => {
   return (dispatch) => {
     if (type === "HAPPY_SHOPPING") {
       dispatch(setLoadingHappyShopping(true));
+    } else if (type === "SMART_CONTRACT") {
+      dispatch(setLoadingSmartContract(true));
     } else {
       dispatch(setLoadingRegister(true));
     }
@@ -67,6 +69,9 @@ export const getPaket = (where = "", type = "REGISTER") => {
       if (type === "HAPPY_SHOPPING") {
         dispatch(setDataHappyShopping(res));
         dispatch(setLoadingHappyShopping(false));
+      } else if (type === "SMART_CONTRACT") {
+        dispatch(setDataSmartContract(res));
+        dispatch(setLoadingSmartContract(false));
       } else {
         dispatch(setDataRegister(res));
         dispatch(setLoadingRegister(false));

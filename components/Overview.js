@@ -5,7 +5,7 @@ import {
   ApartmentOutlined,
 } from "@ant-design/icons";
 import { theme } from "./styles/GlobalStyles";
-import { Col, Button, Row, Card, Popconfirm, Divider } from "antd";
+import { Col, Button, Row, Card, Popconfirm, Divider, Alert } from "antd";
 import React, { useEffect, useState } from "react";
 import Action, { doLogout } from "../action/auth.action";
 import Helper from "../helper/general_helper";
@@ -18,6 +18,7 @@ import StatCard from "./shared/StatCard";
 import Form from "antd/lib/form/Form";
 import FormItem from "antd/lib/form/FormItem";
 import general_helper from "../helper/general_helper";
+import { info } from "logrocket";
 const Overview = () => {
   const dispatch = useDispatch();
 
@@ -49,6 +50,13 @@ const Overview = () => {
 
   console.log("info", data);
   console.log("user", objUser);
+
+  let isDisableButton = false;
+  if (data !== undefined) {
+    if (parseInt(data.total_pin_aktivasi, 10) === 0 || data.activate === 1) {
+      isDisableButton = true;
+    }
+  }
 
   return (
     <div>
@@ -114,6 +122,9 @@ const Overview = () => {
           <Row>
             <Col xs={24} sm={12} md={24} className="mb-2">
               <Card title={"Pin Yang Anda Miliki"}>
+                {data && data.activate === 1 && (
+                  <Alert banner type="success" message="Telah Di Aktivasi" />
+                )}
                 <Divider orientation="left" orientationMargin="0">
                   Aktivasi :{" "}
                   {data === undefined
@@ -121,26 +132,10 @@ const Overview = () => {
                     : general_helper.toRp(data.total_pin_aktivasi, true)}{" "}
                   PIN
                 </Divider>
-                <Popconfirm
-                  visible={visibleAktivasi}
-                  title="Kamu yakin akan melanjutkan proses ini ?"
-                  onConfirm={(e) =>
-                    dispatch(
-                      aktivasiPinAction({
-                        id_member: objUser.id,
-                        id_stockis: data.id_stockis,
-                      })
-                    )
-                  }
-                  onCancel={(e) => setVisibleAktivasi(false)}
-                  okText="Lanjut"
-                  cancelText="Batal"
-                  okButtonProps={{
-                    loading: loadingPinAktivasi,
-                  }}
-                >
+
+                {isDisableButton ? (
                   <Button
-                    onClick={(e) => setVisibleAktivasi(true)}
+                    disabled={true}
                     type="primary"
                     style={{
                       width: "100%",
@@ -148,7 +143,39 @@ const Overview = () => {
                   >
                     Aktivasi
                   </Button>
-                </Popconfirm>
+                ) : (
+                  <Popconfirm
+                    visible={visibleAktivasi}
+                    title="Kamu yakin akan melanjutkan proses ini ?"
+                    onConfirm={(e) =>
+                      dispatch(
+                        aktivasiPinAction({
+                          id_member: objUser.id,
+                          id_stockis: data.id_stockis,
+                        })
+                      )
+                    }
+                    onCancel={(e) => setVisibleAktivasi(false)}
+                    okText="Lanjut"
+                    cancelText="Batal"
+                    okButtonProps={{
+                      loading: loadingPinAktivasi,
+                    }}
+                  >
+                    <Button
+                      onClick={(e) => {
+                        if (data.activate !== 1) setVisibleAktivasi(true);
+                      }}
+                      type="primary"
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      Aktivasi
+                    </Button>
+                  </Popconfirm>
+                )}
+
                 <Divider orientation="left" orientationMargin="0">
                   Happy Shopping :{" "}
                   {data === undefined ? 0 : general_helper.toRp(0, true)} PIN

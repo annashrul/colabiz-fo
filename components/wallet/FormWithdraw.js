@@ -41,7 +41,7 @@ const FormWithdraw = () => {
   }, [state]);
   useEffect(() => {
     if (bank.length > 0) {
-      form.setFieldsValue({ id_bank: bank[0].id_bank });
+      form.setFieldsValue({ id_bank: bank[0].id });
     }
   }, [bank]);
 
@@ -63,6 +63,7 @@ const FormWithdraw = () => {
     Object.assign(dataWd, {
       member_pin: pin,
     });
+    // console.log(dataWd);
     dispatch(withdrawAction(dataWd));
   };
 
@@ -174,37 +175,16 @@ const FormWithdraw = () => {
                 >
                   {bank.map((val, key) => {
                     return (
-                      <Option key={key} value={val.id_bank}>
+                      <Option key={key} value={val.id}>
                         {val.bank_name}
                       </Option>
                     );
                   })}
                 </Select>
               </Form.Item>
-              {/* <Popconfirm
-                visible={visible}
-                title="Anda yakin akan meneruskan transaksi ini ?"
-                onConfirm={(e) => handleSubmit()}
-                okText="Oke"
-                cancelText="Batal"
-                onCancel={() => setVisible(false)}
-                okButtonProps={{
-                  loading: loadingWithdraw,
-                }}
-              >
-                <Button
-                  type="primary"
-                  onClick={(e) => setVisible(true)}
-                  size={"medium"}
-                  style={{ width: "100%" }}
-                  htmlType="button"
-                >
-                  Lanjut
-                </Button>
-              </Popconfirm> */}
+
               <Button
                 type="primary"
-                // onClick={(e) => setVisible(true)}
                 size={"medium"}
                 style={{ width: "100%" }}
                 htmlType="submit"
