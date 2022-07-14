@@ -12,7 +12,6 @@ import {
   Input,
   Alert,
   Badge,
-  Tooltip,
 } from "antd";
 import Marquee from "react-fast-marquee";
 import {
@@ -21,7 +20,6 @@ import {
   FilterOutlined,
   CaretRightOutlined,
   CaretLeftOutlined,
-  CloseOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +40,6 @@ const { Option } = Select;
 const ListProduct = () => {
   const dispatch = useDispatch();
   const [formFilter] = Form.useForm();
-  const [dataStokis, setDataStokis] = useState({});
   const [queryString, setQueryString] = useState("");
   const [indexStockis, setIndexStockis] = useState("");
   const [isModalFilter, setIsModalFilter] = useState(false);
@@ -130,17 +127,8 @@ const ListProduct = () => {
 
   const handleSetStockis = (val, key) => {
     localStorage.setItem("dataStokis", JSON.stringify(val));
-    setDataStokis(val);
     setIndexStockis(key);
   };
-
-  // const goToCheckout = (val) => {
-  //   localStorage.setItem("dataStokis", JSON.stringify(dataStokis));
-  //   localStorage.setItem("dataPaket", JSON.stringify(val));
-  //   setTimeout(() => {
-  //     Router.push(StringLink.checkout);
-  //   }, 300);
-  // };
 
   return (
     <>
@@ -311,17 +299,19 @@ const ListProduct = () => {
         </Col>
         <Col xs={24} sm={12} md={12}>
           <Card title="PAKET HAPPY SHOPPING">
-            <CardPaket
-              callback={(val) => {
-                if (indexStockis !== "") {
-                  dispatch(postCart(val.id));
-                } else {
-                  Message.info("Silahkan pilih stokis terlebih dahulu");
-                }
-              }}
-              data={dataHappyShopping}
-              pagination={paginationHappyShopping}
-            />
+            <Spin spinning={loadingHappyShopping || loadingCart}>
+              <CardPaket
+                callback={(val) => {
+                  if (indexStockis !== "") {
+                    dispatch(postCart(val.id));
+                  } else {
+                    Message.info("Silahkan pilih stokis terlebih dahulu");
+                  }
+                }}
+                data={dataHappyShopping}
+                pagination={paginationHappyShopping}
+              />
+            </Spin>
           </Card>
         </Col>
       </Row>

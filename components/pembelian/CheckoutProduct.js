@@ -30,7 +30,6 @@ import authAction from "../../action/auth.action";
 import {
   getCartAction,
   postCart,
-  setLoading,
   deleteCartAction,
 } from "../../redux/actions/cart.action";
 import { useAppState } from "../shared/AppProvider";
