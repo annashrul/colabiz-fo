@@ -54,7 +54,6 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
               <Button
                 onClick={() => cancel(isModal)}
                 type={"dashed"}
-                primary
                 size={"medium"}
                 htmlType="button"
               >
@@ -79,8 +78,6 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
                     setFocusPin(true);
                     setPin("");
                   }
-
-                  // submit(pin);
                 }}
                 onCancel={() => {}}
                 okText="Oke"

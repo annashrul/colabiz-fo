@@ -1,13 +1,25 @@
-import { INFO, PIN } from "../type";
+import { CONFIG, INFO, PIN } from "../type";
 import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction from "../../action/auth.action";
 import { message, Message } from "antd";
 import Router from "next/router";
 
+export const setLoadingConfig = (load) => {
+  return {
+    type: CONFIG.LOADING_CONFIG,
+    load,
+  };
+};
 export const setLoading = (load) => {
   return {
     type: INFO.LOADING,
     load,
+  };
+};
+export const setDataConfig = (data) => {
+  return {
+    type: CONFIG.DATA_CONFIG,
+    data,
   };
 };
 
@@ -59,6 +71,16 @@ export const getInfoAction = (where = "") => {
       dispatch(setData(res.data));
       console.log("info", res);
       dispatch(setLoading(false));
+    });
+  };
+};
+
+export const getConfigAction = (where = "") => {
+  return (dispatch) => {
+    dispatch(setLoadingConfig(true));
+    handleGet("site/config", (res, status) => {
+      dispatch(setDataConfig(res.data));
+      dispatch(setLoadingConfig(false));
     });
   };
 };

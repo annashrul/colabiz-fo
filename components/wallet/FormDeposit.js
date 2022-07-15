@@ -8,16 +8,19 @@ import authAction from "../../action/auth.action";
 import general_helper from "../../helper/general_helper";
 import { depositAction } from "../../redux/actions/wallet.action";
 import { paymentChannelAction } from "../../redux/actions/paymentChannel.action";
+import { getConfigAction } from "../../redux/actions/info.action";
 const { Option } = Select;
+import CurrencyComponent from "../CurrencyComponent";
 
 const FormDeposit = () => {
   const dispatch = useDispatch();
   const [state] = useAppState();
   const [form] = Form.useForm();
   const [modalPin, setModalPin] = useState(false);
-  const [isActiveAmount, setIsActiveAmount] = useState("");
   const [user, setUser] = useState({});
   const [dataDeposit, setDataDeposit] = useState({});
+  const [amountActive, setAmountActive] = useState("0");
+
   const [nominalError, setNominalError] = useState({
     enable: false,
     helpText: "-",
@@ -25,6 +28,9 @@ const FormDeposit = () => {
   const nominalErrorRef = useRef(nominalError);
   const nominalInput = useRef(null);
 
+  const { loadingConfig, dataConfig } = useSelector(
+    (state) => state.infoReducer
+  );
   const { loadingDeposit } = useSelector((state) => state.walletReducer);
   const { data, loading } = useSelector((state) => state.paymentChannelReducer);
   useEffect(() => {
@@ -35,45 +41,41 @@ const FormDeposit = () => {
     }
   }, [nominalError]);
   useEffect(() => {
+    dispatch(getConfigAction());
     dispatch(paymentChannelAction());
     setUser(authAction.getUser());
   }, []);
-
-  const onChange = (e) => {
-    let val = e.target.value;
-    for (let i = 0; i < caraCepat.length; i++) {
-      if (parseInt(val, 10) === parseInt(caraCepat[i], 10)) {
-        setIsActiveAmount(i);
-        break;
-      } else {
-        setIsActiveAmount("");
-        continue;
-      }
+  useEffect(() => {
+    if (data.length > 0) {
+      form.setFieldsValue({ payment_channel: data[0].code });
     }
-  };
+  }, [data]);
 
   const handleFinish = (pin) => {
     Object.assign(dataDeposit, {
       member_pin: pin,
     });
-    dispatch(depositAction(dataDeposit));
+    console.log(dataDeposit);
+
+    // dispatch(depositAction(dataDeposit));
   };
 
   const handleSubmit = async (e) => {
+    if (parseInt(e.amount, 10) < parseInt(dataConfig.min_deposit, 10)) {
+      setNominalError({
+        enable: true,
+        helpText: `minimal deposit sebesar ${general_helper.toRp(
+          dataConfig.min_deposit
+        )}`,
+      });
+      return;
+    }
     setModalPin(true);
     setDataDeposit(e);
   };
 
-  const caraCepat = [
-    "100000",
-    "200000",
-    "300000",
-    "400000",
-    "500000",
-    "1000000",
-  ];
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={loading || loadingConfig}>
       <Form
         form={form}
         layout="vertical"
@@ -92,32 +94,20 @@ const FormDeposit = () => {
           gutter={4}
         >
           <Col md={8} xs={24}>
-            <Card title={`Deposit`}>
+            <Card
+              title={`Deposit minimal ${general_helper.toRp(
+                dataConfig ? dataConfig.min_deposit : 0
+              )}`}
+            >
               <Form.Item label="Nominal Cepat">
-                <Row gutter={4}>
-                  {caraCepat.map((res, key) => {
-                    return (
-                      <Col xs={8} sm={8} md={8} key={key} className="mb-2">
-                        <Button
-                          style={{ width: "100%" }}
-                          type={isActiveAmount === key ? `danger` : `dashed`}
-                          key={key}
-                          onClick={(e) => {
-                            setIsActiveAmount(key);
-                            form.setFieldsValue({ amount: res });
-                          }}
-                        >
-                          <small>{general_helper.toRp(res)}</small>
-                        </Button>
-                      </Col>
-                    );
-                  })}
-                </Row>
+                <CurrencyComponent
+                  callback={(res) => form.setFieldsValue({ amount: res })}
+                  val={amountActive}
+                />
               </Form.Item>
               <Form.Item
                 label="Nominal"
                 hasFeedback
-                onChange={onChange}
                 name="amount"
                 rules={[
                   { required: true, message: "Tidak Boleh Kosong" },
@@ -136,6 +126,7 @@ const FormDeposit = () => {
                 ]}
               >
                 <Input
+                  onChange={(e) => setAmountActive(e.target.value)}
                   style={{ fontSize: state.mobile ? "12px" : "14px" }}
                   prefix={"Rp."}
                   ref={nominalInput}

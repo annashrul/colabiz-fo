@@ -41,6 +41,7 @@ const CheckoutProduct = () => {
   const [dataMetodePembayaran, setDataMetodePembayaran] = useState([]);
   const [visible, setVisible] = useState(false);
   const [loadingPage, setLoadingPage] = useState(true);
+  const [visibleDelete, setVisibleDelete] = useState(false);
   const [idxCart, setIdxCart] = useState(0);
   const [dataStokis, setDataStokis] = useState(null);
   const [state] = useAppState();
@@ -80,6 +81,14 @@ const CheckoutProduct = () => {
       }
     }
   }, []);
+
+  // useEffect(() => {
+  //   if(dataCart !== undefined){
+  //     if(dataCart.length < 1){
+  //       Message.info("anda akan dialihkan kehalaman pembelian")
+  //     }
+  //   }
+  // }, [loadingCart]);
 
   useEffect(() => setVisible(loadingCheckout), [loadingCheckout]);
 
@@ -227,20 +236,33 @@ const CheckoutProduct = () => {
                           </Col>
                           <Col md={12} xs={12} sm={12}>
                             <ButtonGroup style={{ float: "right" }}>
-                              <Button
-                                // loading={idxCart === key && loadingDelete}
-                                size="small"
-                                danger
-                                onClick={(e) => {
-                                  setIdxCart(key);
-                                  setTimeout(
-                                    () => dispatch(deleteCartAction(res.id)),
-                                    20
-                                  );
+                              <Popconfirm
+                                visible={visibleDelete}
+                                title="Anda yakin akan meneruskan proses ini ?"
+                                onConfirm={(e) => {
+                                  dispatch(deleteCartAction(res.id));
+                                }}
+                                okText="Oke"
+                                cancelText="Batal"
+                                onCancel={() => setVisibleDelete(false)}
+                                okButtonProps={{
+                                  loading: idxCart === key && loadingDelete,
                                 }}
                               >
-                                <DeleteOutlined style={{ fontSize: "12px" }} />
-                              </Button>
+                                <Button
+                                  size="small"
+                                  danger
+                                  onClick={(e) => {
+                                    setIdxCart(key);
+                                    setVisibleDelete(true);
+                                  }}
+                                >
+                                  <DeleteOutlined
+                                    style={{ fontSize: "12px" }}
+                                  />
+                                </Button>
+                              </Popconfirm>
+
                               <Button
                                 loading={idxCart === key && loadingDelete}
                                 size="small"
@@ -259,7 +281,6 @@ const CheckoutProduct = () => {
                               >
                                 <MinusOutlined style={{ fontSize: "12px" }} />
                               </Button>
-
                               <Button size="small">
                                 <small>{parseInt(res.qty, 10)}</small>
                               </Button>
@@ -321,7 +342,11 @@ const CheckoutProduct = () => {
                     loading: loadingCheckout,
                   }}
                 >
-                  <Button type="primary" onClick={(e) => setVisible(true)}>
+                  <Button
+                    disabled={dataCart.length < 1}
+                    type="primary"
+                    onClick={(e) => setVisible(true)}
+                  >
                     Checkout
                   </Button>
                 </Popconfirm>

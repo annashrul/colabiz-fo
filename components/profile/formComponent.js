@@ -15,7 +15,7 @@ import { putMemberAction } from "../../redux/actions/member.action";
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
 
-const FormComponent = ({ isModal, ok, cancel, userData }) => {
+const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -24,9 +24,9 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
   const { loading } = useSelector((state) => state.memberReducer);
 
   useEffect(() => {
-    setStep(1);
+    setStep(isCreate ? 3 : 1);
     form.setFieldsValue({ fullname: userData.fullname });
-  }, []);
+  }, [isModal]);
 
   const handleSubmit = async (e) => {
     let datas = {};
@@ -55,7 +55,10 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
     >
       <Spin spinning={loading}>
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Tabs defaultActiveKey="1" onChange={(e) => setStep(parseInt(e, 10))}>
+          <Tabs
+            defaultActiveKey={`${isCreate ? "3" : "1"}`}
+            onChange={(e) => setStep(parseInt(e, 10))}
+          >
             <TabPane
               tab={
                 <span>
@@ -238,7 +241,6 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
               <Button
                 onClick={() => cancel()}
                 type={"dashed"}
-                primary
                 size={"medium"}
                 style={{ width: "100%" }}
                 htmlType="button"

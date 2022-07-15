@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import moment from "moment";
-import { DatePicker, message, Tag } from "antd";
+import { DatePicker, message, Row, Tag, Col } from "antd";
 import copy from "copy-to-clipboard";
 
 const RangePicker = DatePicker.RangePicker;
@@ -182,7 +182,7 @@ const labelStatusPembelian = (res) => {
     return <Tag color="blue">Dikirim</Tag>;
   } else if (res === 3) {
     return <Tag color="cyan">Diterima Stokis</Tag>;
-  } else if (res === 3) {
+  } else if (res === 4) {
     return <Tag color="green">Selesai</Tag>;
   } else {
     return <Tag color="red">Ditolak</Tag>;
@@ -196,8 +196,21 @@ const labelStatusPengambilan = (res) => {
     return <Tag color="gold">Sudah Diambil</Tag>;
   }
 };
+const tempRow = (title, desc, isRp = true) => {
+  return (
+    <Row>
+      <Col xs={10} md={10} style={{ alignItems: "left", textAlign: "left" }}>
+        <small>{title}</small>
+      </Col>
+      <Col xs={14} md={14} style={{ alignItems: "right", textAlign: "right" }}>
+        <small>{isRp ? toRp(desc) : desc}</small>
+      </Col>
+    </Row>
+  );
+};
 
 export default {
+  tempRow,
   labelStatusPengambilan,
   labelStatusPembelian,
   copyText,

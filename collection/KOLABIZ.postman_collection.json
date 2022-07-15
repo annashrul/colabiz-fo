@@ -48,7 +48,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"ulman1\",\n    \"password\":\"123456\"\n}",
+							"raw": "{\n    \"username\":\"netindo\",\n    \"password\":\"123456\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3879,6 +3879,57 @@
 					"response": []
 				},
 				{
+					"name": "config",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Project-ID",
+								"value": "{{project_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-From",
+								"value": "{{source}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}site/config",
+							"host": [
+								"{{url}}site"
+							],
+							"path": [
+								"config"
+							],
+							"query": [
+								{
+									"key": "searchby",
+									"value": "title",
+									"description": "Jika digunakan, pakai nama parameter dari object respon",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "tatang",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Dashboar BO",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -4166,13 +4217,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}transaction/deposit/SU5WL0RQLzIyMDYwMi8wMDE=/invoice",
+									"raw": "{{url}}transaction/deposit/dW5kZWZpbmVk/invoice",
 									"host": [
 										"{{url}}transaction"
 									],
 									"path": [
 										"deposit",
-										"SU5WL0RQLzIyMDYwMi8wMDE=",
+										"dW5kZWZpbmVk",
 										"invoice"
 									],
 									"query": [
@@ -5199,12 +5250,12 @@
 											}
 										},
 										"url": {
-											"raw": "{{url}}cart/8ab5a98a-eea5-46bd-bd9d-2f2d1f22a662",
+											"raw": "{{url}}cart/7cff9ead-63b7-4657-9a2c-c56b8f9a0e73",
 											"host": [
 												"{{url}}cart"
 											],
 											"path": [
-												"8ab5a98a-eea5-46bd-bd9d-2f2d1f22a662"
+												"7cff9ead-63b7-4657-9a2c-c56b8f9a0e73"
 											]
 										}
 									},
@@ -5359,15 +5410,6 @@
 										"type": "text"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"status\":1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{url}}penjualan/ambil/send/SU5WL0RQLzIyMDcxMi8wMDI=",
 									"host": [
@@ -5484,7 +5526,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}penjualan/report?id_member=92bee49a-20a2-4137-a005-bbec32f81816",
+									"raw": "{{url}}penjualan/report?perpage=10&id_member=92bee49a-20a2-4137-a005-bbec32f81816&page=1&datefrom=2022-01-01&dateto=2022-12-31",
 									"host": [
 										"{{url}}penjualan"
 									],
@@ -5492,6 +5534,26 @@
 										"report"
 									],
 									"query": [
+										{
+											"key": "perpage",
+											"value": "10"
+										},
+										{
+											"key": "id_member",
+											"value": "92bee49a-20a2-4137-a005-bbec32f81816"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "datefrom",
+											"value": "2022-01-01"
+										},
+										{
+											"key": "dateto",
+											"value": "2022-12-31"
+										},
 										{
 											"key": "searchby",
 											"value": "title",
@@ -5502,20 +5564,6 @@
 											"key": "q",
 											"value": "tatang",
 											"disabled": true
-										},
-										{
-											"key": "datefrom",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "dateto",
-											"value": "",
-											"disabled": true
-										},
-										{
-											"key": "id_member",
-											"value": "92bee49a-20a2-4137-a005-bbec32f81816"
 										}
 									]
 								}
@@ -5593,6 +5641,156 @@
 										{
 											"key": "id_stockis",
 											"value": "a267e585-fa16-4cad-919d-37437d1cae6a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail Transaksi",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/report/detail/SU5WL1BFLzIyMDcxNC8wMTc=",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"report",
+										"detail",
+										"SU5WL1BFLzIyMDcxNC8wMTc="
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "datefrom",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "dateto",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List filter resi",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/report/filter/resi",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"report",
+										"filter",
+										"resi"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "datefrom",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "dateto",
+											"value": "",
+											"disabled": true
 										}
 									]
 								}

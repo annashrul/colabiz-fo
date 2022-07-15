@@ -1,6 +1,8 @@
-import { INFO, PIN } from "../type";
+import { INFO, PIN, CONFIG } from "../type";
 const initialState = {
   data: [],
+  dataConfig: [],
+  loadingConfig: true,
   loading: true,
   loadingPinAktivasi: false,
   loadingPinHappyShopping: false,
@@ -9,11 +11,20 @@ const initialState = {
 
 export const infoReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CONFIG.DATA_CONFIG:
+      return {
+        ...state,
+        dataConfig: action.data,
+      };
     case INFO.DATA:
       return {
         ...state,
         data: action.data,
       };
+    case CONFIG.LOADING_CONFIG:
+      return Object.assign({}, state, {
+        loadingConfig: action.load,
+      });
     case INFO.LOADING:
       return Object.assign({}, state, {
         loading: action.load,

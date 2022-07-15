@@ -77,6 +77,7 @@ const IndexOrderStockis = () => {
         searchby === "kd_trx" ? btoa(values) : values
       }`;
     }
+
     setWhere(where);
     dispatch(orderStockisAction(user.id_stockis, `page=1` + where));
   };
@@ -256,14 +257,6 @@ const IndexOrderStockis = () => {
             return menuAction;
           }}
         />
-        <Column
-          title="Tanggal"
-          dataIndex="created_at"
-          key="created_at"
-          render={(_, record) => {
-            return moment(record.created_at).format("LLL");
-          }}
-        />
         <ColumnGroup title="Pembeli">
           <Column title="Nama" dataIndex="pembeli" key="pembeli" />
           <Column
@@ -272,7 +265,14 @@ const IndexOrderStockis = () => {
             key="pembeli_mobile_no"
           />
         </ColumnGroup>
-
+        <Column
+          title="Tanggal"
+          dataIndex="created_at"
+          key="created_at"
+          render={(_, record) => {
+            return moment(record.created_at).format("LLL");
+          }}
+        />
         <ColumnGroup title="Kode">
           <Column
             title="Resi"

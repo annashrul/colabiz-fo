@@ -1,4 +1,4 @@
-import { Typography, Col, Row, Empty, Button, Tooltip } from "antd";
+import { Typography, Col, Row, Empty, Button, Tooltip, Divider } from "antd";
 import React from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
@@ -72,6 +72,7 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
               </Button>
             </Col>
           )}
+          <Divider style={{ padding: "0px" }} />
         </Row>
       );
     })

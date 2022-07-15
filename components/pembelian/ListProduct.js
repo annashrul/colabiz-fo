@@ -12,6 +12,7 @@ import {
   Input,
   Alert,
   Badge,
+  Divider,
 } from "antd";
 import Marquee from "react-fast-marquee";
 import {
@@ -36,6 +37,10 @@ import { postCart } from "../../redux/actions/cart.action";
 import { getPaket } from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
 import { useAppState } from "../shared/AppProvider";
+import { getConfigAction } from "../../redux/actions/info.action";
+import ModalPin from "../ModalPin";
+import FormComponent from "../profile/formComponent";
+import authAction from "../../action/auth.action";
 const { Option } = Select;
 
 const ListProduct = () => {
@@ -44,9 +49,13 @@ const ListProduct = () => {
   const [queryString, setQueryString] = useState("");
   const [indexStockis, setIndexStockis] = useState("");
   const [isModalFilter, setIsModalFilter] = useState(false);
+  const [isModalPin, setIsModalPin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [dataStockis, setDataStockis] = useState([]);
   const [state] = useAppState();
-
+  const { loadingConfig, dataConfig } = useSelector(
+    (state) => state.infoReducer
+  );
   const { loadingData, data, pagination } = useSelector(
     (state) => state.stockisReducer
   );
@@ -72,8 +81,21 @@ const ListProduct = () => {
     dispatch(getStockisAction("page=1"));
     dispatch(getPaket("page=1", "REGISTER"));
     dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
+    dispatch(getConfigAction());
   }, []);
 
+  useEffect(() => {
+    if (!loadingData && !loadingConfig) {
+      if (data !== undefined && data.length > 0) {
+        if (dataConfig.data_stockis.id === "-") {
+          setDataStockis(data);
+        } else {
+          handleSetStockis(dataConfig.data_stockis, 0);
+          setDataStockis([dataConfig.data_stockis]);
+        }
+      }
+    }
+  }, [loadingData, loadingConfig]);
   useEffect(() => {
     dispatch(provinceAction());
   }, []);
@@ -165,10 +187,10 @@ const ListProduct = () => {
           </Row>
         }
       >
-        <Spin spinning={loadingData}>
+        <Spin spinning={loadingData || loadingConfig}>
           <Row gutter={16}>
-            {data !== undefined && data.length > 0 ? (
-              data.map((val, key) => {
+            {dataStockis !== undefined && dataStockis.length > 0 ? (
+              dataStockis.map((val, key) => {
                 return (
                   <Col
                     key={key}
@@ -181,6 +203,7 @@ const ListProduct = () => {
                         val.status_layanan === 0 ? "not-allowed" : "pointer",
                     }}
                     onClick={() => {
+                      console.log("pagination", pagination);
                       if (val.status_layanan !== 0) {
                         handleSetStockis(val, key);
                       }
@@ -200,7 +223,11 @@ const ListProduct = () => {
                             handleSetStockis(val, key);
                           }
                         }}
-                        type={indexStockis === key ? "fill" : ""}
+                        type={
+                          indexStockis === key && val.status_layanan === 1
+                            ? "fill"
+                            : ""
+                        }
                         title={
                           <span style={{ marginLeft: "10px" }}>
                             {val.mobile_no}
@@ -210,7 +237,7 @@ const ListProduct = () => {
                           <span style={{ marginLeft: "10px" }}>{val.name}</span>
                         }
                         icon={
-                          indexStockis === key ? (
+                          indexStockis === key && val.status_layanan === 1 ? (
                             <CheckOutlined
                               style={{
                                 fontSize: "20px",
@@ -225,7 +252,7 @@ const ListProduct = () => {
                           )
                         }
                         color={
-                          indexStockis === key
+                          indexStockis === key && val.status_layanan === 1
                             ? theme.primaryColor
                             : theme.darkColor
                         }
@@ -256,46 +283,50 @@ const ListProduct = () => {
               <Empty />
             )}
           </Row>
-          {pagination && (
-            <Row justify="end" gutter={16}>
-              <Col>
-                <Button
-                  type="primary"
-                  disabled={currentPage === 1}
-                  onClick={(e) => {
-                    if (currentPage > 1) {
-                      let page = currentPage;
-                      page -= 1;
-                      setIndexStockis("");
-                      setCurrentPage(page);
-                      dispatch(getStockisAction(`page=${page}&${queryString}`));
-                    }
-                  }}
-                >
-                  <CaretLeftOutlined />
-                </Button>
-                <Button className="mr-2 ml-2">{currentPage}</Button>
-                <Button
-                  type="primary"
-                  disabled={pagination.to >= parseInt(pagination.total, 10)}
-                  onClick={(e) => {
-                    setIndexStockis("");
-                    console.log(queryString);
-                    if (pagination.to >= parseInt(pagination.total, 10)) {
-                      Message.info("data stokis habis");
-                    } else {
-                      let page = currentPage;
-                      page += 1;
-                      setCurrentPage(page);
-                      dispatch(getStockisAction(`page=${page}&${queryString}`));
-                    }
-                  }}
-                >
-                  <CaretRightOutlined />
-                </Button>
-              </Col>
-            </Row>
-          )}
+          {dataConfig && dataConfig.id_stockis === "-"
+            ? pagination && (
+                <Row justify="end" gutter={16}>
+                  <Col>
+                    <Button
+                      type="primary"
+                      disabled={currentPage === 1}
+                      onClick={(e) => {
+                        if (currentPage > 1) {
+                          let page = currentPage;
+                          page -= 1;
+                          setCurrentPage(page);
+                          dispatch(
+                            getStockisAction(`page=${page}&${queryString}`)
+                          );
+                        }
+                      }}
+                    >
+                      <CaretLeftOutlined />
+                    </Button>
+                    <Button className="mr-2 ml-2">{currentPage}</Button>
+                    <Button
+                      type="primary"
+                      disabled={pagination.to >= parseInt(pagination.total, 10)}
+                      onClick={(e) => {
+                        if (pagination.to >= parseInt(pagination.total, 10)) {
+                          Message.info("data stokis habis");
+                        } else {
+                          // console.log(pa)
+                          let page = currentPage;
+                          page += 1;
+                          setCurrentPage(page);
+                          dispatch(
+                            getStockisAction(`page=${page}&${queryString}`)
+                          );
+                        }
+                      }}
+                    >
+                      <CaretRightOutlined />
+                    </Button>
+                  </Col>
+                </Row>
+              )
+            : ""}
         </Spin>
       </Card>
       <Spin spinning={loadingCart}>
@@ -305,10 +336,14 @@ const ListProduct = () => {
               <CardPaket
                 isButton={true}
                 callback={(val) => {
-                  if (indexStockis !== "") {
-                    dispatch(postCart(val.id));
+                  if (dataConfig.pin === "-") {
+                    setIsModalPin(true);
                   } else {
-                    Message.info("Silahkan pilih stokis terlebih dahulu");
+                    if (indexStockis !== "") {
+                      dispatch(postCart(val.id));
+                    } else {
+                      Message.info("Silahkan pilih stokis terlebih dahulu");
+                    }
                   }
                 }}
                 data={dataRegister}
@@ -335,129 +370,143 @@ const ListProduct = () => {
         </Row>
       </Spin>
 
-      <Modal
-        centered
-        closable={false}
-        destroyOnClose={true}
-        maskClosable={false}
-        footer={null}
-        title="Filter Stokis"
-        visible={isModalFilter}
-      >
-        <Form form={formFilter} layout="vertical" onFinish={handleFilter}>
-          <Form.Item name="kd_prov" label="Provinsi">
-            <Select
-              loading={loadingProvince}
-              style={{ width: "100%" }}
-              showSearch
-              placeholder="Pilih Provinsi"
-              optionFilterProp="children"
-              onChange={(e) => handleChangeAddress(e, "prov", 0)}
-              onSearch={(e) => {}}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {dataProvince.map((val, key) => {
-                return (
-                  <Option key={key} value={val.id}>
-                    {val.name}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item name="kd_kota" label="Kota">
-            <Select
-              style={{ width: "100%" }}
-              showSearch
-              placeholder="Pilih Kota"
-              optionFilterProp="children"
-              onChange={(e) => handleChangeAddress(e, "kota", 0)}
-              onSearch={(e) => {}}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {dataCity.map((val, key) => {
-                return (
-                  <Option key={key} value={val.id}>
-                    {val.name}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item name="kd_kec" label="Kecamatan">
-            <Select
-              style={{ width: "100%" }}
-              showSearch
-              placeholder="Pilih Kecamatan"
-              optionFilterProp="children"
-              onChange={(e) => handleChangeAddress(e, "kota", 0)}
-              onSearch={(e) => {}}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {dataDistricts.map((val, key) => {
-                return (
-                  <Option key={key} value={val.id}>
-                    {val.kecamatan}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item name="name" label="Nama">
-            <Input
-              onChange={(e) => {
-                let datas = Object.assign(queryString, {
-                  name: e.target.value,
-                });
-                setQueryString(datas);
-              }}
-            />
-          </Form.Item>
-          <Row gutter={8}>
-            <Col md={8} xs={8} sm={8}>
-              <Button
+      {isModalPin && (
+        <FormComponent
+          isModal={isModalPin}
+          ok={(e) => {
+            console.log(e);
+          }}
+          cancel={(e) => setIsModalPin(false)}
+          userData={authAction.getUser()}
+          isCreate={true}
+        />
+      )}
+
+      {isModalFilter && (
+        <Modal
+          centered
+          closable={false}
+          destroyOnClose={true}
+          maskClosable={false}
+          footer={null}
+          title="Filter Stokis"
+          visible={isModalFilter}
+        >
+          <Form form={formFilter} layout="vertical" onFinish={handleFilter}>
+            <Form.Item name="kd_prov" label="Provinsi">
+              <Select
+                loading={loadingProvince}
                 style={{ width: "100%" }}
-                type="dashed"
-                htmlType="button"
-                onClick={(e) => {
-                  setIsModalFilter(false);
-                  //   callback("cancel", data);
+                showSearch
+                placeholder="Pilih Provinsi"
+                optionFilterProp="children"
+                onChange={(e) => handleChangeAddress(e, "prov", 0)}
+                onSearch={(e) => {}}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {dataProvince.map((val, key) => {
+                  return (
+                    <Option key={key} value={val.id}>
+                      {val.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item name="kd_kota" label="Kota">
+              <Select
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Pilih Kota"
+                optionFilterProp="children"
+                onChange={(e) => handleChangeAddress(e, "kota", 0)}
+                onSearch={(e) => {}}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {dataCity.map((val, key) => {
+                  return (
+                    <Option key={key} value={val.id}>
+                      {val.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item name="kd_kec" label="Kecamatan">
+              <Select
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Pilih Kecamatan"
+                optionFilterProp="children"
+                onChange={(e) => handleChangeAddress(e, "kota", 0)}
+                onSearch={(e) => {}}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {dataDistricts.map((val, key) => {
+                  return (
+                    <Option key={key} value={val.id}>
+                      {val.kecamatan}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item name="name" label="Nama">
+              <Input
+                onChange={(e) => {
+                  let datas = Object.assign(queryString, {
+                    name: e.target.value,
+                  });
+                  setQueryString(datas);
                 }}
-              >
-                Kembali
-              </Button>
-            </Col>
-            <Col md={8} xs={8} sm={8}>
-              <Button
-                style={{ width: "100%" }}
-                type="dashed"
-                htmlType="button"
-                onClick={(e) => {
-                  formFilter.resetFields();
-                }}
-              >
-                Reset
-              </Button>
-            </Col>
-            <Col md={8} xs={8} sm={8}>
-              <Button
-                style={{ width: "100%" }}
-                type="primary"
-                htmlType="submit"
-                className=""
-              >
-                Simpan
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
+              />
+            </Form.Item>
+            <Row gutter={8}>
+              <Col md={8} xs={8} sm={8}>
+                <Button
+                  style={{ width: "100%" }}
+                  type="dashed"
+                  htmlType="button"
+                  onClick={(e) => {
+                    setIsModalFilter(false);
+                    //   callback("cancel", data);
+                  }}
+                >
+                  Kembali
+                </Button>
+              </Col>
+              <Col md={8} xs={8} sm={8}>
+                <Button
+                  style={{ width: "100%" }}
+                  type="dashed"
+                  htmlType="button"
+                  onClick={(e) => {
+                    formFilter.resetFields();
+                  }}
+                >
+                  Reset
+                </Button>
+              </Col>
+              <Col md={8} xs={8} sm={8}>
+                <Button
+                  style={{ width: "100%" }}
+                  type="primary"
+                  htmlType="submit"
+                  className=""
+                >
+                  Simpan
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Modal>
+      )}
     </>
   );
 };
