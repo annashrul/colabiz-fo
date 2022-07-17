@@ -13,7 +13,9 @@ import {
   Alert,
   Badge,
   Divider,
+  Collapse,
 } from "antd";
+const { Panel } = Collapse;
 import Marquee from "react-fast-marquee";
 import {
   HomeOutlined,
@@ -33,7 +35,7 @@ import {
   cityAction,
   districtsAction,
 } from "../../redux/actions/address.action";
-import { postCart } from "../../redux/actions/cart.action";
+import { getCartAction, postCart } from "../../redux/actions/cart.action";
 import { getPaket } from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
 import { useAppState } from "../shared/AppProvider";
@@ -41,7 +43,9 @@ import { getConfigAction } from "../../redux/actions/info.action";
 import ModalPin from "../ModalPin";
 import FormComponent from "../profile/formComponent";
 import authAction from "../../action/auth.action";
+import { StringLink } from "../../helper/string_link_helper";
 const { Option } = Select;
+import Router from "next/router";
 
 const ListProduct = () => {
   const dispatch = useDispatch();
@@ -51,6 +55,8 @@ const ListProduct = () => {
   const [isModalFilter, setIsModalFilter] = useState(false);
   const [isModalPin, setIsModalPin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [indexKategoriPaket, setIndexKategoriPaket] = useState(0);
+  const [step, setStep] = useState(1);
   const [dataStockis, setDataStockis] = useState([]);
   const [state] = useAppState();
   const { loadingConfig, dataConfig } = useSelector(
@@ -60,6 +66,7 @@ const ListProduct = () => {
     (state) => state.stockisReducer
   );
   const loadingCart = useSelector((state) => state.cartReducer.loadingAdd);
+  const dataCart = useSelector((state) => state.cartReducer.data);
   const {
     loadingRegister,
     dataRegister,
@@ -67,6 +74,9 @@ const ListProduct = () => {
     loadingHappyShopping,
     dataHappyShopping,
     paginationHappyShopping,
+    loadingSmartContract,
+    dataSmartContract,
+    paginationSmartContract,
   } = useSelector((state) => state.paketReducer);
 
   const {
@@ -79,8 +89,9 @@ const ListProduct = () => {
 
   useEffect(() => {
     dispatch(getStockisAction("page=1"));
-    dispatch(getPaket("page=1", "REGISTER"));
-    dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
+    dispatch(getCartAction());
+    // dispatch(getPaket("page=1", "REGISTER"));
+    // dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
     dispatch(getConfigAction());
   }, []);
 
@@ -154,221 +165,377 @@ const ListProduct = () => {
     setIndexStockis(key);
   };
 
+  const handleStep = () => {};
+
+  const kategoriPaket = ["REGISTER", "SMART_CONTRACT", "HAPPY_SHOPPING"];
+
   return (
     <>
-      <Card
-        title="Stokis"
-        extra={
-          <Row gutter={4}>
-            <Col>
-              <Button
-                size="small"
-                type="dashed"
-                onClick={() => {
-                  setIsModalFilter(true);
-                }}
-              >
-                <FilterOutlined /> Cari Stokis
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                size="small"
-                type="dashed"
-                onClick={() => {
-                  setIndexStockis("");
-                  setQueryString("");
-                  dispatch(getStockisAction("page=1"));
-                }}
-              >
-                <CloseOutlined /> Reset
-              </Button>
-            </Col>
-          </Row>
-        }
+      <Collapse
+        bordered={false}
+        expandIcon={({ isActive }) => (
+          <CaretRightOutlined rotate={isActive ? 90 : 0} />
+        )}
+        className="site-collapse-custom-collapse"
+        defaultActiveKey={["1"]}
+        onChange={(e) => {}}
       >
-        <Spin spinning={loadingData || loadingConfig}>
-          <Row gutter={16}>
-            {dataStockis !== undefined && dataStockis.length > 0 ? (
-              dataStockis.map((val, key) => {
-                return (
-                  <Col
-                    key={key}
-                    xs={24}
-                    sm={12}
-                    md={8}
-                    className="mb-2"
-                    style={{
-                      cursor:
-                        val.status_layanan === 0 ? "not-allowed" : "pointer",
-                    }}
-                    onClick={() => {
-                      console.log("pagination", pagination);
-                      if (val.status_layanan !== 0) {
-                        handleSetStockis(val, key);
-                      }
-                    }}
-                  >
-                    <Badge.Ribbon
-                      text={
-                        val.status_layanan === 0
-                          ? "Tidak Melayani"
-                          : "Aktif Melayani"
-                      }
-                      color={val.status_layanan === 0 ? "orange" : "cyan"}
+        <Panel
+          key="1"
+          header={`lihat cara memilih ${
+            step === 1 ? "stokis" : step === 2 ? "kategori paket" : "paket"
+          }`}
+        >
+          {step === 1 && (
+            <ul style={{ paddingLeft: "20px" }}>
+              <li style={{ fontSize: "12px" }}>
+                Silahkan pilih stokis terlebih dahulu
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Sentuh atau klik pada bagian mana saja
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Cari stokis yang mempunyai label AKTIF MELAYANI
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                stokis yang dipilih akan ditandai dengan warna biru dan ikon
+                ceklis
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                sentuh atau klik tombol lanjut dibawah untuk melanjutkan proses
+                ke tahap selanjutnya
+              </li>
+            </ul>
+          )}
+          {step === 2 && (
+            <ul style={{ paddingLeft: "20px" }}>
+              <li style={{ fontSize: "12px" }}>
+                Silahkan pilih kategori paket terlebih dahulu
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Sentuh atau klik pada bagian mana saja
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Kategori paket yang dipilih akan ditandai dengan label warna
+                biru dan bertuliskan paket dipilih
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                sentuh atau klik tombol lanjut dibawah untuk melanjutkan proses
+                ke tahap selanjutnya
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                sentuh atau klik tombol kembali dibawah untuk kembali ke proses
+                sebelumnya
+              </li>
+            </ul>
+          )}
+          {step === 3 && (
+            <ul style={{ paddingLeft: "20px" }}>
+              <li style={{ fontSize: "12px" }}>
+                Silahkan pilih paket {kategoriPaket[indexKategoriPaket]}
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Sentuh, klik atau dekatkan cursor pada bagian deskripsi apabila
+                anda ingin mengetahui deskripsi dari produk ini
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Sentuh atau klik tombol tambah untuk menambah jumlah qty item
+                tersebut
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                Apabila proses tambah berhasil, tahap selanjutnya sentuh atau
+                klik ikon keranjang yang berada di pojok kanan atas anda, atau
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                sentuh atau klik tombol lanjut dibawah untuk melanjutkan proses
+                ke tahap selanjutnya
+              </li>
+              <li style={{ fontSize: "12px" }}>
+                sentuh atau klik tombol kembali dibawah untuk kembali ke proses
+                sebelumnya
+              </li>
+            </ul>
+          )}
+        </Panel>
+      </Collapse>
+      {step === 1 && (
+        <Card
+          className="mt-2"
+          title="Stokis"
+          extra={
+            <Row gutter={4}>
+              <Col>
+                <Button
+                  size="small"
+                  type="dashed"
+                  onClick={() => {
+                    setIsModalFilter(true);
+                  }}
+                >
+                  <FilterOutlined /> Cari Stokis
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  size="small"
+                  type="dashed"
+                  onClick={() => {
+                    setIndexStockis("");
+                    setQueryString("");
+                    dispatch(getStockisAction("page=1"));
+                  }}
+                >
+                  <CloseOutlined /> Reset
+                </Button>
+              </Col>
+            </Row>
+          }
+        >
+          <Spin spinning={loadingData || loadingConfig}>
+            <Row gutter={16}>
+              {dataStockis !== undefined && dataStockis.length > 0 ? (
+                dataStockis.map((val, key) => {
+                  return (
+                    <Col
+                      key={key}
+                      xs={24}
+                      sm={12}
+                      md={8}
+                      className="mb-2"
+                      style={{
+                        cursor:
+                          val.status_layanan === 0 ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        console.log("pagination", pagination);
+                        if (val.status_layanan !== 0) {
+                          handleSetStockis(val, key);
+                        }
+                      }}
                     >
-                      <StatCard
-                        clickHandler={() => {
-                          if (val.status_layanan !== 0) {
-                            handleSetStockis(val, key);
+                      <Badge.Ribbon
+                        text={
+                          val.status_layanan === 0
+                            ? "Tidak Melayani"
+                            : "Aktif Melayani"
+                        }
+                        color={val.status_layanan === 0 ? "orange" : "cyan"}
+                      >
+                        <StatCard
+                          clickHandler={() => {
+                            if (val.status_layanan !== 0) {
+                              handleSetStockis(val, key);
+                            }
+                          }}
+                          type={
+                            indexStockis === key && val.status_layanan === 1
+                              ? "fill"
+                              : ""
                           }
-                        }}
-                        type={
-                          indexStockis === key && val.status_layanan === 1
-                            ? "fill"
-                            : ""
-                        }
-                        title={
-                          <span style={{ marginLeft: "10px" }}>
-                            {val.mobile_no}
-                          </span>
-                        }
-                        value={
-                          <span style={{ marginLeft: "10px" }}>{val.name}</span>
-                        }
-                        icon={
-                          indexStockis === key && val.status_layanan === 1 ? (
-                            <CheckOutlined
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                          ) : (
-                            <HomeOutlined
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                          )
-                        }
-                        color={
-                          indexStockis === key && val.status_layanan === 1
-                            ? theme.primaryColor
-                            : theme.darkColor
+                          title={
+                            <span style={{ marginLeft: "10px" }}>
+                              {val.mobile_no}
+                            </span>
+                          }
+                          value={
+                            <span style={{ marginLeft: "10px" }}>
+                              {val.name}
+                            </span>
+                          }
+                          icon={
+                            indexStockis === key && val.status_layanan === 1 ? (
+                              <CheckOutlined
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              />
+                            ) : (
+                              <HomeOutlined
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              />
+                            )
+                          }
+                          color={
+                            indexStockis === key && val.status_layanan === 1
+                              ? theme.primaryColor
+                              : theme.darkColor
+                          }
+                        />
+                      </Badge.Ribbon>
+                      <Alert
+                        banner
+                        message={
+                          <Marquee pauseOnHover gradient={false}>
+                            {state.mobile ? (
+                              <small>
+                                &nbsp; {val.main_address}, {val.provinsi},{" "}
+                                {val.kota}, {val.kecamatan}
+                              </small>
+                            ) : (
+                              <span>
+                                &nbsp; {val.main_address}, {val.provinsi},{" "}
+                                {val.kota}, {val.kecamatan}
+                              </span>
+                            )}
+                          </Marquee>
                         }
                       />
-                    </Badge.Ribbon>
-                    <Alert
-                      banner
-                      message={
-                        <Marquee pauseOnHover gradient={false}>
-                          {state.mobile ? (
-                            <small>
-                              &nbsp; {val.main_address}, {val.provinsi},{" "}
-                              {val.kota}, {val.kecamatan}
-                            </small>
-                          ) : (
-                            <span>
-                              &nbsp; {val.main_address}, {val.provinsi},{" "}
-                              {val.kota}, {val.kecamatan}
-                            </span>
-                          )}
-                        </Marquee>
-                      }
+                    </Col>
+                  );
+                })
+              ) : (
+                <Empty />
+              )}
+            </Row>
+            {dataConfig && dataConfig.id_stockis === "-"
+              ? pagination && (
+                  <Row justify="end" gutter={16}>
+                    <Col>
+                      <Button
+                        type="primary"
+                        disabled={currentPage === 1}
+                        onClick={(e) => {
+                          if (currentPage > 1) {
+                            let page = currentPage;
+                            page -= 1;
+                            setCurrentPage(page);
+                            dispatch(
+                              getStockisAction(`page=${page}&${queryString}`)
+                            );
+                          }
+                        }}
+                      >
+                        <CaretLeftOutlined />
+                      </Button>
+                      <Button className="mr-2 ml-2">{currentPage}</Button>
+                      <Button
+                        type="primary"
+                        disabled={
+                          pagination.to >= parseInt(pagination.total, 10)
+                        }
+                        onClick={(e) => {
+                          if (pagination.to >= parseInt(pagination.total, 10)) {
+                            Message.info("data stokis habis");
+                          } else {
+                            // console.log(pa)
+                            let page = currentPage;
+                            page += 1;
+                            setCurrentPage(page);
+                            dispatch(
+                              getStockisAction(`page=${page}&${queryString}`)
+                            );
+                          }
+                        }}
+                      >
+                        <CaretRightOutlined />
+                      </Button>
+                    </Col>
+                  </Row>
+                )
+              : ""}
+          </Spin>
+        </Card>
+      )}
+
+      {step === 2 && (
+        <Card className="mt-2" title="Kategori Paket">
+          <Row gutter={16}>
+            {kategoriPaket.map((res, key) => {
+              return (
+                <Col
+                  key={key}
+                  xs={24}
+                  sm={12}
+                  md={8}
+                  className="mb-2"
+                  onClick={() => {
+                    setIndexKategoriPaket(key);
+                  }}
+                >
+                  <Badge.Ribbon
+                    text={indexKategoriPaket === key ? "Paket Dipilih" : ""}
+                  >
+                    <StatCard
+                      clickHandler={() => {
+                        setIndexKategoriPaket(key);
+                      }}
+                      value={res.replaceAll("_", " ")}
+                      color={theme.darkColor}
                     />
-                  </Col>
-                );
-              })
-            ) : (
-              <Empty />
-            )}
+                  </Badge.Ribbon>
+                </Col>
+              );
+            })}
           </Row>
-          {dataConfig && dataConfig.id_stockis === "-"
-            ? pagination && (
-                <Row justify="end" gutter={16}>
-                  <Col>
-                    <Button
-                      type="primary"
-                      disabled={currentPage === 1}
-                      onClick={(e) => {
-                        if (currentPage > 1) {
-                          let page = currentPage;
-                          page -= 1;
-                          setCurrentPage(page);
-                          dispatch(
-                            getStockisAction(`page=${page}&${queryString}`)
-                          );
-                        }
-                      }}
-                    >
-                      <CaretLeftOutlined />
-                    </Button>
-                    <Button className="mr-2 ml-2">{currentPage}</Button>
-                    <Button
-                      type="primary"
-                      disabled={pagination.to >= parseInt(pagination.total, 10)}
-                      onClick={(e) => {
-                        if (pagination.to >= parseInt(pagination.total, 10)) {
-                          Message.info("data stokis habis");
+        </Card>
+      )}
+
+      {step === 3 && (
+        <Spin spinning={loadingCart}>
+          <Row gutter={16} className={"mt-3"}>
+            <Col xs={24} sm={24} md={24} className="mb-3">
+              <Spin spinning={loadingRegister}>
+                <Card
+                  title={`PAKET ${kategoriPaket[indexKategoriPaket].replaceAll(
+                    "_",
+                    " "
+                  )}`}
+                >
+                  <CardPaket
+                    isButton={true}
+                    callback={(val) => {
+                      if (dataConfig.pin === "-") {
+                        setIsModalPin(true);
+                      } else {
+                        if (indexStockis !== "") {
+                          dispatch(postCart(val.id));
                         } else {
-                          // console.log(pa)
-                          let page = currentPage;
-                          page += 1;
-                          setCurrentPage(page);
-                          dispatch(
-                            getStockisAction(`page=${page}&${queryString}`)
-                          );
+                          Message.info("Silahkan pilih stokis terlebih dahulu");
                         }
-                      }}
-                    >
-                      <CaretRightOutlined />
-                    </Button>
-                  </Col>
-                </Row>
-              )
-            : ""}
+                      }
+                    }}
+                    data={dataRegister}
+                    pagination={paginationRegister}
+                  />
+                </Card>
+              </Spin>
+            </Col>
+          </Row>
         </Spin>
-      </Card>
-      <Spin spinning={loadingCart}>
-        <Row gutter={16} className={"mt-3"}>
-          <Col xs={24} sm={12} md={12} className="mb-3">
-            <Card title="PAKET REGISTER">
-              <CardPaket
-                isButton={true}
-                callback={(val) => {
-                  if (dataConfig.pin === "-") {
-                    setIsModalPin(true);
-                  } else {
-                    if (indexStockis !== "") {
-                      dispatch(postCart(val.id));
-                    } else {
-                      Message.info("Silahkan pilih stokis terlebih dahulu");
-                    }
-                  }
-                }}
-                data={dataRegister}
-                pagination={paginationRegister}
-              />
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={12}>
-            <Card title="PAKET HAPPY SHOPPING">
-              <CardPaket
-                isButton={true}
-                callback={(val) => {
-                  if (indexStockis !== "") {
-                    dispatch(postCart(val.id));
-                  } else {
-                    Message.info("Silahkan pilih stokis terlebih dahulu");
-                  }
-                }}
-                data={dataHappyShopping}
-                pagination={paginationHappyShopping}
-              />
-            </Card>
-          </Col>
-        </Row>
-      </Spin>
+      )}
+      <Row gutter={16} align="end" className="mt-2">
+        <Button
+          onClick={(e) => {
+            setStep(step - 1);
+          }}
+          type="dashed"
+          className="mr-2"
+        >
+          Kembali
+        </Button>
+        <Button
+          type="primary"
+          onClick={(e) => {
+            console.log(step);
+            if (step === 2) {
+              dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));
+            } else if (step == 3) {
+              if (dataCart.length > 0) {
+                Router.push(StringLink.checkout);
+                return;
+              } else {
+                Message.info("silahkan pilih paket terlebih dahulu");
+                return;
+              }
+            }
+            setStep(step + 1);
+          }}
+        >
+          Lanjut
+        </Button>
+      </Row>
 
       {isModalPin && (
         <FormComponent

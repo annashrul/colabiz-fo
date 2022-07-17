@@ -8,6 +8,7 @@ import {
   Empty,
   Input,
   Form,
+  Badge,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
@@ -51,12 +52,14 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
     await handleGet(
       `content?&page=1&perpage=${pages}&status=1${where}`,
       (res, status, msg) => {
+        console.log(res.data);
         if (status) {
           setPagination(res.pagination);
           setArrNews(res.data);
           callback(res);
         } else {
           setArrNews([]);
+          callback([]);
         }
 
         setTimeout(() => setLoadingLoadMore(false), 300);
@@ -100,6 +103,7 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
             if (desc.length > lengthIsMobile) {
               desc = desc.substr(0, lengthIsMobile) + " ..";
             }
+            console.log(val);
             return (
               <Col
                 key={key}
@@ -112,24 +116,28 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
                   Router.push(`/news/${val.id}`);
                 }}
               >
-                <Card
-                  style={{ height: !state.mobile ? "330px" : "260px" }}
-                  title={<small style={{ fontSize: font }}>{val.title}</small>}
-                  hoverable
-                  cover={
-                    <img
-                      style={{ height: !state.mobile ? "180px" : "105px" }}
-                      alt="example"
-                      src={val.picture}
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
-                        currentTarget.src = Helper.imgDefault;
-                      }}
-                    />
-                  }
-                >
-                  <small style={{ fontSize: font }}>{desc}</small>
-                </Card>
+                <Badge.Ribbon text={val.category} size="small">
+                  <Card
+                    style={{ height: !state.mobile ? "330px" : "260px" }}
+                    title={
+                      <small style={{ fontSize: font }}>{val.title}</small>
+                    }
+                    hoverable
+                    cover={
+                      <img
+                        style={{ height: !state.mobile ? "180px" : "105px" }}
+                        alt="example"
+                        src={val.picture}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null; // prevents looping
+                          currentTarget.src = Helper.imgDefault;
+                        }}
+                      />
+                    }
+                  >
+                    <small style={{ fontSize: font }}>{desc}</small>
+                  </Card>
+                </Badge.Ribbon>
               </Col>
             );
           })

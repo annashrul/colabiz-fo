@@ -23,12 +23,19 @@ export const depositAction = (data) => {
     dispatch(setLoadingDeposit(true));
     handlePost("transaction/deposit", data, (res, status, msg) => {
       if (status) {
+        console.log(res);
         Message.success(msg).then(() => {
+          if (msg === "Masih ada transaksi yang belum selesai..") {
+            Router.push(StringLink.deposit).then(() => {
+              dispatch(setLoadingDeposit(false));
+            });
+          }
+          //  else {
+
+          // }
           localStorage.setItem("typeTrx", "Deposit");
           localStorage.setItem("kdTrx", res.data.kd_trx);
           localStorage.setItem("linkBack", "/");
-          console.log(res.data.kd_trx);
-          dispatch(setLoadingDeposit(false));
           Router.push(StringLink.invoiceProduct).then(() => {
             dispatch(setLoadingDeposit(false));
           });

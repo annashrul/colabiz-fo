@@ -18,7 +18,10 @@ import { useDispatch, useSelector } from "react-redux";
 import authAction from "../../action/auth.action";
 import general_helper from "../../helper/general_helper";
 import { withdrawAction } from "../../redux/actions/wallet.action";
-import { getConfigAction } from "../../redux/actions/info.action";
+import {
+  getConfigAction,
+  getInfoAction,
+} from "../../redux/actions/info.action";
 import StatCard from "../shared/StatCard";
 import CurrencyComponent from "../CurrencyComponent";
 const { Option } = Select;
@@ -38,9 +41,10 @@ const FormWithdraw = () => {
   });
   const nominalErrorRef = useRef(nominalError);
   const nominalInput = useRef(null);
-  const { loadingConfig, dataConfig } = useSelector(
+  const { loading, data, loadingConfig, dataConfig } = useSelector(
     (state) => state.infoReducer
   );
+
   const { loadingWithdraw } = useSelector((state) => state.walletReducer);
   useEffect(() => {
     nominalErrorRef.current = nominalError;
@@ -50,10 +54,12 @@ const FormWithdraw = () => {
     }
   }, [nominalError]);
   useEffect(() => {
+    dispatch(getInfoAction());
     setUser(authAction.getUser());
     dispatch(getConfigAction());
     setBank([authAction.getBank()]);
   }, [state]);
+  console.log("info", data);
 
   useEffect(() => {
     if (bank.length > 0) {
@@ -79,7 +85,7 @@ const FormWithdraw = () => {
         )}`,
       });
       return;
-    } else if (parseInt(e.amount, 10) > parseInt(user.saldo, 10)) {
+    } else if (parseInt(e.amount, 10) > parseInt(data.saldo, 10)) {
       setNominalError({
         enable: true,
         helpText: "nominal penarikan melebihi saldo anda",
@@ -118,7 +124,8 @@ const FormWithdraw = () => {
                   )}
                   <br />
                   <small style={{ color: "green" }}>
-                    <WalletOutlined /> Saldo {general_helper.toRp(user.saldo)}
+                    <WalletOutlined /> Saldo{" "}
+                    {data ? general_helper.toRp(data.saldo) : 0}
                   </small>
                 </span>
               }

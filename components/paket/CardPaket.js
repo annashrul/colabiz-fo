@@ -1,5 +1,5 @@
 import { Typography, Col, Row, Empty, Button, Tooltip, Divider } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import Helper from "../../helper/general_helper";
@@ -10,10 +10,18 @@ const { Paragraph, Text } = Typography;
 const CardPaket = ({ isButton = false, callback, data, pagination }) => {
   const [state] = useAppState();
 
+  const [font, setFont] = useState("14px");
+
+  useEffect(() => {
+    if (state.mobile) {
+      setFont("10px");
+    }
+  }, [state]);
+
   return data !== undefined && data.length > 0 ? (
     data.map((val, key) => {
       let desc = Helper.rmHtml(val.caption);
-      let lengthIsMobile = state.mobile ? 50 : 80;
+      let lengthIsMobile = state.mobile ? 50 : 200;
       if (desc.length > lengthIsMobile) {
         desc = desc.substr(0, lengthIsMobile) + " ..";
       }
@@ -24,7 +32,7 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
           className={data.length > 1 ? "mb-2" : ""}
           style={{ cursor: "pointer" }}
         >
-          <Col md={6} xs={8} sm={8}>
+          <Col md={4} xs={8} sm={8}>
             <img
               style={{ height: "100px", width: "100%", borderRadius: "10px" }}
               alt={val.gambar}
@@ -35,7 +43,7 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
               }}
             />
           </Col>
-          <Col md={18} xs={16} sm={16}>
+          <Col md={20} xs={16} sm={16}>
             {!state.mobile && (
               <Row justify="space-beetwen">
                 <Col md={!isButton ? 24 : 18}>
@@ -58,7 +66,12 @@ const CardPaket = ({ isButton = false, callback, data, pagination }) => {
             )}
             {state.mobile && <h5>{val.title}</h5>}
             <p>{general_helper.toRp(val.price)}</p>
-            <Tooltip title={Helper.rmHtml(val.caption)}>{desc}</Tooltip>
+            <Tooltip
+              style={{ fontSize: font }}
+              title={Helper.rmHtml(val.caption)}
+            >
+              {desc}
+            </Tooltip>
           </Col>
           {state.mobile && isButton && (
             <Col xs={24}>

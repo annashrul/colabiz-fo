@@ -9,13 +9,18 @@ import {
   Popconfirm,
   Tooltip,
   Typography,
+  Badge,
+  Collapse,
 } from "antd";
+
+const { Panel } = Collapse;
 import {
   DeleteOutlined,
   MinusOutlined,
   PlusOutlined,
   CheckOutlined,
   WalletOutlined,
+  CaretRightOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +38,7 @@ import {
   deleteCartAction,
 } from "../../redux/actions/cart.action";
 import { useAppState } from "../shared/AppProvider";
+import ModalPin from "../ModalPin";
 const ButtonGroup = Button.Group;
 const { Text } = Typography;
 const CheckoutProduct = () => {
@@ -42,6 +48,7 @@ const CheckoutProduct = () => {
   const [visible, setVisible] = useState(false);
   const [loadingPage, setLoadingPage] = useState(true);
   const [visibleDelete, setVisibleDelete] = useState(false);
+  const [modalPin, setModalPin] = useState(false);
   const [idxCart, setIdxCart] = useState(0);
   const [dataStokis, setDataStokis] = useState(null);
   const [state] = useAppState();
@@ -96,18 +103,20 @@ const CheckoutProduct = () => {
     if (!loadingPage) {
       setDataMetodePembayaran([
         {
-          metode_pembayaran: "TRANSFER",
-          id_bank: dataStokis.id_bank,
-          bank_name: dataStokis.bank_name,
-          acc_no: dataStokis.acc_no,
-          acc_name: dataStokis.acc_name,
-        },
-        {
           metode_pembayaran: "SALDO",
           id_bank: "-",
           bank_name: general_helper.toRp(info.saldo),
           acc_no: "",
           acc_name: "SALDO",
+          title: "Gunakan pembayaran menggunakan saldo",
+        },
+        {
+          metode_pembayaran: "TRANSFER",
+          id_bank: dataStokis.id_bank,
+          bank_name: dataStokis.bank_name,
+          acc_no: dataStokis.acc_no,
+          acc_name: dataStokis.acc_name,
+          title: "Gunakan pembayaran menggunakan transfer bank",
         },
       ]);
     }
@@ -116,10 +125,10 @@ const CheckoutProduct = () => {
   const tempStokis = (title, desc, isRight = "") => {
     return (
       <Row>
-        <Col md={6} xs={8} sm={8}>
+        <Col md={6} xs={12} sm={8}>
           {title}
         </Col>
-        <Col md={18} xs={16} sm={16}>
+        <Col md={18} xs={12} sm={16}>
           : <span style={{ float: isRight }}>{desc}</span>
         </Col>
       </Row>
@@ -140,6 +149,51 @@ const CheckoutProduct = () => {
   let subQty = 0;
   return !loadingPage ? (
     <>
+      <Collapse
+        bordered={false}
+        expandIcon={({ isActive }) => (
+          <CaretRightOutlined rotate={isActive ? 90 : 0} />
+        )}
+        className="site-collapse-custom-collapse"
+        defaultActiveKey={["1"]}
+        onChange={(e) => {}}
+      >
+        <Panel header={`Tata cara pembayaran`} key="1">
+          <ul style={{ paddingLeft: "20px" }}>
+            <li style={{ fontSize: "12px" }}>
+              Pastikan data stokis dengan benar
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              Pilih metode pambayaran dengan menyentuh atau mengklik pada bagian
+              mana saja
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              Apabilah Terdapat label Dipilih dan ikon dopmet berwarna biru,
+              maka
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              metode pembayaran berhasil dipilih
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              Anda bisa menambah ataupun mengurangi jumlah qty paket dengan
+              menyentuh atau mengklik tombol + dan -. Atau,
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              anda juga dapat menhapus paket dengan menyentuh atau mengklik
+              tomboh tong sampah yang bergaris merah di samping kiri tombol -
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              Sentuh atau klik tombol checkout yang berwarna biru untuk
+              melanjutkan ke proses berikutnya. Atau,
+            </li>
+            <li style={{ fontSize: "12px" }}>
+              Sentuh atau klik tombol kembali yang berwarna putih untuk kembali
+              ke halaman pembelian.
+            </li>
+          </ul>
+        </Panel>
+      </Collapse>
+      <br />
       <Row gutter={16}>
         <Col md={12} xs={24} sm={24} className="mb-2">
           <Card title="Stokis">
@@ -157,26 +211,30 @@ const CheckoutProduct = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => setIndexMetodePembayaran(key)}
                 >
-                  <StatCard
-                    clickHandler={() => setIndexMetodePembayaran(key)}
-                    type={"fill"}
-                    title={`${val.bank_name}${
-                      val.acc_no !== "" ? "- " + val.acc_no : ""
-                    }`}
-                    value={val.acc_name}
-                    icon={
-                      indexMetodePembayaran === key ? (
-                        <CheckOutlined style={{ fontSize: "20px" }} />
-                      ) : (
-                        <WalletOutlined style={{ fontSize: "20px" }} />
-                      )
-                    }
-                    color={
-                      indexMetodePembayaran === key
-                        ? theme.primaryColor
-                        : theme.darkColor
-                    }
-                  />
+                  <p>{val.title}</p>
+                  <Badge.Ribbon
+                    text={indexMetodePembayaran === key ? "Dipilih" : ""}
+                  >
+                    <StatCard
+                      clickHandler={() => setIndexMetodePembayaran(key)}
+                      title={
+                        <span style={{ marginLeft: "5px" }}>{`${val.bank_name}${
+                          val.acc_no !== "" ? "- " + val.acc_no : ""
+                        }`}</span>
+                      }
+                      value={
+                        <span style={{ marginLeft: "5px" }}>
+                          {val.acc_name}
+                        </span>
+                      }
+                      icon={<WalletOutlined style={{ fontSize: "20px" }} />}
+                      color={
+                        indexMetodePembayaran === key
+                          ? theme.primaryColor
+                          : theme.darkColor
+                      }
+                    />
+                  </Badge.Ribbon>
                   <br />
                 </span>
               );
@@ -237,7 +295,7 @@ const CheckoutProduct = () => {
                           <Col md={12} xs={12} sm={12}>
                             <ButtonGroup style={{ float: "right" }}>
                               <Popconfirm
-                                visible={visibleDelete}
+                                visible={idxCart === key && visibleDelete}
                                 title="Anda yakin akan meneruskan proses ini ?"
                                 onConfirm={(e) => {
                                   dispatch(deleteCartAction(res.id));
@@ -311,7 +369,14 @@ const CheckoutProduct = () => {
               )}
             </Spin>
           </Card>
-          <Card title="Rincian Pembayaran">
+          <Card title="Informasi Pembayaran">
+            {dataMetodePembayaran !== undefined &&
+              dataMetodePembayaran.length > 0 &&
+              tempStokis(
+                "Metode pembayaran",
+                dataMetodePembayaran[indexMetodePembayaran].metode_pembayaran,
+                "right"
+              )}
             {tempStokis(
               "Qty Dibeli",
               general_helper.toRp(subQty, true),
@@ -331,30 +396,58 @@ const CheckoutProduct = () => {
                 >
                   Kembali
                 </Button>
-                <Popconfirm
-                  visible={visible}
-                  title="Anda yakin akan meneruskan transaksi ini ?"
-                  onConfirm={(e) => handleCheckout()}
-                  okText="Oke"
-                  cancelText="Batal"
-                  onCancel={() => setVisible(false)}
-                  okButtonProps={{
-                    loading: loadingCheckout,
-                  }}
-                >
-                  <Button
-                    disabled={dataCart.length < 1}
-                    type="primary"
-                    onClick={(e) => setVisible(true)}
-                  >
-                    Checkout
-                  </Button>
-                </Popconfirm>
+                {dataMetodePembayaran !== undefined &&
+                  dataMetodePembayaran.length > 0 && (
+                    <Popconfirm
+                      visible={visible}
+                      title={`Anda yakin akan meneruskan transaksi ini ? metode pembayaran yang anda pilih menggunakan ${dataMetodePembayaran[indexMetodePembayaran].metode_pembayaran}`}
+                      onConfirm={(e) => {
+                        if (
+                          dataMetodePembayaran[indexMetodePembayaran]
+                            .metode_pembayaran === "TRANSFER"
+                        ) {
+                          handleCheckout();
+                        } else {
+                          setModalPin(true);
+                        }
+                      }}
+                      okText="Oke"
+                      cancelText="Batal"
+                      onCancel={() => setVisible(false)}
+                      okButtonProps={{
+                        loading: loadingCheckout,
+                      }}
+                    >
+                      <Button
+                        disabled={dataCart.length < 1}
+                        type="primary"
+                        onClick={(e) => setVisible(true)}
+                      >
+                        Checkout
+                      </Button>
+                    </Popconfirm>
+                  )}
               </Col>
             </Row>
           </Card>
         </Col>
       </Row>
+
+      {modalPin &&
+        dataMetodePembayaran[indexMetodePembayaran].metode_pembayaran ===
+          "SALDO" && (
+          <ModalPin
+            submit={(e) => {
+              setVisible(false);
+              handleCheckout();
+            }}
+            cancel={(e) => {
+              setModalPin(false);
+            }}
+            modalPin={modalPin}
+            loading={loadingCheckout}
+          />
+        )}
     </>
   ) : (
     <Spin spinning={loadingPage}>

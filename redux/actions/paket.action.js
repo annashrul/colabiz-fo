@@ -54,28 +54,31 @@ export const setLoadingCheckout = (load) => {
 
 export const getPaket = (where = "", type = "REGISTER") => {
   return (dispatch) => {
-    if (type === "HAPPY_SHOPPING") {
-      dispatch(setLoadingHappyShopping(true));
-    } else if (type === "SMART_CONTRACT") {
-      dispatch(setLoadingSmartContract(true));
-    } else {
-      dispatch(setLoadingRegister(true));
-    }
+    // if (type === "HAPPY_SHOPPING") {
+    //   dispatch(setLoadingHappyShopping(true));
+    // } else if (type === "SMART_CONTRACT") {
+    //   dispatch(setLoadingSmartContract(true));
+    // } else {
+    //   dispatch(setLoadingRegister(true));
+    // }
+    dispatch(setLoadingRegister(true));
     let url = `paket/list/${type}`;
     if (where !== "") {
       url += `?${where}`;
     }
     handleGet(url, (res, status) => {
-      if (type === "HAPPY_SHOPPING") {
-        dispatch(setDataHappyShopping(res));
-        dispatch(setLoadingHappyShopping(false));
-      } else if (type === "SMART_CONTRACT") {
-        dispatch(setDataSmartContract(res));
-        dispatch(setLoadingSmartContract(false));
-      } else {
-        dispatch(setDataRegister(res));
-        dispatch(setLoadingRegister(false));
-      }
+      dispatch(setDataRegister(res));
+      dispatch(setLoadingRegister(false));
+      // if (type === "HAPPY_SHOPPING") {
+      //   dispatch(setDataHappyShopping(res));
+      //   dispatch(setLoadingHappyShopping(false));
+      // } else if (type === "SMART_CONTRACT") {
+      //   dispatch(setDataSmartContract(res));
+      //   dispatch(setLoadingSmartContract(false));
+      // } else {
+      //   dispatch(setDataRegister(res));
+      //   dispatch(setLoadingRegister(false));
+      // }
     });
   };
 };
@@ -95,11 +98,14 @@ export const checkout = (e) => {
             });
           });
         } else {
-          Message.success(msg).then(() =>
-            Router.push(StringLink.pembelian).then(() => {
-              dispatch(setLoadingCheckout(false));
-            })
-          );
+          Message.success(msg).then(() => {
+            Message.info("Anda akan dialihkan ke halaman utama").then(() => {
+              Router.push("/").then(() => {
+                dispatch(setLoadingCheckout(false));
+                dispatch(getCartAction());
+              });
+            });
+          });
         }
       } else {
         dispatch(setLoadingCheckout(false));

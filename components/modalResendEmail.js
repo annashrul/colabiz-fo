@@ -29,7 +29,7 @@ const ModalResendEmail = ({ modal, onCancel }) => {
 
   return (
     <Modal
-      title="Resend Verifikasi"
+      title="Lupa Password"
       visible={modal}
       closable={false}
       destroyOnClose={true}
@@ -38,7 +38,7 @@ const ModalResendEmail = ({ modal, onCancel }) => {
     >
       <Spin tip="Tunggu Sebentar..." size="large" spinning={loadingResendEmail}>
         <div>
-          <p>masukan username anda untuk mengirim ulang verifikasi</p>
+          <p>masukan username anda untuk mengirim ulang password</p>
           <Form onFinish={handleSubmit} form={form} layout="vertical">
             <FormItem
               hasFeedback

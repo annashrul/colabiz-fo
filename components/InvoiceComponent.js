@@ -85,7 +85,7 @@ const InvoiceComponent = () => {
           style={{ alignItems: "right", textAlign: "right" }}
         >
           <small style={{ fontSize: fontSize }}>
-            {isRp ? Helper.toRp(desc) : desc}
+            {isRp ? Helper.toRp(parseInt(desc, 10)) : desc}
           </small>
         </Col>
       </Row>
@@ -186,7 +186,7 @@ const InvoiceComponent = () => {
                   danger
                   size={"large"}
                 >
-                  {Helper.toRp(data && data.total_pay)}
+                  {Helper.toRp(data && parseInt(data.total_pay, 10))}
                 </Button>
                 <Row style={{ margin: "5px" }}>
                   <Col />

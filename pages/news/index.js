@@ -1,10 +1,11 @@
 import { Row, PageHeader } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Router from "next/router";
 import { useAppState } from "../../components/shared/AppProvider";
 import CardNews from "../../components/news/cardNews";
 const News = () => {
   const [state] = useAppState();
+  const [arrNews, setArrNews] = useState([]);
 
   useEffect(() => {}, [state]);
 

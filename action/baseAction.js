@@ -5,7 +5,6 @@ export const handleGet = async (url, callback) => {
   try {
     const getData = await Action.get(Action.apiUrl + url);
     const datum = getData.data;
-
     callback(datum, true);
   } catch (err) {
     callback([], false, "gagal");
@@ -27,6 +26,7 @@ export const handlePost = async (url, data, callback) => {
   try {
     const submitData = await Action.post(Action.apiUrl + url, data);
     const datum = submitData.data;
+
     if (submitData.status === 200) {
       callback(datum, true, datum.meta.message);
     } else {

@@ -190,7 +190,7 @@ const IndexOrderStockis = () => {
           }}
         />
         <Column
-          title=""
+          title="Aksi"
           dataIndex="operation"
           key="operation"
           render={(_, record, i) => {
@@ -243,9 +243,13 @@ const IndexOrderStockis = () => {
                         ? "loading ...."
                         : "Ambil Barang"}
                     </Tag>
+                  ) : record.status === 5 ? (
+                    <Tag style={{ cursor: "not-allowed" }} color="orange">
+                      Ditolak
+                    </Tag>
                   ) : (
                     <Tooltip title="anda belum bisa mengambil barang ini">
-                      <Tag style={{ cursor: "not-allowed" }} color="#2db7f5">
+                      <Tag style={{ cursor: "not-allowed" }} color="purple">
                         Ambil Barang
                       </Tag>
                     </Tooltip>

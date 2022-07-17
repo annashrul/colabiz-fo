@@ -78,7 +78,7 @@ const Signin = () => {
             </FormItem>
             <div className="text-center">
               <small className="text-muted">
-                <span>Kirim ulang link verifikasi?</span>{" "}
+                <span>Lupa password?</span>{" "}
                 <a onClick={() => setShowModalResendEmail(true)}>
                   &nbsp;Kirim sekarang!
                 </a>

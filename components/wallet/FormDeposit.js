@@ -57,7 +57,7 @@ const FormDeposit = () => {
     });
     console.log(dataDeposit);
 
-    // dispatch(depositAction(dataDeposit));
+    dispatch(depositAction(dataDeposit));
   };
 
   const handleSubmit = async (e) => {

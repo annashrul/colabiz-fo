@@ -5,7 +5,7 @@ import moment from "moment";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
 import Matahari from "../../components/genealogy/matahari";
-
+import { Tabs } from "antd";
 moment.locale("id");
 
 const Genealogy = () => {

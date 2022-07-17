@@ -178,13 +178,11 @@ const labelStatusPembelian = (res) => {
     return <Tag color="purple">Menunggu Pembayaran</Tag>;
   } else if (res === 1) {
     return <Tag color="geekblue">Diproses</Tag>;
-  } else if (res === 2) {
-    return <Tag color="blue">Dikirim</Tag>;
   } else if (res === 3) {
-    return <Tag color="cyan">Diterima Stokis</Tag>;
+    return <Tag color="blue">Dikirim</Tag>;
   } else if (res === 4) {
-    return <Tag color="green">Selesai</Tag>;
-  } else {
+    return <Tag color="cyan">Selesai</Tag>;
+  } else if (res === 5) {
     return <Tag color="red">Ditolak</Tag>;
   }
 };

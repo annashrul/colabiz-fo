@@ -4,7 +4,7 @@ import {
   ApartmentOutlined,
 } from "@ant-design/icons";
 import { theme } from "./styles/GlobalStyles";
-import { Col, Button, Row, Card, Popconfirm, Alert } from "antd";
+import { Col, Button, Row, Card, Popconfirm, Alert, Badge } from "antd";
 import React, { useEffect, useState } from "react";
 import Action, { doLogout } from "../action/auth.action";
 import Helper from "../helper/general_helper";
@@ -55,6 +55,87 @@ const Overview = () => {
       isDisableButton = true;
     }
   }
+
+  const tempAktivasi = () => {
+    return (
+      <Card title={"Pin Anda"}>
+        <p style={{ marginBottom: "10px" }}>
+          Aktivasi :{" "}
+          {data === undefined
+            ? 0
+            : general_helper.toRp(data.total_pin_aktivasi, true)}{" "}
+          PIN
+        </p>
+
+        {isDisableButton ? (
+          <Button
+            size="medium"
+            disabled={true}
+            type="primary"
+            style={{
+              width: "100%",
+            }}
+          >
+            Aktivasi
+          </Button>
+        ) : (
+          <Popconfirm
+            visible={visibleAktivasi}
+            title="Kamu yakin akan melanjutkan proses ini ?"
+            onConfirm={(e) =>
+              dispatch(
+                aktivasiPinAction({
+                  id_member: objUser.id,
+                  id_stockis: data.id_stockis,
+                })
+              )
+            }
+            onCancel={(e) => setVisibleAktivasi(false)}
+            okText="Lanjut"
+            cancelText="Batal"
+            okButtonProps={{
+              loading: loadingPinAktivasi,
+            }}
+          >
+            <Button
+              onClick={(e) => {
+                if (data.activate !== 1) setVisibleAktivasi(true);
+              }}
+              size="medium"
+              type="primary"
+              style={{
+                width: "100%",
+              }}
+            >
+              Aktivasi
+            </Button>
+          </Popconfirm>
+        )}
+
+        <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+          Happy Shopping :{" "}
+          {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
+        </p>
+        <Button
+          size="medium"
+          disabled
+          type="primary"
+          style={{
+            width: "100%",
+          }}
+        >
+          Aktivasi Happy Shopping
+        </Button>
+        <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+          Smart Contract :{" "}
+          {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
+        </p>
+        <Button size="medium" disabled type="primary" style={{ width: "100%" }}>
+          Aktivasi Smart Contract
+        </Button>
+      </Card>
+    );
+  };
 
   return (
     <div>
@@ -111,90 +192,18 @@ const Overview = () => {
         <Col md={6} xs={24} sm={12}>
           <Row>
             <Col xs={24} sm={12} md={24}>
-              <Card title={"Pin Yang Anda Miliki"}>
-                {data && data.activate === 1 && (
-                  <Alert banner type="success" message="Telah Di Aktivasi" />
-                )}
-                <p style={{ marginBottom: "10px" }}>
-                  Aktivasi :{" "}
-                  {data === undefined
-                    ? 0
-                    : general_helper.toRp(data.total_pin_aktivasi, true)}{" "}
-                  PIN
-                </p>
-
-                {isDisableButton ? (
-                  <Button
-                    size="medium"
-                    disabled={true}
-                    type="primary"
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    Aktivasi
-                  </Button>
-                ) : (
-                  <Popconfirm
-                    visible={visibleAktivasi}
-                    title="Kamu yakin akan melanjutkan proses ini ?"
-                    onConfirm={(e) =>
-                      dispatch(
-                        aktivasiPinAction({
-                          id_member: objUser.id,
-                          id_stockis: data.id_stockis,
-                        })
-                      )
-                    }
-                    onCancel={(e) => setVisibleAktivasi(false)}
-                    okText="Lanjut"
-                    cancelText="Batal"
-                    okButtonProps={{
-                      loading: loadingPinAktivasi,
-                    }}
-                  >
-                    <Button
-                      onClick={(e) => {
-                        if (data.activate !== 1) setVisibleAktivasi(true);
-                      }}
-                      size="medium"
-                      type="primary"
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      Aktivasi
-                    </Button>
-                  </Popconfirm>
-                )}
-
-                <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-                  Happy Shopping :{" "}
-                  {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
-                </p>
-                <Button
-                  size="medium"
-                  disabled
-                  type="primary"
-                  style={{
-                    width: "100%",
-                  }}
+              {data && data.activate === 1 ? (
+                <Badge.Ribbon
+                  color={"green"}
+                  size="small"
+                  status="success"
+                  text="Telah Diaktivasi"
                 >
-                  Aktivasi Happy Shopping
-                </Button>
-                <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-                  Smart Contract :{" "}
-                  {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
-                </p>
-                <Button
-                  size="medium"
-                  disabled
-                  type="primary"
-                  style={{ width: "100%" }}
-                >
-                  Aktivasi Smart Contract
-                </Button>
-              </Card>
+                  {tempAktivasi()}
+                </Badge.Ribbon>
+              ) : (
+                tempAktivasi()
+              )}
             </Col>
           </Row>
         </Col>
@@ -205,7 +214,7 @@ const Overview = () => {
           <Col xs={24} md={24} sm={24}>
             <p
               align="right"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", marginTop: "10px" }}
               onClick={() => Router.push(`/news`)}
             >
               <a>
@@ -219,7 +228,7 @@ const Overview = () => {
       <Row gutter={16} type="flex">
         <CardNews
           callback={(res) => {
-            setIsData(res.data.length > 0);
+            setIsData(res.length > 0);
           }}
           isLoadMore={false}
           pagePer={4}
