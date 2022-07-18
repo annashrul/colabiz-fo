@@ -197,7 +197,7 @@ const SidebarContent = ({
                           : ""
                       }
                       onClick={() => {
-                        if (state.mobile) dispatch({ type: "mobileDrawer" });
+                        // if (state.mobile) dispatch({ type: "mobileDrawer" });
                       }}
                     >
                       {checkMenu}

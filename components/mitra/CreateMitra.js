@@ -33,6 +33,12 @@ const TambahMitra = () => {
   const [step, setStep] = useState(1);
   const [, forceUpdate] = useState();
   const usernameInput = useRef(null);
+  const [usernameError, setUsernameError] = useState({
+    enable: false,
+    helpText: "-",
+  });
+  const usernameErrorRef = useRef(usernameError);
+
   const { validateUsername, loadingValidateUsername, loadingSignUp } =
     useSelector((state) => state.authUserReducer);
 
@@ -49,6 +55,14 @@ const TambahMitra = () => {
   );
 
   useEffect(() => {
+    usernameErrorRef.current = usernameError;
+    if (usernameError.enable) {
+      usernameInput.current.focus();
+      form.validateFields();
+    }
+  }, [usernameError]);
+
+  useEffect(() => {
     setInfo(Action.getInfo());
     setUser(Action.getUser());
     forceUpdate({});
@@ -61,15 +75,7 @@ const TambahMitra = () => {
   }, [loadingSignUp]);
 
   useEffect(() => {
-    console.log("fullname", form.getFieldValue("fullname"));
     if (form.getFieldValue("fullname") !== undefined) {
-      if (step === 1 && loadingValidateUsername) {
-        !validateUsername && usernameInput.current.focus();
-      }
-      if (step === 1 && validateUsername && !loadingValidateUsername) {
-        dispatch(provinceAction());
-        setTimeout(() => setStep(2), 300);
-      }
       setIconLoading(loadingValidateUsername);
     }
   }, [loadingValidateUsername]);
@@ -92,7 +98,20 @@ const TambahMitra = () => {
   const handleStep = async (e) => {
     if (step === 1) {
       setValue(value.replaceAll("+", ""));
-      dispatch(validateUsernameAction(e.username));
+      dispatch(
+        validateUsernameAction(e.username, (res) => {
+          if (res !== "") {
+            usernameInput.current.focus();
+            setUsernameError({
+              enable: true,
+              helpText: res,
+            });
+          } else {
+            dispatch(provinceAction());
+            setTimeout(() => setStep(2), 300);
+          }
+        })
+      );
       Object.assign(dataForm, e);
       setDataForm(dataForm);
       form.setFieldsValue({ acc_name: e.fullname });
@@ -130,37 +149,6 @@ const TambahMitra = () => {
       },
     };
     dispatch(signUpAction(data));
-
-    // console.log(data);
-    // const data = {
-    //   fullname: form.getFieldValue("fullname"),
-    //   mobile_no: general_helper.checkNo(form.getFieldValue("mobile_no")),
-    //   username: form.getFieldValue("username"),
-    //   password: form.getFieldValue("password"),
-    //   sponsor: user.referral,
-    //   payment_channel: form1.getFieldValue("payment_channel"),
-    //   id_paket: form1.getFieldValue("id_paket"),
-    //   data_bank: {
-    //     id_bank: objBank.id,
-    //     acc_name: form.getFieldValue("acc_name"),
-    //     acc_no: form.getFieldValue("acc_no"),
-    //   },
-    // };
-    // setIconLoading(true);
-    // await handlePost("auth/signup", data, (res, status, msg) => {
-    //   if (status) {
-    //     localStorage.setItem("linkBack", StringLink.tambahMitra);
-    //     localStorage.setItem("typeTrx", "Mitra Baru");
-    //     localStorage.setItem("kdTrx", res.data.kd_trx);
-    //     Message.success(msg).then(() =>
-    //       Router.push(StringLink.invoiceMitra).then(() => setIconLoading(false))
-    //     );
-    //     // onReset();
-    //   } else {
-    //     setIconLoading(false);
-    //     // Message.info(msg).then(() => setIconLoading(false));
-    //   }
-    // });
   };
 
   return (
@@ -172,6 +160,11 @@ const TambahMitra = () => {
         onFinish={handleStep}
         initialValues={{
           sponsor: "NETINDO",
+        }}
+        onChange={() => {
+          if (usernameError.enable) {
+            setUsernameError({ enable: false, helpText: "" });
+          }
         }}
       >
         <Row
@@ -238,6 +231,14 @@ const TambahMitra = () => {
                           pattern: new RegExp(/^[a-zA-Z0-9]*$/),
                           message:
                             "Tidak boleh memasukan selain huruf,angka dan tanpa spasi",
+                        },
+                        {
+                          validator(_, value) {
+                            if (usernameError.enable) {
+                              return Promise.reject(usernameError.helpText);
+                            }
+                            return Promise.resolve();
+                          },
                         },
                       ]}
                       tooltip={{

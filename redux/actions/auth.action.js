@@ -140,13 +140,18 @@ export const signUpAction = (e) => {
   };
 };
 
-export const validateUsernameAction = (username) => {
+export const validateUsernameAction = (username, callback = undefined) => {
   return (dispatch) => {
     dispatch(setLoadingValidateUsername(true));
     handlePost(
       "auth/validate/username",
       { username: username },
       (res, status, msg) => {
+        if (!status) {
+          callback(msg);
+        } else {
+          callback("");
+        }
         dispatch(setValidateUsername(status));
         dispatch(setLoadingValidateUsername(false));
       }
