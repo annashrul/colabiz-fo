@@ -47,12 +47,19 @@ const Overview = () => {
   }, [loading]);
 
   let isDisableButton = false;
+  let isDisableButtonHs = false;
   if (data !== undefined) {
     if (parseInt(data.total_pin_aktivasi, 10) === 0) {
       isDisableButton = true;
     }
     if (data.activate === 1) {
       isDisableButton = true;
+    }
+    if (parseInt(data.total_pin_hs, 10) === 0) {
+      isDisableButtonHs = true;
+    }
+    if (data.activate === 1) {
+      isDisableButtonHs = true;
     }
   }
 
@@ -128,7 +135,10 @@ const Overview = () => {
         </Button>
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
           Smart Contract :{" "}
-          {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
+          {data === undefined
+            ? 0
+            : general_helper.toRp(data.total_pin_hs, true)}{" "}
+          PIN
         </p>
         <Button size="medium" disabled type="primary" style={{ width: "100%" }}>
           Aktivasi Smart Contract
