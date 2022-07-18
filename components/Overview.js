@@ -28,10 +28,10 @@ const Overview = () => {
   const [objUser, setObjUser] = useState({});
   const [isData, setIsData] = useState(false);
   const [visibleAktivasi, setVisibleAktivasi] = useState(false);
+  const [visibleHs, setVisibleHs] = useState(false);
   const [state] = useAppState();
-  const { loading, data, loadingPinAktivasi } = useSelector(
-    (state) => state.infoReducer
-  );
+  const { loading, data, loadingPinAktivasi, loadingHappyShopping } =
+    useSelector((state) => state.infoReducer);
   useEffect(() => {
     const user = Action.getUser();
     if (user !== undefined) {
@@ -53,16 +53,10 @@ const Overview = () => {
   let isDisableButton = false;
   let isDisableButtonHs = false;
   if (data !== undefined) {
-    if (parseInt(data.total_pin_aktivasi, 10) === 0) {
+    if (parseInt(data.total_pin_aktivasi, 10) === 0 || data.activate === 1) {
       isDisableButton = true;
     }
-    if (data.activate === 1) {
-      isDisableButton = true;
-    }
-    if (parseInt(data.total_pin_hs, 10) === 0) {
-      isDisableButtonHs = true;
-    }
-    if (data.activate === 1) {
+    if (parseInt(data.total_pin_hs, 10) === 0 || data.activate === 1) {
       isDisableButtonHs = true;
     }
   }
@@ -130,23 +124,51 @@ const Overview = () => {
             : general_helper.toRp(data.total_pin_hs, true)}{" "}
           PIN
         </p>
-        <Button
-          size="medium"
-          disabled={isDisableButtonHs}
-          type="primary"
-          style={{
-            width: "100%",
-          }}
-          onClick={(e) => {
-            dispatch(
-              happyShoppingPinAction({
-                id_member: objUser.id,
-              })
-            );
-          }}
-        >
-          Aktivasi Happy Shopping
-        </Button>
+        {isDisableButtonHs ? (
+          <Button
+            size="medium"
+            disabled={true}
+            type="primary"
+            style={{
+              width: "100%",
+            }}
+          >
+            Aktivasi Happy Shopping
+          </Button>
+        ) : (
+          <Popconfirm
+            visible={visibleHs}
+            title="Kamu yakin akan melanjutkan proses ini ?"
+            onConfirm={(e) =>
+              dispatch(
+                happyShoppingPinAction({
+                  id_member: objUser.id,
+                })
+              )
+            }
+            onCancel={(e) => setVisibleHs(false)}
+            okText="Lanjut"
+            cancelText="Batal"
+            okButtonProps={{
+              loading: loadingHappyShopping,
+            }}
+          >
+            <Button
+              onClick={(e) => {
+                // if (data.activate !== 1) setVisibleHs(true);
+                setVisibleHs(true);
+              }}
+              size="medium"
+              type="primary"
+              style={{
+                width: "100%",
+              }}
+            >
+              Aktivasi Happy Shopping
+            </Button>
+          </Popconfirm>
+        )}
+
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
           Smart Contract :{" "}
           {data === undefined ? 0 : general_helper.toRp(0, true)} PIN

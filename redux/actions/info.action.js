@@ -65,9 +65,9 @@ export const aktivasiPinAction = (data) => {
 };
 export const happyShoppingPinAction = (data) => {
   return (dispatch) => {
-    dispatch(setLoadingPinAktivasi(true));
+    dispatch(setLoadingPinHappyShopping(true));
     handlePost("pin/aktivasi/hs", data, (res, status, msg) => {
-      dispatch(setLoadingPinAktivasi(false));
+      dispatch(setLoadingPinHappyShopping(false));
       if (status) {
         dispatch(getInfoAction());
         message.success(msg);
