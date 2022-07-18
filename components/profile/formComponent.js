@@ -45,7 +45,11 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
       Object.assign(datas, { pin: e.pin, current_pin: e.current_pin });
     }
     if (isCreate) {
-      dispatch(createPinAction(userData.id, e.pin));
+      dispatch(
+        createPinAction(userData.id, e.pin, (res) => {
+          ok(res);
+        })
+      );
     } else {
       dispatch(putMemberAction(userData.id, datas));
     }

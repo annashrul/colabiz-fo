@@ -58,7 +58,6 @@ const FormDeposit = () => {
     setUser(authAction.getUser());
   }, []);
 
-  console.log("data config", dataConfig);
   useEffect(() => {
     if (data.length > 0) {
       form.setFieldsValue({ payment_channel: data[0].code });
@@ -87,9 +86,9 @@ const FormDeposit = () => {
       message.info("anda belum mempunya pin").then(() => {
         setModalProfile(true);
       });
-
       return;
     }
+    // console.log()
     setModalPin(true);
     setDataDeposit(e);
   };
@@ -206,7 +205,10 @@ const FormDeposit = () => {
       {modalProfile && (
         <FormComponent
           isModal={modalProfile}
-          ok={(e) => {}}
+          ok={(e) => {
+            setModalProfile(false);
+            // setModalPin(true);
+          }}
           cancel={(e) => {
             setModalProfile(false);
           }}

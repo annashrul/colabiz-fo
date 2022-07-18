@@ -3,6 +3,7 @@ import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction, { doLogout } from "../../action/auth.action";
 import { Message } from "antd";
 import Router from "next/router";
+import { getConfigAction } from "./info.action";
 
 export const setLoading = (load) => {
   return {
@@ -52,22 +53,17 @@ export const putMemberAction = (id, e) => {
     });
   };
 };
-export const createPinAction = (id, e) => {
+export const createPinAction = (id, e, callback) => {
   return (dispatch) => {
     dispatch(setLoading(true));
     handlePut(`member/pin/${id}`, { pin: e }, (res, status, msg) => {
       if (status) {
-        Message.success(msg).then(() => {
-          Message.info(
-            "Demi keamanan, Anda akan dialihkan ke halaman login terlebih dahulu"
-          ).then(() => {
-            Router.push("/signin").then(() => {
-              dispatch(setLoading(false));
-              doLogout();
-            });
-          });
-        });
+        Message.success(msg);
+        dispatch(getConfigAction());
+        dispatch(setLoading(false));
+        callback(false);
       } else {
+        callback(true);
         dispatch(setLoading(false));
       }
     });
