@@ -170,6 +170,7 @@ export const infoAction = () => {
 export const userDetailAction = (id) => {
   return (dispatch) => {
     handleGet(`member/get/${id}`, (res, status) => {
+      console.log(res);
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
       Action.setUser(actUser);
