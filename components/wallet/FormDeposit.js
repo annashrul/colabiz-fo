@@ -55,8 +55,7 @@ const FormDeposit = () => {
     Object.assign(dataDeposit, {
       member_pin: pin,
     });
-    console.log(dataDeposit);
-
+    setModalPin(false);
     dispatch(depositAction(dataDeposit));
   };
 

@@ -5,6 +5,7 @@ import { StringLink } from "../../helper/string_link_helper";
 import { Message, Modal } from "antd";
 import Router from "next/router";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import general_helper from "../../helper/general_helper";
 const { confirm } = Modal;
 export const setLoadingDeposit = (load) => {
   return {
@@ -36,25 +37,36 @@ export const depositAction = (data) => {
   return (dispatch) => {
     dispatch(setLoadingDeposit(true));
     handlePost("transaction/deposit", data, (res, status, msg) => {
+      console.log(res);
       if (status) {
         Message.success(msg).then(() => {
           if (msg === "Masih ada transaksi yang belum selesai..") {
             confirm({
               visible: true,
-              title: "transaksi pending #" + res.data.kd_trx,
+              title: "Masih ada transaksi aktif!",
               icon: <ExclamationCircleOutlined />,
-              okText: "Ya, batalkan",
-              cancelText: "kembali",
-              content:
-                "Apakah anda akan melanjutkan proses ini dan membatalkan transaksi sebelumnya ?",
+              okText: "Batalkan Transaksi.",
+              okType: "danger",
+              cancelText: "Lihat Invoice",
+              content:(
+                <>
+                  #{res.data.kd_trx}
+                  <br/>
+                  Jumlah: {general_helper.toRp(res.data.amount)}
+                </>
+              ),
               onOk() {
                 // Object.assign(data,{kd_trx:res.data.kd_trx})
                 dispatch(cancelDepositAction(res.data.kd_trx, data));
               },
-
               onCancel() {
-                console.log("Cancel");
-              },
+                localStorage.setItem("typeTrx", "Deposit");
+                localStorage.setItem("kdTrx", res.data.kd_trx);
+                localStorage.setItem("linkBack", "/");
+                Router.push(StringLink.invoiceProduct).then(() => {
+                  dispatch(setLoadingDeposit(false));
+                });
+              }
             });
             dispatch(setLoadingDeposit(false));
           } else {
