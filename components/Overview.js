@@ -12,7 +12,11 @@ import Router from "next/router";
 import { useAppState } from "./shared/AppProvider";
 import CardNews from "./news/cardNews";
 import { useDispatch, useSelector } from "react-redux";
-import { aktivasiPinAction, getInfoAction } from "../redux/actions/info.action";
+import {
+  aktivasiPinAction,
+  getInfoAction,
+  happyShoppingPinAction,
+} from "../redux/actions/info.action";
 import StatCard from "./shared/StatCard";
 import general_helper from "../helper/general_helper";
 import moment from "moment";
@@ -121,24 +125,31 @@ const Overview = () => {
 
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
           Happy Shopping :{" "}
-          {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
+          {data === undefined
+            ? 0
+            : general_helper.toRp(data.total_pin_hs, true)}{" "}
+          PIN
         </p>
         <Button
           size="medium"
-          disabled
+          disabled={isDisableButtonHs}
           type="primary"
           style={{
             width: "100%",
+          }}
+          onClick={(e) => {
+            dispatch(
+              happyShoppingPinAction({
+                id_member: objUser.id,
+              })
+            );
           }}
         >
           Aktivasi Happy Shopping
         </Button>
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
           Smart Contract :{" "}
-          {data === undefined
-            ? 0
-            : general_helper.toRp(data.total_pin_hs, true)}{" "}
-          PIN
+          {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
         </p>
         <Button size="medium" disabled type="primary" style={{ width: "100%" }}>
           Aktivasi Smart Contract

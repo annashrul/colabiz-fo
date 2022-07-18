@@ -63,6 +63,18 @@ export const aktivasiPinAction = (data) => {
     });
   };
 };
+export const happyShoppingPinAction = (data) => {
+  return (dispatch) => {
+    dispatch(setLoadingPinAktivasi(true));
+    handlePost("pin/aktivasi/hs", data, (res, status, msg) => {
+      dispatch(setLoadingPinAktivasi(false));
+      if (status) {
+        dispatch(getInfoAction());
+        message.success(msg);
+      }
+    });
+  };
+};
 
 export const getInfoAction = (where = "") => {
   return (dispatch) => {
