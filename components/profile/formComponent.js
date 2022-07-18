@@ -10,7 +10,10 @@ import {
 import { useState, useEffect } from "react";
 import general_helper from "../../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
-import { putMemberAction } from "../../redux/actions/member.action";
+import {
+  createPinAction,
+  putMemberAction,
+} from "../../redux/actions/member.action";
 
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
@@ -41,7 +44,11 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
     } else {
       Object.assign(datas, { pin: e.pin, current_pin: e.current_pin });
     }
-    dispatch(putMemberAction(userData.id, datas));
+    if (isCreate) {
+      dispatch(createPinAction(userData.id, e.pin));
+    } else {
+      dispatch(putMemberAction(userData.id, datas));
+    }
   };
   return (
     <Modal
@@ -158,28 +165,30 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
               }
               key="3"
             >
-              <Form.Item
-                hasFeedback
-                name="current_pin"
-                label="Pin Saat Ini"
-                rules={
-                  step === 3 && [
-                    { required: true, message: "Tidak Boleh Kosong" },
-                    { min: 6, message: "Harus 6 Angka" },
-                    { max: 6, message: "Harus 6 Angka" },
-                    {
-                      pattern: new RegExp(/^[0-9]*$/),
-                      message: "Harus Berupa Angka",
-                    },
-                  ]
-                }
-                tooltip={{
-                  title: "Harus 6 Angka",
-                  icon: <InfoCircleOutlined />,
-                }}
-              >
-                <Input.Password />
-              </Form.Item>
+              {!isCreate && (
+                <Form.Item
+                  hasFeedback
+                  name="current_pin"
+                  label="Pin Saat Ini"
+                  rules={
+                    step === 3 && [
+                      { required: true, message: "Tidak Boleh Kosong" },
+                      { min: 6, message: "Harus 6 Angka" },
+                      { max: 6, message: "Harus 6 Angka" },
+                      {
+                        pattern: new RegExp(/^[0-9]*$/),
+                        message: "Harus Berupa Angka",
+                      },
+                    ]
+                  }
+                  tooltip={{
+                    title: "Harus 6 Angka",
+                    icon: <InfoCircleOutlined />,
+                  }}
+                >
+                  <Input.Password />
+                </Form.Item>
+              )}
               <Form.Item
                 hasFeedback
                 name="pin"

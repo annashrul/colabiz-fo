@@ -1,4 +1,14 @@
-import { Button, Form, Row, Col, Select, Input, Card, Spin } from "antd";
+import {
+  Button,
+  Form,
+  Row,
+  Col,
+  Select,
+  Input,
+  Card,
+  Spin,
+  message,
+} from "antd";
 
 import React, { useRef, useEffect, useState } from "react";
 import ModalPin from "../ModalPin";
@@ -9,6 +19,7 @@ import general_helper from "../../helper/general_helper";
 import { depositAction } from "../../redux/actions/wallet.action";
 import { paymentChannelAction } from "../../redux/actions/paymentChannel.action";
 import { getConfigAction } from "../../redux/actions/info.action";
+import FormComponent from "../profile/formComponent";
 const { Option } = Select;
 import CurrencyComponent from "../CurrencyComponent";
 
@@ -20,6 +31,7 @@ const FormDeposit = () => {
   const [user, setUser] = useState({});
   const [dataDeposit, setDataDeposit] = useState({});
   const [amountActive, setAmountActive] = useState("0");
+  const [modalProfile, setModalProfile] = useState(false);
 
   const [nominalError, setNominalError] = useState({
     enable: false,
@@ -45,6 +57,8 @@ const FormDeposit = () => {
     dispatch(paymentChannelAction());
     setUser(authAction.getUser());
   }, []);
+
+  console.log("data config", dataConfig);
   useEffect(() => {
     if (data.length > 0) {
       form.setFieldsValue({ payment_channel: data[0].code });
@@ -67,6 +81,13 @@ const FormDeposit = () => {
           dataConfig.min_deposit
         )}`,
       });
+      return;
+    }
+    if (dataConfig.pin === "-") {
+      message.info("anda belum mempunya pin").then(() => {
+        setModalProfile(true);
+      });
+
       return;
     }
     setModalPin(true);
@@ -179,6 +200,18 @@ const FormDeposit = () => {
             setModalPin(false);
           }}
           modalPin={modalPin}
+        />
+      )}
+
+      {modalProfile && (
+        <FormComponent
+          isModal={modalProfile}
+          ok={(e) => {}}
+          cancel={(e) => {
+            setModalProfile(false);
+          }}
+          userData={user}
+          isCreate={true}
         />
       )}
     </Spin>

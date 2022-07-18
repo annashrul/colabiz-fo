@@ -1,4 +1,15 @@
-import { Collapse, Message, Badge, Row, Col, Tag, Avatar, Empty } from "antd";
+import {
+  Collapse,
+  Message,
+  Badge,
+  Row,
+  Col,
+  Tag,
+  Avatar,
+  Empty,
+  Space,
+  Card,
+} from "antd";
 import React from "react";
 import moment from "moment";
 import general_helper from "../../helper/general_helper";
@@ -27,12 +38,13 @@ const Index = ({
   activate,
 }) => {
   const handleMore = (idData, index) => {
-    console.log(`key`, `${key}-${index}`);
     if (idData === null) Message.success("data tidak ada");
     else {
       callback(idData, index);
     }
   };
+
+  console.log(activate);
   return (
     <Collapse
       bordered={false}
@@ -51,46 +63,93 @@ const Index = ({
     >
       <Panel
         header={
-          <Badge.Ribbon
-            color={status === 0 ? "#f50" : "#87d068"}
-            text={
-              <small>
-                {status === 0 ? <SyncOutlined spin /> : <CheckCircleOutlined />}
-                &nbsp;
-                {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
-              </small>
-            }
-          >
-            <Row type="flex" style={{ alignItems: "center" }}>
-              <Col>
-                <Avatar src={picture}>
-                  {general_helper.getInitialName(name)}
-                </Avatar>
-              </Col>
-              <Col style={{ marginLeft: "5px" }}>
+          <Badge.Ribbon text="Hippies" color="magenta">
+            <Card
+              title={
                 <Row>
-                  <small>{name}</small>
+                  <Col>
+                    <Avatar src={picture} size={30}>
+                      {general_helper.getInitialName(name)}
+                    </Avatar>
+                  </Col>
+                  <Col style={{ marginLeft: "5px" }}>
+                    <Row>
+                      <small>{name}</small>
+                    </Row>
+                    <Row>
+                      <small>
+                        <Badge
+                          style={{
+                            color: activate === 0 ? "#f50" : "#87d068",
+                          }}
+                          status={activate === 0 ? "processing" : "green"}
+                          text={
+                            <small>
+                              {activate === 0
+                                ? "Belum Terverifikasi"
+                                : "Sudah Terverifikasi"}
+                            </small>
+                          }
+                        />
+                      </small>
+                    </Row>
+                  </Col>
                 </Row>
-                <Row>
-                  <small>
-                    <Badge
-                      style={{
-                        color: activate === 0 ? "#f50" : "#87d068",
-                      }}
-                      status={activate === 0 ? "processing" : "green"}
-                      text={
-                        <small>
-                          {activate === 0
-                            ? "Belum Terverifikasi"
-                            : "Sudah Terverifikasi"}
-                        </small>
-                      }
-                    />
-                  </small>
-                </Row>
-              </Col>
-            </Row>
+              }
+              size="small"
+            >
+              and raises the spyglass.
+            </Card>
           </Badge.Ribbon>
+          // <Badge.Ribbon
+          //   placement="start"
+          //   color={status === 0 ? "#f50" : "#87d068"}
+          //   text={
+          //     <Space>
+          //       <small>
+          //         {status === 0 ? (
+          //           <SyncOutlined spin />
+          //         ) : (
+          //           <CheckCircleOutlined />
+          //         )}
+          //         &nbsp;
+          //         {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+          //       </small>
+          //       {/* {activate === 0 && <Tag>Aktivasi</Tag>} */}
+          //     </Space>
+          //   }
+          // >
+          //   <p style={{ float: "right" }}>ads</p>
+          //   <Row type="flex" style={{ alignItems: "center" }}>
+          //     <Col>
+          // <Avatar src={picture}>
+          //   {general_helper.getInitialName(name)}
+          // </Avatar>
+          //     </Col>
+          // <Col style={{ marginLeft: "5px" }}>
+          //   <Row>
+          //     <small>{name}</small>
+          //   </Row>
+          //   <Row>
+          //     <small>
+          //       <Badge
+          //         style={{
+          //           color: activate === 0 ? "#f50" : "#87d068",
+          //         }}
+          //         status={activate === 0 ? "processing" : "green"}
+          //         text={
+          //           <small>
+          //             {activate === 0
+          //               ? "Belum Terverifikasi"
+          //               : "Sudah Terverifikasi"}
+          //           </small>
+          //         }
+          //       />
+          //     </small>
+          //   </Row>
+          // </Col>
+          //   </Row>
+          // </Badge.Ribbon>
         }
       >
         {children.length > 0

@@ -1,6 +1,6 @@
 import { MEMBER } from "../type";
 import { handleGet, handlePost, handlePut } from "../../action/baseAction";
-import authAction from "../../action/auth.action";
+import authAction, { doLogout } from "../../action/auth.action";
 import { Message } from "antd";
 import Router from "next/router";
 
@@ -46,6 +46,27 @@ export const putMemberAction = (id, e) => {
               authAction.doLogout();
             });
           });
+      } else {
+        dispatch(setLoading(false));
+      }
+    });
+  };
+};
+export const createPinAction = (id, e) => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    handlePut(`member/pin/${id}`, { pin: e }, (res, status, msg) => {
+      if (status) {
+        Message.success(msg).then(() => {
+          Message.info(
+            "Demi keamanan, Anda akan dialihkan ke halaman login terlebih dahulu"
+          ).then(() => {
+            Router.push("/signin").then(() => {
+              dispatch(setLoading(false));
+              doLogout();
+            });
+          });
+        });
       } else {
         dispatch(setLoading(false));
       }
