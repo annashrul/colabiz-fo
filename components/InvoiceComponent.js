@@ -44,11 +44,13 @@ const InvoiceComponent = () => {
     ) {
       Router.back();
       // Router.push("/_error");
+    } else {
+      if (state.mobile) {
+        setFontSize("80%");
+      }
+      console.log("############", kdTrx);
+      dispatch(invoiceAction(kdTrx, typeTrx));
     }
-    if (state.mobile) {
-      setFontSize("80%");
-    }
-    dispatch(invoiceAction(kdTrx, typeTrx));
   }, []);
 
   const rmStorageLocal = () => {
