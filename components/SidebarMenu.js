@@ -103,8 +103,6 @@ const SidebarContent = ({
           if (user.stockis !== 0 && route.name === "Daftar Stokis") {
             displayNone = "none";
           }
-
-          // console.log(user);
           if (!hasChildren) {
             return (
               <Menu.Item

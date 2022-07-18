@@ -97,8 +97,9 @@ const ListProduct = () => {
 
   useEffect(() => {
     if (!loadingData && !loadingConfig) {
+      console.log(dataConfig);
       if (data !== undefined && data.length > 0) {
-        if (dataConfig.data_stockis.id === "-") {
+        if (dataConfig.id_stockis === "-") {
           setDataStockis(data);
         } else {
           handleSetStockis(dataConfig.data_stockis, 0);
