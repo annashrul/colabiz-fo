@@ -9,6 +9,7 @@ import {
   Empty,
   Space,
   Card,
+  Button,
 } from "antd";
 import React from "react";
 import moment from "moment";
@@ -63,7 +64,16 @@ const Index = ({
     >
       <Panel
         header={
-          <Badge.Ribbon text="Hippies" color="magenta">
+          <Badge.Ribbon
+            color={status === 0 ? "#f50" : "#87d068"}
+            text={
+              <small>
+                {status === 0 ? <SyncOutlined spin /> : <CheckCircleOutlined />}
+                &nbsp;
+                {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+              </small>
+            }
+          >
             <Card
               title={
                 <Row>
@@ -98,7 +108,29 @@ const Index = ({
               }
               size="small"
             >
-              and raises the spyglass.
+              <Row>
+                <Col md={12}>
+                  {activate === 0
+                    ? "Belum Terverifikasi"
+                    : "Sudah Terverifikasi"}
+                </Col>
+                {activate === 0 && (
+                  <Col md={12}>
+                    <p style={{ float: "right" }}>
+                      <Button
+                        htmlType="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          return;
+                        }}
+                        size="small"
+                      >
+                        Aktivasi
+                      </Button>
+                    </p>
+                  </Col>
+                )}
+              </Row>
             </Card>
           </Badge.Ribbon>
           // <Badge.Ribbon
@@ -106,15 +138,15 @@ const Index = ({
           //   color={status === 0 ? "#f50" : "#87d068"}
           //   text={
           //     <Space>
-          //       <small>
-          //         {status === 0 ? (
-          //           <SyncOutlined spin />
-          //         ) : (
-          //           <CheckCircleOutlined />
-          //         )}
-          //         &nbsp;
-          //         {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
-          //       </small>
+          // <small>
+          //   {status === 0 ? (
+          //     <SyncOutlined spin />
+          //   ) : (
+          //     <CheckCircleOutlined />
+          //   )}
+          //   &nbsp;
+          //   {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+          // </small>
           //       {/* {activate === 0 && <Tag>Aktivasi</Tag>} */}
           //     </Space>
           //   }
@@ -133,15 +165,15 @@ const Index = ({
           //   <Row>
           //     <small>
           //       <Badge
-          //         style={{
-          //           color: activate === 0 ? "#f50" : "#87d068",
-          //         }}
-          //         status={activate === 0 ? "processing" : "green"}
+          // style={{
+          //   color: activate === 0 ? "#f50" : "#87d068",
+          // }}
+          // status={activate === 0 ? "processing" : "green"}
           //         text={
           //           <small>
-          //             {activate === 0
-          //               ? "Belum Terverifikasi"
-          //               : "Sudah Terverifikasi"}
+          // {activate === 0
+          //   ? "Belum Terverifikasi"
+          //   : "Sudah Terverifikasi"}
           //           </small>
           //         }
           //       />
