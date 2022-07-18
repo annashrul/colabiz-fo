@@ -40,7 +40,6 @@ import { getPaket } from "../../redux/actions/paket.action";
 import CardPaket from "../paket/CardPaket";
 import { useAppState } from "../shared/AppProvider";
 import { getConfigAction } from "../../redux/actions/info.action";
-import ModalPin from "../ModalPin";
 import FormComponent from "../profile/formComponent";
 import authAction from "../../action/auth.action";
 import { StringLink } from "../../helper/string_link_helper";
