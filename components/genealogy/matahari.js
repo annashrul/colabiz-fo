@@ -31,7 +31,7 @@ const Matahari = ({
   };
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div style={{ marginTop: "20px", zoom: "80%" }}>
       <div className="row">
         <div className="col-md-12">
           <div className="tree">
