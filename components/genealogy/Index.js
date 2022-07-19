@@ -61,7 +61,6 @@ const Index = ({
       callback(id, no);
     }, 300);
   }, []);
-  console.log("children", no);
   return (
     <Collapse
       key={no}

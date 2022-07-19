@@ -10,6 +10,8 @@ export const StringLink = {
   address: "/address",
   profile: "/profile",
   genealogy: "/genealogy",
+  genealogyPraPosting: "/genealogy/pra-posting",
+  genealogyMonolegNasional: "/genealogy/monoleg-nasional",
   product: "/product",
   invoiceProduct: "/invoice",
   // checkout: "/product/checkout",

@@ -1,5 +1,5 @@
-import { Empty, Message } from "antd";
-import React from "react";
+import { Badge, Empty, Message } from "antd";
+import React, { useEffect } from "react";
 import moment from "moment";
 import ComponentMatahari from "./componenMatahari";
 // import ReactFamilyTree from "react-family-tree";
@@ -8,7 +8,7 @@ import ComponentMatahari from "./componenMatahari";
 moment.locale("id");
 
 const Matahari = ({
-  key,
+  no,
   isActive,
   loading,
   joinDate,
@@ -23,6 +23,12 @@ const Matahari = ({
   handleActive,
   totalPinAktivasi,
 }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("running on ", name);
+      callback(id, no);
+    }, 300);
+  }, []);
   const handleMore = (idData, index) => {
     if (idData === null) Message.success("data tidak ada");
     else {
@@ -41,7 +47,7 @@ const Matahari = ({
                   href="#"
                   onClick={(e) => {
                     if (!isActive) {
-                      handleMore(id, key);
+                      handleMore(id, no);
                     }
                   }}
                 >
@@ -64,6 +70,7 @@ const Matahari = ({
                       return (
                         <ComponentMatahari
                           key={index}
+                          no={res.no}
                           isActive={res.isActive}
                           loading={loading}
                           joinDate={res.join_date}

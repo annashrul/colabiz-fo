@@ -1,5 +1,5 @@
-import { Empty, Message } from "antd";
-import React from "react";
+import { Empty, Message, Tag } from "antd";
+import React, { useEffect } from "react";
 import moment from "moment";
 // import ReactFamilyTree from "react-family-tree";
 // import FamilyNode from "./your-components/FamilyNode";
@@ -7,7 +7,7 @@ import moment from "moment";
 moment.locale("id");
 
 const ComponentMatahari = ({
-  key,
+  no,
   isActive,
   loading,
   joinDate,
@@ -30,10 +30,10 @@ const ComponentMatahari = ({
   };
   return (
     <>
-      <li key={key}>
+      <li key={no}>
         <a
           onClick={(e) => {
-            handleMore(id, key);
+            handleMore(id, no);
           }}
         >
           <div className="container-genealogy">
@@ -45,7 +45,16 @@ const ComponentMatahari = ({
             </div>
             <div className="row">{name}</div>
             <div className="row" style={{ marginBottom: "5px" }}>
-              {status === 0 ? "Belum Terverifikasi" : "Sudah Terverifikasi"}
+              <p>
+                <Tag color={status === 0 ? "#f50" : "#87d068"}>
+                  {status === 0 ? "Belum Terverifikasi" : "Sudah Terverifikasi"}
+                </Tag>
+              </p>
+              <p className="mt-2">
+                <Tag color={activate === 0 ? "#f50" : "#87d068"}>
+                  {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+                </Tag>
+              </p>
             </div>
           </div>
         </a>
@@ -54,6 +63,7 @@ const ComponentMatahari = ({
         children.map((res, index) => {
           <ComponentMatahari
             key={index}
+            no={res.no}
             isActive={res.isActive}
             loading={loading}
             joinDate={res.join_date}
