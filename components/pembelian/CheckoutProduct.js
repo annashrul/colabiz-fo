@@ -11,6 +11,7 @@ import {
   Typography,
   Badge,
   Collapse,
+  message,
 } from "antd";
 
 const { Panel } = Collapse;
@@ -421,7 +422,13 @@ const CheckoutProduct = () => {
                       <Button
                         disabled={dataCart.length < 1}
                         type="primary"
-                        onClick={(e) => setVisible(true)}
+                        onClick={(e) => {
+                          if (parseInt(info.saldo, 10) > 0) {
+                            setVisible(true);
+                          } else {
+                            message.info("saldo anda tidak cukup");
+                          }
+                        }}
                       >
                         Checkout
                       </Button>

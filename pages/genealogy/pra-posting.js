@@ -101,6 +101,7 @@ const GenealogyPraPosting = () => {
             },
             () => {
               onChange(id_member, index);
+              getGenealogy();
             }
           )
         );
