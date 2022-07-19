@@ -329,7 +329,7 @@ const CreateStockis = () => {
                         </Radio.Button>
                       </Radio.Group>
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                       name="checkedBanks"
                       label="Gunakan akun bank yang sudah ada ?"
                       onChange={(e) => {
@@ -364,7 +364,7 @@ const CreateStockis = () => {
                           Tidak
                         </Radio.Button>
                       </Radio.Group>
-                    </Form.Item>
+                    </Form.Item> */}
                   </Col>
                 </Row>
               )}

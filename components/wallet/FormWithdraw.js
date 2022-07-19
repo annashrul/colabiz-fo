@@ -202,8 +202,7 @@ const FormWithdraw = () => {
                     size={"large"}
                   >
                     {general_helper.toRp(
-                      parseInt(form.getFieldValue("amount"), 10) -
-                        parseInt(dataConfig.charge_withdraw, 10)
+                      parseInt(form.getFieldValue("amount"), 10)
                     )}
                   </Button>
                   <Divider plain>Informasi Akun Bank</Divider>
@@ -227,8 +226,11 @@ const FormWithdraw = () => {
                   <Divider plain>Informasi Lainnya</Divider>
 
                   {general_helper.tempRow(
-                    "Jumlah Penarikan",
-                    general_helper.toRp(form.getFieldValue("amount")),
+                    "Saldo yang akan berkurang",
+                    general_helper.toRp(
+                      parseInt(form.getFieldValue("amount"), 10) +
+                        parseInt(dataConfig.charge_withdraw, 10)
+                    ),
                     true
                   )}
                   {general_helper.tempRow(
@@ -241,8 +243,7 @@ const FormWithdraw = () => {
                   {general_helper.tempRow(
                     "Uang Yang Diterima",
                     general_helper.toRp(
-                      parseInt(form.getFieldValue("amount"), 10) -
-                        parseInt(dataConfig.charge_withdraw, 10)
+                      parseInt(form.getFieldValue("amount"), 10)
                     ),
                     true
                   )}
