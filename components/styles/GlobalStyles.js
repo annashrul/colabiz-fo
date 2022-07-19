@@ -103,7 +103,7 @@ right connector from last child*/
 
       .tree li a {
         height: auto;
-        width: 200px;
+        width: 120px;
         padding: 5px 10px;
         text-decoration: none;
         background-color: white;
