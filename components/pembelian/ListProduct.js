@@ -499,7 +499,6 @@ const ListProduct = () => {
         <Button
           type="primary"
           onClick={(e) => {
-            console.log(step);
             if (step === 2) {
               localStorage.setItem("linkBackProduct", 3);
               dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));

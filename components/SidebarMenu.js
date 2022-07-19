@@ -112,7 +112,9 @@ const SidebarContent = ({
                   pathname === route.path ? "ant-menu-item-selected" : ""
                 }
                 onClick={() => {
-                  localStorage.removeItem("linkBackProduct");
+                  if (localStorage.linkBackProduct !== undefined) {
+                    localStorage.removeItem("linkBackProduct");
+                  }
                   setOpenKeys([getKey(route.name, index)]);
                   if (state.mobile) dispatch({ type: "mobileDrawer" });
                 }}
@@ -196,6 +198,9 @@ const SidebarContent = ({
                           : ""
                       }
                       onClick={() => {
+                        if (localStorage.linkBackProduct !== undefined) {
+                          localStorage.removeItem("linkBackProduct");
+                        }
                         // if (state.mobile) dispatch({ type: "mobileDrawer" });
                       }}
                     >
