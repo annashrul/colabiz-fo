@@ -1,4 +1,14 @@
-import { Card, Col, Row, Form, Tooltip, Typography, Input, Space } from "antd";
+import {
+  Card,
+  Col,
+  Row,
+  Form,
+  Tooltip,
+  Typography,
+  Input,
+  Space,
+  Button,
+} from "antd";
 import React from "react";
 import general_helper from "../../helper/general_helper";
 const BonusComponent = ({ info }) => {
@@ -66,7 +76,11 @@ const BonusComponent = ({ info }) => {
               <Input
                 disabled
                 addonBefore=""
-                addonAfter={<a>Klaim</a>}
+                addonAfter={
+                  <Button size="small" disabled>
+                    Klaim
+                  </Button>
+                }
                 value={general_helper.toRp(info.saldo_generasi)}
               />
             </Form.Item>
@@ -74,7 +88,11 @@ const BonusComponent = ({ info }) => {
               <Input
                 disabled
                 addonBefore=""
-                addonAfter={<a>Klaim</a>}
+                addonAfter={
+                  <Button size="small" disabled>
+                    Klaim
+                  </Button>
+                }
                 value={general_helper.toRp(info.poin, true)}
               />
             </Form.Item>
