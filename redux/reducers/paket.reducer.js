@@ -4,7 +4,9 @@ const initialState = {
   loadingSmartContract: true,
   loadingHappyShopping: true,
   loadingCheckout: false,
+  loadingDetail: true,
 
+  dataDetail: [],
   dataRegister: [],
   paginationRegister: [],
   dataSmartContract: [],
@@ -15,6 +17,11 @@ const initialState = {
 
 export const paketReducer = (state = initialState, action) => {
   switch (action.type) {
+    case PAKET.DATA_DETAIL_PAKET:
+      return {
+        ...state,
+        dataDetail: action.data.data,
+      };
     case PAKET.DATA_REGISTER:
       return {
         ...state,
@@ -48,6 +55,10 @@ export const paketReducer = (state = initialState, action) => {
     case PAKET.LOADING_CHECKOUT:
       return Object.assign({}, state, {
         loadingCheckout: action.load,
+      });
+    case PAKET.LOADING_DETAIL_PAKET:
+      return Object.assign({}, state, {
+        loadingDetail: action.load,
       });
     default:
       return state;

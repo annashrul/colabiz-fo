@@ -6,6 +6,12 @@ import { Message } from "antd";
 import Router from "next/router";
 import { getCartAction } from "./cart.action";
 
+export const setDataDetail = (data) => {
+  return {
+    type: PAKET.DATA_DETAIL_PAKET,
+    data,
+  };
+};
 export const setDataRegister = (data) => {
   return {
     type: PAKET.DATA_REGISTER,
@@ -52,6 +58,23 @@ export const setLoadingCheckout = (load) => {
   };
 };
 
+export const setLoadingDetail = (load) => {
+  return {
+    type: PAKET.LOADING_DETAIL_PAKET,
+    load,
+  };
+};
+
+export const getPaketDetail = (id = "") => {
+  return (dispatch) => {
+    dispatch(setLoadingDetail(true));
+    let url = `paket/get/${id}`;
+    handleGet(url, (res, status) => {
+      dispatch(setDataDetail(res));
+      dispatch(setLoadingDetail(false));
+    });
+  };
+};
 export const getPaket = (where = "", type = "REGISTER") => {
   return (dispatch) => {
     // if (type === "HAPPY_SHOPPING") {

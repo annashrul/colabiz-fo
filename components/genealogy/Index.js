@@ -16,6 +16,7 @@ import moment from "moment";
 import general_helper from "../../helper/general_helper";
 import {
   CheckCircleOutlined,
+  SettingOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
   ExclamationCircleOutlined,
@@ -87,41 +88,38 @@ const Index = ({
                       <small>{name}</small>
                     </Row>
                     <Row>
-                      <small>
-                        <Badge
-                          style={{
-                            color: activate === 0 ? "#f50" : "#87d068",
-                          }}
-                          status={activate === 0 ? "processing" : "green"}
-                          text={
-                            <small>
-                              {activate === 0
-                                ? "Belum Terverifikasi"
-                                : "Sudah Terverifikasi"}
-                            </small>
-                          }
-                        />
-                      </small>
+                      <Col md={12}>
+                        <small>
+                          <Badge
+                            style={{
+                              color: activate === 0 ? "#f50" : "#87d068",
+                            }}
+                            status={activate === 0 ? "processing" : "green"}
+                            text={
+                              <small>
+                                {activate === 0
+                                  ? "Belum Terverifikasi"
+                                  : "Sudah Terverifikasi"}
+                              </small>
+                            }
+                          />
+                        </small>
+                      </Col>
                     </Row>
                   </Col>
                 </Row>
               }
               size="small"
             >
-              <Row>
-                <Col md={12}>
-                  {activate === 0
-                    ? "Belum Terverifikasi"
-                    : "Sudah Terverifikasi"}
-                </Col>
-                {activate === 0 && (
-                  <Col md={12}>
+              {activate === 0 && (
+                <Row>
+                  <Col md={24} xs={24} sm={24}>
                     <p style={{ float: "right" }}>
                       <Button
                         htmlType="button"
                         onClick={(e) => {
-                          e.preventDefault();
-                          return;
+                          e.stopPropagation();
+                          // return;
                         }}
                         size="small"
                       >
@@ -129,8 +127,8 @@ const Index = ({
                       </Button>
                     </p>
                   </Col>
-                )}
-              </Row>
+                </Row>
+              )}
             </Card>
           </Badge.Ribbon>
           // <Badge.Ribbon

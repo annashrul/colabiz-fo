@@ -112,6 +112,7 @@ const SidebarContent = ({
                   pathname === route.path ? "ant-menu-item-selected" : ""
                 }
                 onClick={() => {
+                  localStorage.removeItem("linkBackProduct");
                   setOpenKeys([getKey(route.name, index)]);
                   if (state.mobile) dispatch({ type: "mobileDrawer" });
                 }}

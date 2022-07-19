@@ -45,6 +45,7 @@ import authAction from "../../action/auth.action";
 import { StringLink } from "../../helper/string_link_helper";
 const { Option } = Select;
 import Router from "next/router";
+import CardProduct from "./CardProduct";
 
 const ListProduct = () => {
   const dispatch = useDispatch();
@@ -87,11 +88,18 @@ const ListProduct = () => {
   } = useSelector((state) => state.addressReducer);
 
   useEffect(() => {
+    console.log("locls", localStorage.linkBackProduct);
     dispatch(getStockisAction("page=1"));
     dispatch(getCartAction());
     // dispatch(getPaket("page=1", "REGISTER"));
     // dispatch(getPaket("page=1", "HAPPY_SHOPPING"));
     dispatch(getConfigAction());
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.linkBackProduct !== undefined) {
+      setStep(3);
+    }
   }, []);
 
   useEffect(() => {
@@ -474,35 +482,8 @@ const ListProduct = () => {
 
       {step === 3 && (
         <Spin spinning={loadingCart}>
-          <Row gutter={16} className={"mt-3"}>
-            <Col xs={24} sm={24} md={24} className="mb-3">
-              <Spin spinning={loadingRegister}>
-                <Card
-                  title={`PAKET ${kategoriPaket[indexKategoriPaket].replaceAll(
-                    "_",
-                    " "
-                  )}`}
-                >
-                  <CardPaket
-                    isButton={true}
-                    callback={(val) => {
-                      if (dataConfig.pin === "-") {
-                        setIsModalPin(true);
-                      } else {
-                        if (indexStockis !== "") {
-                          dispatch(postCart(val.id));
-                        } else {
-                          Message.info("Silahkan pilih stokis terlebih dahulu");
-                        }
-                      }
-                    }}
-                    data={dataRegister}
-                    pagination={paginationRegister}
-                  />
-                </Card>
-              </Spin>
-            </Col>
-          </Row>
+          <br />
+          <CardProduct category={kategoriPaket[indexKategoriPaket]} />
         </Spin>
       )}
       <Row gutter={16} align="end" className="mt-2">
@@ -520,6 +501,7 @@ const ListProduct = () => {
           onClick={(e) => {
             console.log(step);
             if (step === 2) {
+              localStorage.setItem("linkBackProduct", 3);
               dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));
             } else if (step == 3) {
               if (dataCart.length > 0) {
@@ -541,7 +523,7 @@ const ListProduct = () => {
         <FormComponent
           isModal={isModalPin}
           ok={(e) => {
-            console.log(e);
+            setIsModalPin(false);
           }}
           cancel={(e) => setIsModalPin(false)}
           userData={authAction.getUser()}
