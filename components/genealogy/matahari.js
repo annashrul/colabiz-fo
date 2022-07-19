@@ -40,7 +40,14 @@ const Matahari = ({
     <div style={{ marginTop: "20px", zoom: "80%" }}>
       <div className="row">
         <div className="col-md-12">
-          <div className="tree">
+          <div
+            className="tree"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+            }}
+          >
             <ul>
               <li>
                 <a
