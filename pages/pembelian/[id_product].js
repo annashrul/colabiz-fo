@@ -46,6 +46,7 @@ const DetailProduct = () => {
 
   const temp = () => {
     return (
+      !loadingDetail &&
       dataDetail !== undefined && (
         <Row gutter={16}>
           <Col xs={24} sm={24} md={16}>
