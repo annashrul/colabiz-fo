@@ -497,15 +497,17 @@ const ListProduct = () => {
       )}
       <Row gutter={16} align="end" className="mt-2">
         <Col>
-          <Button
-            onClick={(e) => {
-              setStep(step - 1);
-            }}
-            type="dashed"
-            className="mr-2"
-          >
-            Kembali
-          </Button>
+          {step > 1 && (
+            <Button
+              onClick={(e) => {
+                setStep(step - 1);
+              }}
+              type="dashed"
+              className="mr-2"
+            >
+              Kembali
+            </Button>
+          )}
           <Button
             type="primary"
             onClick={(e) => {
