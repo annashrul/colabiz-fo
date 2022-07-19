@@ -5,7 +5,7 @@ import moment from "moment";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
 import Matahari from "../../components/genealogy/matahari";
-import { Tabs, Modal, Spin } from "antd";
+import { Tabs, Modal, Spin, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getGenealogyAction } from "../../redux/actions/member.action";
 moment.locale("id");
@@ -130,7 +130,13 @@ const GenealogyPraPosting = () => {
             status={res.status}
             activate={res.activate}
             id_member={res.id_member}
-            handleActive={(id_member, key) => handleActivate(id_member, index)}
+            handleActive={(id_member, key) => {
+              if (parseInt(dataConfig.total_pin_aktivasi, 10) === 0) {
+                message.info("pin aktivasi anda sudah habis");
+              } else {
+                handleActivate(id_member, index);
+              }
+            }}
             totalPinAktivasi={res.totalPinAktivasi}
           />
         );

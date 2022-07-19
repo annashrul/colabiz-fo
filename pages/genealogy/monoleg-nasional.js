@@ -128,7 +128,11 @@ const GenealogyMonolegNasional = () => {
         status={res.status}
         activate={res.activate}
         id_member={res.id_member}
-        handleActive={(id_member, key) => handleActivate(id_member, index)}
+        handleActive={(id_member, key) => {
+          if (parseInt(dataConfig.total_pin_aktivasi, 10) === 0) {
+            handleActivate(id_member, index);
+          }
+        }}
         totalPinAktivasi={res.totalPinAktivasi}
       />
     );
