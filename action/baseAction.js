@@ -33,11 +33,11 @@ export const handlePost = async (url, data, callback) => {
       callback(datum, false, "gagal memproses permintaan.");
     }
   } catch (err) {
-    let msg = err.message;
-    if (err.response.data !== undefined) {
+    callback([], false, "gagal");
+    let msg = "Terjadi Kesalahan Jaringan";
+    if (err.response.data.meta !== undefined) {
       msg = err.response.data.meta.message;
     }
-    callback([], false, msg);
     const key = `open${Date.now()}`;
     notification.error({
       message: "Terjadi Kesalahan",

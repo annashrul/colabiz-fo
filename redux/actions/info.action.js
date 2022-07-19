@@ -3,6 +3,7 @@ import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import authAction from "../../action/auth.action";
 import { message, Message } from "antd";
 import Router from "next/router";
+import { getGenealogyAction } from "./member.action";
 
 export const setLoadingConfig = (load) => {
   return {
@@ -51,14 +52,19 @@ export const setLoadingPinSmartContract = (load) => {
   };
 };
 
-export const aktivasiPinAction = (data) => {
+export const aktivasiPinAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingPinAktivasi(true));
     handlePost("pin/aktivasi/register", data, (res, status, msg) => {
       dispatch(setLoadingPinAktivasi(false));
       if (status) {
-        dispatch(getInfoAction());
         message.success(msg);
+      }
+      if (callback !== undefined) {
+        callback();
+        console.log(data);
+      } else {
+        dispatch(getInfoAction());
       }
     });
   };

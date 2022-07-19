@@ -5,13 +5,22 @@ import moment from "moment";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
 import Matahari from "../../components/genealogy/matahari";
-import { Tabs } from "antd";
+import { Tabs, Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { getGenealogyAction } from "../../redux/actions/member.action";
 moment.locale("id");
+
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { aktivasiPinAction } from "../../redux/actions/info.action";
+const { confirm } = Modal;
 
 const Genealogy = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   let user = authAction.getUser();
+  const { loadingGenealogy, dataGenealogy } = useSelector(
+    (state) => state.authUserReducer.loadingLogin
+  );
 
   const getGenealogy = async (where) => {
     setData([
@@ -26,16 +35,17 @@ const Genealogy = () => {
         key: "0",
         status: user.status,
         activate: user.activate,
+        id_member: user.id,
       },
     ]);
     setLoading(false);
   };
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    setLoading(loadingGenealogy);
     getGenealogy(`${user.referral}?isfirst=true`);
   }, []);
-  console.log("keys", user);
-
   const onChange = async (val, keys) => {
     setLoading(true);
     await handleGet("member/genealogy/" + val, (res, status) => {
@@ -55,6 +65,30 @@ const Genealogy = () => {
         setData(data.concat(res.data));
       }
       setLoading(false);
+    });
+  };
+  const handleActivate = (id_member, index) => {
+    confirm({
+      visible: true,
+      title: "Informasi",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Oke, Lanjut",
+      okType: "danger",
+      cancelText: "Kembali",
+      content: "Anda yakin akan melakukan proses ini ?",
+      onOk() {
+        console.log(id_member);
+        dispatch(
+          aktivasiPinAction(
+            {
+              id_member: id_member,
+            },
+            () => {
+              onChange(id_member, index);
+            }
+          )
+        );
+      },
     });
   };
 
@@ -77,6 +111,8 @@ const Genealogy = () => {
         }}
         status={res.status}
         activate={res.activate}
+        id_member={res.id_member}
+        handleActive={(id_member, key) => handleActivate(id_member, index)}
       />
     );
   });

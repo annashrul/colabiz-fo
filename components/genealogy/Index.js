@@ -10,6 +10,7 @@ import {
   Space,
   Card,
   Button,
+  Modal,
 } from "antd";
 import React from "react";
 import moment from "moment";
@@ -23,8 +24,11 @@ import {
   MinusCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
+import { aktivasiPinAction } from "../../redux/actions/info.action";
+import { useDispatch } from "react-redux";
 moment.locale("id");
 const { Panel } = Collapse;
+const { confirm } = Modal;
 
 const Index = ({
   key,
@@ -38,7 +42,10 @@ const Index = ({
   callback,
   status,
   activate,
+  id_member,
+  handleActive,
 }) => {
+  const dispatch = useDispatch();
   const handleMore = (idData, index) => {
     if (idData === null) Message.success("data tidak ada");
     else {
@@ -46,7 +53,6 @@ const Index = ({
     }
   };
 
-  console.log(activate);
   return (
     <Collapse
       bordered={false}
@@ -119,7 +125,7 @@ const Index = ({
                         htmlType="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          // return;
+                          handleActive(id_member, key);
                         }}
                         size="small"
                       >
@@ -131,55 +137,6 @@ const Index = ({
               )}
             </Card>
           </Badge.Ribbon>
-          // <Badge.Ribbon
-          //   placement="start"
-          //   color={status === 0 ? "#f50" : "#87d068"}
-          //   text={
-          //     <Space>
-          // <small>
-          //   {status === 0 ? (
-          //     <SyncOutlined spin />
-          //   ) : (
-          //     <CheckCircleOutlined />
-          //   )}
-          //   &nbsp;
-          //   {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
-          // </small>
-          //       {/* {activate === 0 && <Tag>Aktivasi</Tag>} */}
-          //     </Space>
-          //   }
-          // >
-          //   <p style={{ float: "right" }}>ads</p>
-          //   <Row type="flex" style={{ alignItems: "center" }}>
-          //     <Col>
-          // <Avatar src={picture}>
-          //   {general_helper.getInitialName(name)}
-          // </Avatar>
-          //     </Col>
-          // <Col style={{ marginLeft: "5px" }}>
-          //   <Row>
-          //     <small>{name}</small>
-          //   </Row>
-          //   <Row>
-          //     <small>
-          //       <Badge
-          // style={{
-          //   color: activate === 0 ? "#f50" : "#87d068",
-          // }}
-          // status={activate === 0 ? "processing" : "green"}
-          //         text={
-          //           <small>
-          // {activate === 0
-          //   ? "Belum Terverifikasi"
-          //   : "Sudah Terverifikasi"}
-          //           </small>
-          //         }
-          //       />
-          //     </small>
-          //   </Row>
-          // </Col>
-          //   </Row>
-          // </Badge.Ribbon>
         }
       >
         {children.length > 0
@@ -200,6 +157,10 @@ const Index = ({
                     }}
                     status={res.status}
                     activate={res.activate}
+                    id_member={res.id_member}
+                    handleActive={(id_member, index) =>
+                      handleActive(id_member, index)
+                    }
                   />
                 </span>
               );

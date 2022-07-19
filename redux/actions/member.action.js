@@ -25,12 +25,13 @@ export const setDataGenealogy = (data) => {
   };
 };
 
-export const getGenealogyAction = (where = "") => {
+export const getGenealogyAction = (where = "", callback) => {
   return (dispatch) => {
     dispatch(setLoadingGenealogy(true));
     handleGet("member/genealogy/" + where, (res, status) => {
       dispatch(setDataGenealogy(res.data));
       dispatch(setLoadingGenealogy(false));
+      callback(res.data);
     });
   };
 };
