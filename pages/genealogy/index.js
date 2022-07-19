@@ -112,7 +112,7 @@ const Genealogy = () => {
   };
   return (
     <Tabs defaultActiveKey="1">
-      <TabPane tab="Satu Arah" key="1">
+      <TabPane tab="Genealogy 1" key="1">
         {arrayToTree(data.length > 0 ? data : [], {
           dataField: null,
           childrenField: "children",
@@ -143,7 +143,7 @@ const Genealogy = () => {
           );
         })}
       </TabPane>
-      <TabPane tab="Matahari" key="2">
+      <TabPane tab="Genealogy 2" key="2">
         {arrayToTree(data.length > 0 ? data : [], {
           dataField: null,
           childrenField: "children",
