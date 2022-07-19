@@ -40,6 +40,7 @@ const DetailProduct = () => {
   }, []);
   useEffect(() => {
     dispatch(getConfigAction());
+    console.log(Router.router.query.id_product);
     dispatch(getPaketDetail(Router.router.query.id_product));
   }, []);
 

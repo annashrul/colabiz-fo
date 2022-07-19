@@ -70,6 +70,7 @@ export const getPaketDetail = (id = "") => {
     dispatch(setLoadingDetail(true));
     let url = `paket/get/${id}`;
     handleGet(url, (res, status) => {
+      console.log("detail", res);
       dispatch(setDataDetail(res));
       dispatch(setLoadingDetail(false));
     });
