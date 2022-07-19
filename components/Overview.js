@@ -62,6 +62,8 @@ const Overview = () => {
     }
   }
 
+  console.log("info", data);
+
   const tempAktivasi = () => {
     return (
       <Card title={"Pin Anda"}>

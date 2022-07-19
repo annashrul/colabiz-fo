@@ -5,15 +5,27 @@ import authAction from "../../action/auth.action";
 import { CopyOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
 import moment from "moment";
+import { getInfoAction } from "../../redux/actions/info.action";
+import { useDispatch, useSelector } from "react-redux";
+
 moment.locale("id");
 const ProfileCard = ({ callback }) => {
+  const dispatch = useDispatch();
   const [state] = useAppState();
   const [user, setUser] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const { loading, data, loadingPinAktivasi, loadingHappyShopping } =
+    useSelector((state) => state.infoReducer);
   useEffect(() => {
     const users = authAction.getUser();
     setUser(users);
   }, [state, showForm]);
+
+  useEffect(() => {
+    // dispatch(getInfoAction());
+  }, []);
+
+  // console.log("info", data);
 
   const tempRow = (title, desc) => {
     return (
