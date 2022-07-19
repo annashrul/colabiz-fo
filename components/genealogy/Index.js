@@ -25,7 +25,10 @@ import {
   MinusCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { aktivasiPinAction } from "../../redux/actions/info.action";
+import {
+  aktivasiPinAction,
+  getConfigAction,
+} from "../../redux/actions/info.action";
 import { useDispatch } from "react-redux";
 moment.locale("id");
 const { Panel } = Collapse;
@@ -55,7 +58,12 @@ const Index = ({
     // }
     callback(idData, index);
   };
-
+  useEffect(() => {
+    dispatch(getConfigAction());
+  }, []);
+  const { loadingConfig, dataConfig } = useSelector(
+    (state) => state.infoReducer
+  );
   useEffect(() => {
     setTimeout(() => {
       console.log("running on ", name);
@@ -141,7 +149,7 @@ const Index = ({
                         htmlType="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (parseInt(totalPinAktivasi, 10) > 0) {
+                          if (parseInt(dataConfig.total_pin_aktivasi, 10) > 0) {
                             handleActive(id_member, no);
                           } else {
                             message.info("pin aktivasi anda sudah habis");
