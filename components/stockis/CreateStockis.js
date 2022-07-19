@@ -75,7 +75,8 @@ const CreateStockis = () => {
     // console.log(objAddress);
     const data = {
       id_address: parseInt(checkedAdress, 10) === 1 ? "-" : objAddress.id,
-      id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
+      id_bank: objBanks.id,
+      // id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
       name: objForm.name,
       mobile_no: value,
       email: objForm.email,
