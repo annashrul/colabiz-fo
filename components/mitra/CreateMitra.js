@@ -137,9 +137,9 @@ const TambahMitra = () => {
       email: dataForm.email,
       sponsor: user.referral,
       data_bank: {
-        id_bank: dataForm.id_bank,
-        acc_name: dataForm.acc_name,
-        acc_no: dataForm.acc_no,
+        id_bank: form.getFieldValue("id_bank"),
+        acc_name: form.getFieldValue("acc_name"),
+        acc_no: form.getFieldValue("acc_no"),
       },
       address: {
         main_address: dataForm.main_address,
@@ -148,6 +148,8 @@ const TambahMitra = () => {
         kd_kec: dataForm.kd_kec,
       },
     };
+    console.log(data);
+
     dispatch(signUpAction(data));
   };
 
@@ -178,7 +180,7 @@ const TambahMitra = () => {
               {step === 1 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
-                    <h5>Lengkapi Form Data Mitra Anda</h5>
+                    <h5>Lengkapi Form Data Mitra</h5>
                     <br />
 
                     <Form.Item
@@ -274,7 +276,7 @@ const TambahMitra = () => {
               {step === 2 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
-                    <h5>Lengakapi Form Alamat Anda</h5>
+                    <h5>Lengakapi Form Alamat Mitra</h5>
                     <Form.Item
                       hasFeedback
                       name="kd_prov"
@@ -386,7 +388,7 @@ const TambahMitra = () => {
               {step === 3 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
-                    <h5>Lengakapi Form Akun Bank Anda</h5>
+                    <h5>Lengakapi Form Akun Bank Mitra</h5>
                     <Form.Item
                       hasFeedback
                       name={"acc_name"}
