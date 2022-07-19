@@ -131,11 +131,7 @@ const GenealogyPraPosting = () => {
             activate={res.activate}
             id_member={res.id_member}
             handleActive={(id_member, key) => {
-              if (parseInt(dataConfig.total_pin_aktivasi, 10) === 0) {
-                message.info("pin aktivasi anda sudah habis");
-              } else {
-                handleActivate(id_member, index);
-              }
+              handleActivate(id_member, index);
             }}
             totalPinAktivasi={res.totalPinAktivasi}
           />

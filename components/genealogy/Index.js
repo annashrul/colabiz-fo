@@ -29,7 +29,7 @@ import {
   aktivasiPinAction,
   getConfigAction,
 } from "../../redux/actions/info.action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 moment.locale("id");
 const { Panel } = Collapse;
 const { confirm } = Modal;
