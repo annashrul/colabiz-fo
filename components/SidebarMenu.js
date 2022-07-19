@@ -31,7 +31,7 @@ const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
 
 let rootSubMenuKeys = [];
-const versi = "Versi 1.0.3";
+const versi = "Versi 1.0.5";
 const getKey = (name, index) => {
   const string = `${name}-${index}`;
   let key = string.replace(" ", "-");
