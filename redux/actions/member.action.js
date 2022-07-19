@@ -13,14 +13,14 @@ export const setLoading = (load) => {
 };
 export const setLoadingGenealogy = (load) => {
   return {
-    type: MEMBER.LOADING_GENEALOGY,
+    type: MEMBER.LOADING_GENEALOGY_PRA_POSTING,
     load,
   };
 };
 
 export const setDataGenealogy = (data) => {
   return {
-    type: MEMBER.DATA_GENEALOGY,
+    type: MEMBER.DATA_GENEALOGY_PRA_POSTING,
     data,
   };
 };
@@ -29,9 +29,46 @@ export const getGenealogyAction = (where = "", callback) => {
   return (dispatch) => {
     dispatch(setLoadingGenealogy(true));
     handleGet("member/genealogy/" + where, (res, status) => {
-      dispatch(setDataGenealogy(res.data));
+      // console.log("res.data", res.data);
+      let data = res.data;
+      data.map((row, index) => {
+        if (row.id === where) {
+          Object.assign(row, { isActive: true, no: index });
+        } else {
+          Object.assign(row, {
+            isActive: false,
+            no: index,
+          });
+        }
+      });
+      // setTimeout(() => {
+      //   data.map((row, index) => {
+      //     if (row.id === where) {
+      //       Object.assign(row, { isActive: true, no: index });
+      //     }
+      //   });
+      // }, 100);
+
+      // data.length > 0 && dispatch(setDataGenealogy(data));
       dispatch(setLoadingGenealogy(false));
-      callback(res.data);
+      console.log("response redux", data);
+      // if (res.data !== undefined) {
+      //   if (res.data.length > 0) {
+      // res.data.map((row, index) => {
+      //   Object.assign(row, {
+      //     isActive: false,
+      //   });
+      // });
+
+      // res.data.map((row, index) => {
+      //   if (row.id === val) {
+      //     Object.assign(row, { isActive: true, no: index });
+      //   }
+      // });
+      //   }
+      // }
+
+      // callback(res.data);
     });
   };
 };

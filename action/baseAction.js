@@ -9,7 +9,7 @@ export const handleGet = async (url, callback) => {
   } catch (err) {
     callback([], false, "gagal");
     let msg = "Terjadi Kesalahan Jaringan";
-    if (err.response.data.meta !== undefined) {
+    if (err !== undefined || err.response.data.meta !== undefined) {
       msg = err.response.data.meta.message;
     }
     const key = `open${Date.now()}`;
