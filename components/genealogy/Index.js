@@ -11,8 +11,9 @@ import {
   Card,
   Button,
   Modal,
+  message,
 } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import general_helper from "../../helper/general_helper";
 import {
@@ -31,7 +32,7 @@ const { Panel } = Collapse;
 const { confirm } = Modal;
 
 const Index = ({
-  key,
+  no,
   isActive,
   loading,
   joinDate,
@@ -44,17 +45,26 @@ const Index = ({
   activate,
   id_member,
   handleActive,
+  totalPinAktivasi,
 }) => {
   const dispatch = useDispatch();
   const handleMore = (idData, index) => {
-    if (idData === null) Message.success("data tidak ada");
+    if (children.length === 0) Message.info(`${name} belum mempunyai downline`);
     else {
       callback(idData, index);
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("running on ", name);
+      callback(id, no);
+    }, 300);
+  }, []);
+  console.log("children", no);
   return (
     <Collapse
+      key={no}
       bordered={false}
       style={{
         boxShadow: "none",
@@ -64,12 +74,14 @@ const Index = ({
       }}
       onChange={(keys) => {
         if (!isActive) {
-          handleMore(id, key);
+          handleMore(id, no);
         }
       }}
       expandIconPosition="right"
+      defaultActiveKey={"1"}
     >
       <Panel
+        key={`${no + 1}`}
         header={
           <Badge.Ribbon
             color={activate === 0 ? "#f50" : "#87d068"}
@@ -129,7 +141,11 @@ const Index = ({
                         htmlType="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleActive(id_member, key);
+                          if (totalPinAktivasi > 0) {
+                            handleActive(id_member, key);
+                          } else {
+                            message.info("pin aktivasi anda sudah habis");
+                          }
                         }}
                         size="small"
                       >
@@ -149,6 +165,7 @@ const Index = ({
                 <span key={index}>
                   <Index
                     key={index}
+                    no={res.no}
                     isActive={res.isActive}
                     loading={loading}
                     joinDate={res.join_date}
@@ -165,13 +182,12 @@ const Index = ({
                     handleActive={(id_member, index) =>
                       handleActive(id_member, index)
                     }
+                    totalPinAktivasi={totalPinAktivasi}
                   />
                 </span>
               );
             })
-          : !loading && (
-              <Empty description={`${name} belum mempunyai downline`} />
-            )}
+          : ""}
       </Panel>
     </Collapse>
   );
