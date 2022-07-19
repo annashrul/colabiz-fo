@@ -103,6 +103,16 @@ const ListProduct = () => {
   }, []);
 
   useEffect(() => {
+    if (!loadingData && data !== undefined) {
+      if (data.length > 0) {
+        // setIndexStockis(0);
+        // handleSetStockis(data[0], 0);
+        // console.log("set stokis", data[0]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!loadingData && !loadingConfig) {
       if (data !== undefined && data.length > 0) {
         if (dataConfig.id_stockis === "-") {

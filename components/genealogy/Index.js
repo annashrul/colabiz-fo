@@ -141,8 +141,8 @@ const Index = ({
                         htmlType="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (totalPinAktivasi > 0) {
-                            handleActive(id_member, key);
+                          if (parseInt(totalPinAktivasi, 10) > 0) {
+                            handleActive(id_member, no);
                           } else {
                             message.info("pin aktivasi anda sudah habis");
                           }

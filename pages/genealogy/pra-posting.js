@@ -49,7 +49,7 @@ const GenealogyPraPosting = () => {
         status: dataConfig.status_member,
         activate: dataConfig.activate,
         id_member: user.id,
-        totalPinAktivasi: dataConfig.total_pin_aktivasi,
+        totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
       },
     ]);
     setLoadingPage(false);

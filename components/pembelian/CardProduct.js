@@ -121,6 +121,9 @@ const CardProduct = ({ category = "REGISTER" }) => {
                       />
                     }
                   >
+                    <small style={{ fontSize: font }}>
+                      {general_helper.toRp(val.price)}
+                    </small>
                     <small style={{ fontSize: font }}>{desc}</small>
                     <Row gutter={4}>
                       <Col xs={24} md={12} sm={12}>
