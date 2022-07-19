@@ -30,10 +30,11 @@ const Matahari = ({
     }, 300);
   }, []);
   const handleMore = (idData, index) => {
-    if (idData === null) Message.success("data tidak ada");
-    else {
-      callback(idData, index);
-    }
+    // if (idData === null) Message.success("data tidak ada");
+    // else {
+    //   callback(idData, index);
+    // }
+    callback(idData, index);
   };
 
   return (

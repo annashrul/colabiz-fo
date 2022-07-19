@@ -23,10 +23,12 @@ const ComponentMatahari = ({
   totalPinAktivasi,
 }) => {
   const handleMore = (idData, index) => {
-    if (children.length === 0) Message.info(`${name} belum mempunyai downline`);
-    else {
-      callback(idData, index);
-    }
+    // if (children.length === 0) Message.info(`${name} belum mempunyai downline`);
+    // else {
+    //   callback(idData, index);
+
+    // }
+    callback(idData, index);
   };
   return (
     <>

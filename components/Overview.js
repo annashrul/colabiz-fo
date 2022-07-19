@@ -21,6 +21,7 @@ import StatCard from "./shared/StatCard";
 import general_helper from "../helper/general_helper";
 import moment from "moment";
 import ProfileCard from "./profile/profileCard";
+import BonusComponent from "./dashboard/BonusComponent";
 moment.locale("id");
 
 const Overview = () => {
@@ -251,8 +252,9 @@ const Overview = () => {
           </Row>
         </Col>
       </Row>
+      {data && <BonusComponent info={data} />}
 
-      {isData && (
+      {/* {isData && (
         <Row>
           <Col xs={24} md={24} sm={24}>
             <p
@@ -276,7 +278,7 @@ const Overview = () => {
           isLoadMore={false}
           pagePer={4}
         />
-      </Row>
+      </Row> */}
     </div>
   );
 };

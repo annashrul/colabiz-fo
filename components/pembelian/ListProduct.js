@@ -486,35 +486,37 @@ const ListProduct = () => {
         </Spin>
       )}
       <Row gutter={16} align="end" className="mt-2">
-        <Button
-          onClick={(e) => {
-            setStep(step - 1);
-          }}
-          type="dashed"
-          className="mr-2"
-        >
-          Kembali
-        </Button>
-        <Button
-          type="primary"
-          onClick={(e) => {
-            if (step === 2) {
-              localStorage.setItem("linkBackProduct", 3);
-              dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));
-            } else if (step == 3) {
-              if (dataCart.length > 0) {
-                Router.push(StringLink.checkout);
-                return;
-              } else {
-                Message.info("silahkan pilih paket terlebih dahulu");
-                return;
+        <Col>
+          <Button
+            onClick={(e) => {
+              setStep(step - 1);
+            }}
+            type="dashed"
+            className="mr-2"
+          >
+            Kembali
+          </Button>
+          <Button
+            type="primary"
+            onClick={(e) => {
+              if (step === 2) {
+                localStorage.setItem("linkBackProduct", 3);
+                dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));
+              } else if (step == 3) {
+                if (dataCart.length > 0) {
+                  Router.push(StringLink.checkout);
+                  return;
+                } else {
+                  Message.info("silahkan pilih paket terlebih dahulu");
+                  return;
+                }
               }
-            }
-            setStep(step + 1);
-          }}
-        >
-          Lanjut
-        </Button>
+              setStep(step + 1);
+            }}
+          >
+            Lanjut
+          </Button>
+        </Col>
       </Row>
 
       {isModalPin && (

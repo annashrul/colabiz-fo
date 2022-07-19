@@ -151,7 +151,7 @@ const InvoiceComponent = () => {
       }
     );
   };
-
+  let isDeposit = localStorage.getItem("typeTrx").toLowerCase() === "deposit";
   return (
     <>
       <Spin spinning={loading}>
@@ -257,7 +257,11 @@ const InvoiceComponent = () => {
                 </Row>
 
                 <Row gutter={16}>
-                  <Col md={12} xs={12} sm={12}>
+                  <Col
+                    md={!isDeposit ? 24 : 12}
+                    xs={!isDeposit ? 24 : 12}
+                    sm={!isDeposit ? 24 : 12}
+                  >
                     <Button
                       onClick={handleBack}
                       style={{ width: "100%" }}
@@ -266,12 +270,11 @@ const InvoiceComponent = () => {
                       size="medium"
                     >
                       {" "}
-                      Kembali
+                      Kembali ke halaman utama
                     </Button>
                   </Col>
                   <Col md={12} xs={12} sm={12}>
-                    {localStorage.getItem("typeTrx").toLowerCase() ===
-                    "deposit" ? (
+                    {isDeposit ? (
                       <Button
                         onClick={() => setShowModalUpload(true)}
                         style={{ width: "100%" }}
@@ -281,19 +284,7 @@ const InvoiceComponent = () => {
                         Upload Bukti Transfer
                       </Button>
                     ) : (
-                      <Button
-                        onClick={() => {
-                          message.info(
-                            "fitur ini masih dalam tahap development"
-                          );
-                          // console.log("konfirmasi ke stokis");
-                        }}
-                        style={{ width: "100%" }}
-                        type="primary"
-                        size="medium"
-                      >
-                        Konfirmasi Ke Stokis
-                      </Button>
+                      ""
                     )}
                   </Col>
                 </Row>
