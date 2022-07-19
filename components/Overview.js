@@ -56,7 +56,7 @@ const Overview = () => {
     if (parseInt(data.total_pin_aktivasi, 10) === 0 || data.activate === 1) {
       isDisableButton = true;
     }
-    if (parseInt(data.total_pin_hs, 10) === 0 && data.activate === 1) {
+    if (!data.status_hs) {
       isDisableButtonHs = true;
     }
   }
