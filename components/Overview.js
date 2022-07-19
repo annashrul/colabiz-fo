@@ -192,7 +192,7 @@ const Overview = () => {
             <Col xs={24} sm={12} md={8} className="mb-2">
               <StatCard
                 type={"fill"}
-                title={<span>Total Downline</span>}
+                title={<span>Direct Sponsor</span>}
                 value={
                   <span>
                     {Helper.toRp(
