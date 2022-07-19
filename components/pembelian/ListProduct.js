@@ -104,7 +104,6 @@ const ListProduct = () => {
 
   useEffect(() => {
     if (!loadingData && !loadingConfig) {
-      console.log(dataConfig);
       if (data !== undefined && data.length > 0) {
         if (dataConfig.id_stockis === "-") {
           setDataStockis(data);
@@ -155,7 +154,7 @@ const ListProduct = () => {
     setQueryString(objFilter);
     setTimeout(() => {
       dispatch(getStockisAction("page=1" + objFilter));
-      setIndexStockis("");
+      setIndexStockis(0);
     }, 200);
   };
   const handleChangeAddress = (value, col = "") => {

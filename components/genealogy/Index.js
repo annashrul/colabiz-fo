@@ -72,12 +72,16 @@ const Index = ({
       <Panel
         header={
           <Badge.Ribbon
-            color={status === 0 ? "#f50" : "#87d068"}
+            color={activate === 0 ? "#f50" : "#87d068"}
             text={
               <small>
-                {status === 0 ? <SyncOutlined spin /> : <CheckCircleOutlined />}
+                {activate === 0 ? (
+                  <SyncOutlined spin />
+                ) : (
+                  <CheckCircleOutlined />
+                )}
                 &nbsp;
-                {status === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+                {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
               </small>
             }
           >
@@ -98,12 +102,12 @@ const Index = ({
                         <small>
                           <Badge
                             style={{
-                              color: activate === 0 ? "#f50" : "#87d068",
+                              color: status === 0 ? "#f50" : "#87d068",
                             }}
-                            status={activate === 0 ? "processing" : "green"}
+                            status={status === 0 ? "processing" : "green"}
                             text={
                               <small>
-                                {activate === 0
+                                {status === 0
                                   ? "Belum Terverifikasi"
                                   : "Sudah Terverifikasi"}
                               </small>
