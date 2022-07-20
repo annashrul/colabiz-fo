@@ -423,11 +423,11 @@ const CheckoutProduct = () => {
                         disabled={dataCart.length < 1}
                         type="primary"
                         onClick={(e) => {
-                          if (parseInt(info.saldo, 10) > 0) {
+                          // if (parseInt(info.saldo, 10) > 0) {
                             setVisible(true);
-                          } else {
-                            message.info("saldo anda tidak cukup");
-                          }
+                          // } else {
+                          //   message.info("saldo anda tidak cukup");
+                          // }
                         }}
                       >
                         Checkout
