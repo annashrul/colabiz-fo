@@ -122,7 +122,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"fullname\":\"Syaiful Hamid\",\n    \"mobile_no\":\"6285711868830\",\n    \"username\":\"syailfulhamid\",\n    \"email\":\"mosadbizz@gmail.com\",\n    \"sponsor\":\"NETINDO\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"Syaiful Hamid\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
+							"raw": "{\n    \"fullname\":\"Test 5\",\n    \"mobile_no\":\"6285711868824\",\n    \"username\":\"test5\",\n    \"email\":\"test@gmail.com\",\n    \"sponsor\":\"TEST4770\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"test\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -174,7 +174,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"imsui99\"\n}",
+							"raw": "{\n    \"username\":\"abiekolabiz\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1337,13 +1337,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}member/genealogy/KOLABIZMASTER",
+									"raw": "{{url}}member/genealogy/TEST3348",
 									"host": [
 										"{{url}}member"
 									],
 									"path": [
 										"genealogy",
-										"KOLABIZMASTER"
+										"TEST3348"
 									],
 									"query": [
 										{
@@ -1360,6 +1360,11 @@
 										{
 											"key": "q",
 											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "isfirst",
+											"value": "true",
 											"disabled": true
 										}
 									]
@@ -1394,13 +1399,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}member/get/0c5427dc-ac27-4d1f-abfe-754ce4087f28",
+									"raw": "{{url}}member/get/92bee49a-20a2-4137-a005-bbec32f81816",
 									"host": [
 										"{{url}}member"
 									],
 									"path": [
 										"get",
-										"0c5427dc-ac27-4d1f-abfe-754ce4087f28"
+										"92bee49a-20a2-4137-a005-bbec32f81816"
 									]
 								}
 							},
@@ -1830,7 +1835,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id_address\":\"-\", //mun kosong/buat baru isi strip\n    \"id_bank\":\"-\", //mun kosong/buat baru isi strip\n    \"name\": \"\", //nama admin\n    \"mobile_no\":\"\",\n    \"email\":\"\",\n    \"long\":\"\",\n    \"lat\":\"\",\n    \"pin\":\"\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"Syaiful Hamid\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
+									"raw": "{\n    \"id_address\":\"-\",\n    \"id_bank\":\"-\",\n    \"name\": \"Test123\", \n    \"mobile_no\":\"085711868888\",\n    \"email\":\"test@gmail.com\",\n    \"long\":\"-100\",\n    \"lat\":\"23123\",\n    \"pin\":\"123321\",\n    \"data_bank\":{\n        \"id_bank\":\"37c74070-0198-40b6-b6e8-5d67c1464a3d\",\n        \"acc_name\":\"Syaiful Hamid\",\n        \"acc_no\":\"123321123\"\n    },\n    \"address\":{\n        \"main_address\":\"Jalan mana atuh\",\n        \"kd_prov\":11,\n        \"kd_kota\":123,\n        \"kd_kec\":3920\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2309,13 +2314,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}paket/list/HAPPY_SHOPPING?page=1&perpage=10",
+									"raw": "{{url}}paket?page=1&perpage=10",
 									"host": [
 										"{{url}}paket"
-									],
-									"path": [
-										"list",
-										"HAPPY_SHOPPING"
 									],
 									"query": [
 										{
@@ -2812,6 +2813,266 @@
 									"raw": "{{url}}testimoni/cd9f3495-96cf-435d-bfd3-71c518f8f011",
 									"host": [
 										"{{url}}testimoni"
+									],
+									"path": [
+										"cd9f3495-96cf-435d-bfd3-71c518f8f011"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reward",
+					"item": [
+						{
+							"name": "List",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}reward?page=1&perpage=10",
+									"host": [
+										"{{url}}reward"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "perpage",
+											"value": "10"
+										},
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "cluster",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}reward/get/9a57b404-2d40-4096-aa8b-83db200fa8bb",
+									"host": [
+										"{{url}}reward"
+									],
+									"path": [
+										"get",
+										"9a57b404-2d40-4096-aa8b-83db200fa8bb"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\":\"Reward Motor Beat\",\n    \"picture\":\"-\",\n    \"caption\":\"lorem ipsum dolor sit amet.\",\n    \"clusters\":\"1\",\n    \"poin\":\"80\",\n    \"status\":\"1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}reward",
+									"host": [
+										"{{url}}reward"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"level\":\"\",\n    \"username\":\"\",\n    \"password\":\"\",\n    \"name\":\"\",\n    \"status\":\"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}reward/0f8b9e21-4130-4afd-ae1d-638b5a171a53",
+									"host": [
+										"{{url}}reward"
+									],
+									"path": [
+										"0f8b9e21-4130-4afd-ae1d-638b5a171a53"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_level\":\"543f3d34-a5df-4be1-b667-6ed4e53a84b8\",\n  \"nama\":\"Admin Mantap\",\n  \"username\":\"admin1\",\n  \"password\":\"123123\",\n  \"status\":1,\n  \"photo\":\"data:image/png;base64,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\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}reward/cd9f3495-96cf-435d-bfd3-71c518f8f011",
+									"host": [
+										"{{url}}reward"
 									],
 									"path": [
 										"cd9f3495-96cf-435d-bfd3-71c518f8f011"
@@ -4150,7 +4411,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}transaction/deposit?limit=10",
+									"raw": "{{url}}transaction/deposit?perpage=10&page=1",
 									"host": [
 										"{{url}}transaction"
 									],
@@ -4170,8 +4431,12 @@
 											"disabled": true
 										},
 										{
-											"key": "limit",
+											"key": "perpage",
 											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
 										}
 									]
 								}
@@ -4717,7 +4982,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}transaction/report/member?perpage=2",
+									"raw": "{{url}}transaction/report/member?perpage=1",
 									"host": [
 										"{{url}}transaction"
 									],
@@ -4749,7 +5014,7 @@
 										},
 										{
 											"key": "perpage",
-											"value": "2"
+											"value": "1"
 										}
 									]
 								}
@@ -5500,6 +5765,66 @@
 							"response": []
 						},
 						{
+							"name": "Update resi",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"kd_trx\":\"INV/PE/220714/001,INV/PE/220714/010,INV/PE/220714/015,INV/PE/220715/004,INV/PE/220715/007\",\n    \"resi\":\"123321213\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/update_resi",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"update_resi"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "History Pembelian",
 							"request": {
 								"auth": {
@@ -5648,6 +5973,102 @@
 							"response": []
 						},
 						{
+							"name": "List Order (admin)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/report/order?id_stockis=5a8f1242-14ae-4a16-9dbe-6fa227a6d767&page=1&perpage=2",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"report",
+										"order"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
+											"disabled": true
+										},
+										{
+											"key": "datefrom",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "dateto",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "id_stockis",
+											"value": "5a8f1242-14ae-4a16-9dbe-6fa227a6d767"
+										},
+										{
+											"key": "status",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "resi",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "perpage",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Detail Transaksi",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
@@ -5686,14 +6107,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}penjualan/report/detail/SU5WL1BFLzIyMDcxNC8wMTc=",
+									"raw": "{{url}}penjualan/report/detail/SU5WL1BFLzIyMDcxNS8wMTE=",
 									"host": [
 										"{{url}}penjualan"
 									],
 									"path": [
 										"report",
 										"detail",
-										"SU5WL1BFLzIyMDcxNC8wMTc="
+										"SU5WL1BFLzIyMDcxNS8wMTE="
 									],
 									"query": [
 										{
@@ -5790,6 +6211,71 @@
 										{
 											"key": "dateto",
 											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List filter stockis",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Project-ID",
+										"value": "{{project_id}}",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-From",
+										"value": "{{source}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}penjualan/report/filter/stockis",
+									"host": [
+										"{{url}}penjualan"
+									],
+									"path": [
+										"report",
+										"filter",
+										"stockis"
+									],
+									"query": [
+										{
+											"key": "searchby",
+											"value": "title",
+											"description": "Jika digunakan, pakai nama parameter dari object respon",
+											"disabled": true
+										},
+										{
+											"key": "q",
+											"value": "tatang",
 											"disabled": true
 										}
 									]
@@ -5981,6 +6467,133 @@
 							],
 							"path": [
 								"channel"
+							],
+							"query": [
+								{
+									"key": "searchby",
+									"value": "title",
+									"description": "Jika digunakan, pakai nama parameter dari object respon",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "tatang",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PIN",
+			"item": [
+				{
+					"name": "PIN AKTIVASI REGISTER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Project-ID",
+								"value": "{{project_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-From",
+								"value": "{{source}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_member\":\"486a99c8-a7a1-4bf2-87d7-9baace9e124a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}pin/aktivasi/register",
+							"host": [
+								"{{url}}pin"
+							],
+							"path": [
+								"aktivasi",
+								"register"
+							],
+							"query": [
+								{
+									"key": "searchby",
+									"value": "title",
+									"description": "Jika digunakan, pakai nama parameter dari object respon",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "tatang",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AKTIVASI PIN HAPPY SHOPPING",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Project-ID",
+								"value": "{{project_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-From",
+								"value": "{{source}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_member\":\"0275907d-58fb-4284-ad9b-197f8901e331\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}pin/aktivasi/hs",
+							"host": [
+								"{{url}}pin"
+							],
+							"path": [
+								"aktivasi",
+								"hs"
 							],
 							"query": [
 								{

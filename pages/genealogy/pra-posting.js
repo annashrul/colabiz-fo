@@ -56,10 +56,6 @@ const GenealogyPraPosting = () => {
   };
 
   useEffect(() => {
-    // setLoading(loadingConfig);
-    if (dataConfig !== undefined) {
-      console.log("config", dataConfig);
-    }
     getGenealogy(`${user.referral}?isfirst=true`);
   }, []);
   const onChange = async (val, keys) => {
@@ -109,7 +105,7 @@ const GenealogyPraPosting = () => {
     });
   };
   return (
-    <Spin spinning={loadingPage}>
+    <Spin spinning={loadingConfig}>
       {arrayToTree(data.length > 0 ? data : [], {
         dataField: null,
         childrenField: "children",

@@ -91,16 +91,18 @@ const Index = ({
         key={`${no + 1}`}
         header={
           <Badge.Ribbon
-            color={activate === 0 ? "#f50" : "#87d068"}
+            color={parseInt(activate, 10) === 0 ? "#f50" : "#87d068"}
             text={
               <small>
-                {activate === 0 ? (
+                {parseInt(activate, 10) === 0 ? (
                   <SyncOutlined spin />
                 ) : (
                   <CheckCircleOutlined />
                 )}
                 &nbsp;
-                {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+                {parseInt(activate, 10) === 0
+                  ? "Belum Aktivasi"
+                  : "Telah Aktivasi"}
               </small>
             }
           >
@@ -121,12 +123,17 @@ const Index = ({
                         <small>
                           <Badge
                             style={{
-                              color: status === 0 ? "#f50" : "#87d068",
+                              color:
+                                parseInt(status, 10) === 0 ? "#f50" : "#87d068",
                             }}
-                            status={status === 0 ? "processing" : "green"}
+                            status={
+                              parseInt(status, 10) === 0
+                                ? "processing"
+                                : "green"
+                            }
                             text={
                               <small>
-                                {status === 0
+                                {parseInt(status, 10) === 0
                                   ? "Belum Terverifikasi"
                                   : "Sudah Terverifikasi"}
                               </small>
@@ -140,7 +147,7 @@ const Index = ({
               }
               size="small"
             >
-              {activate === 0 && (
+              {parseInt(activate, 10) === 0 && (
                 <Row>
                   <Col md={24} xs={24} sm={24}>
                     <p style={{ float: "right" }}>
