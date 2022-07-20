@@ -21,12 +21,6 @@ const ProfileCard = ({ callback }) => {
     setUser(users);
   }, [state, showForm]);
 
-  useEffect(() => {
-    // dispatch(getInfoAction());
-  }, []);
-
-  // console.log("info", data);
-
   const tempRow = (title, desc) => {
     return (
       <Row>

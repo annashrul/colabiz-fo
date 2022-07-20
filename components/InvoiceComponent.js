@@ -35,7 +35,6 @@ const InvoiceComponent = () => {
   useEffect(() => {
     let kdTrx = localStorage.getItem("kdTrx");
     let typeTrx = localStorage.getItem("typeTrx");
-    // console.log("kode trx", typeTrx);
     if (
       kdTrx === undefined ||
       kdTrx === null ||
@@ -48,7 +47,6 @@ const InvoiceComponent = () => {
       if (state.mobile) {
         setFontSize("80%");
       }
-      console.log("############", kdTrx);
       dispatch(invoiceAction(kdTrx, typeTrx));
     }
   }, []);

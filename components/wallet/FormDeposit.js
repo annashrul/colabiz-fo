@@ -88,7 +88,6 @@ const FormDeposit = () => {
       });
       return;
     }
-    // console.log()
     setModalPin(true);
     setDataDeposit(e);
   };

@@ -88,7 +88,6 @@ const ListProduct = () => {
   } = useSelector((state) => state.addressReducer);
 
   useEffect(() => {
-    console.log("locls", localStorage.linkBackProduct);
     dispatch(getStockisAction("page=1"));
     dispatch(getCartAction());
     // dispatch(getPaket("page=1", "REGISTER"));
@@ -99,16 +98,6 @@ const ListProduct = () => {
   useEffect(() => {
     if (localStorage.linkBackProduct !== undefined) {
       setStep(3);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!loadingData && data !== undefined) {
-      if (data.length > 0) {
-        // setIndexStockis(0);
-        // handleSetStockis(data[0], 0);
-        // console.log("set stokis", data[0]);
-      }
     }
   }, []);
 
@@ -324,7 +313,6 @@ const ListProduct = () => {
                           val.status_layanan === 0 ? "not-allowed" : "pointer",
                       }}
                       onClick={() => {
-                        console.log("pagination", pagination);
                         if (val.status_layanan !== 0) {
                           handleSetStockis(val, key);
                         }
@@ -436,7 +424,6 @@ const ListProduct = () => {
                           if (pagination.to >= parseInt(pagination.total, 10)) {
                             Message.info("data stokis habis");
                           } else {
-                            // console.log(pa)
                             let page = currentPage;
                             page += 1;
                             setCurrentPage(page);

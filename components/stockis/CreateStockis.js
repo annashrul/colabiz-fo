@@ -72,7 +72,6 @@ const CreateStockis = () => {
     objForm.alamat.replaceAll(" ", "");
     let lat = objForm.alamat.split(",")[1];
     let long = objForm.alamat.split(",")[0];
-    // console.log(objAddress);
     const data = {
       id_address: parseInt(checkedAdress, 10) === 1 ? "-" : objAddress.id,
       id_bank: objBanks.id,
@@ -101,14 +100,12 @@ const CreateStockis = () => {
             }
           : {},
     };
-    // console.log(data);
     dispatch(createStockisAction(data));
   };
   const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
-        console.log(latLng);
         form.setFieldsValue({ alamat: `${latLng.lng}, ${latLng.lat}` });
       })
       .catch((error) => console.error("Error", error));
@@ -306,7 +303,6 @@ const CreateStockis = () => {
                                 <span
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
-                                    console.log(objAddress);
                                     setCheckedAddress(1);
                                   }}
                                 >
@@ -448,7 +444,6 @@ const CreateStockis = () => {
           <FormAddress
             dataOld={objAddress}
             callback={(param, e) => {
-              console.log(e);
               if (param !== "cancel") {
                 setObjAddress(e);
               }
@@ -473,7 +468,6 @@ const CreateStockis = () => {
           <FormBank
             dataOld={objBanks}
             callback={(param, e) => {
-              console.log(e);
               if (param !== "cancel") {
                 setObjBanks(e);
               }

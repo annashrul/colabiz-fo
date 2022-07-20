@@ -25,7 +25,6 @@ const Matahari = ({
 }) => {
   useEffect(() => {
     setTimeout(() => {
-      console.log("running on ", name);
       callback(id, no);
     }, 300);
   }, []);

@@ -52,7 +52,6 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
     await handleGet(
       `content?&page=1&perpage=${pages}&status=1${where}`,
       (res, status, msg) => {
-        console.log(res.data);
         if (status) {
           setPagination(res.pagination);
           setArrNews(res.data);
@@ -103,7 +102,6 @@ const CardNews = ({ callback, isLoadMore = true, pagePer = 4 }) => {
             if (desc.length > lengthIsMobile) {
               desc = desc.substr(0, lengthIsMobile) + " ..";
             }
-            console.log(val);
             return (
               <Col
                 key={key}

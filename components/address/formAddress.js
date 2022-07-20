@@ -54,7 +54,6 @@ const FormAddress = ({ dataOld, callback }) => {
         form={form}
         layout="vertical"
         onFinish={(e) => {
-          // console.log("data", data);
           callback("submit", data);
         }}
       >

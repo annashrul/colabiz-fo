@@ -61,7 +61,6 @@ const SidebarContent = ({
   useEffect(() => {
     let users = authAction.getUser();
     if (users === undefined) {
-      console.log(users);
       // Router.push("/signin");
       // authAction.doLogout();
     } else {

@@ -76,7 +76,6 @@ const reducer = (state, action) => {
       return newState;
     }
     case "weak": {
-      console.log(state);
       // const weak = state.weakColor;
       // let darkSidebar = state.darkSidebar;
       // if (!weak && darkSidebar) darkSidebar = false;
@@ -126,7 +125,6 @@ const AppProvider = (props) => {
   });
 
   useEffect(() => {
-    console.log("app provider");
     mql = window.matchMedia(`(min-width: 992px)`);
     mql.addListener(mediaQueryChanged);
     dispatch({ type: "setup" });

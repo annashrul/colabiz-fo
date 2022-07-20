@@ -20,7 +20,6 @@ const ModalResendEmail = ({ modal, onCancel }) => {
     dispatch(
       resendEmailAction(e, (res) => {
         if (!res) {
-          console.log("bansat", res);
           onCancel(res);
         }
       })

@@ -35,7 +35,6 @@ const Page = ({ router, children }) => {
   useEffect(() => {
     const coo = authAction.getToken();
     setTimeout(() => {
-      // console.log("atob", atob(coo));
       if (coo !== undefined) {
         setLoading(false);
         // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;

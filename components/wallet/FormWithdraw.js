@@ -59,7 +59,6 @@ const FormWithdraw = () => {
     dispatch(getConfigAction());
     setBank([authAction.getBank()]);
   }, [state]);
-  console.log("info", data);
 
   useEffect(() => {
     if (bank.length > 0) {

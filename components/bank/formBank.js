@@ -17,7 +17,6 @@ const FormBank = ({ dataOld, callback }) => {
   useEffect(() => {
     dispatch(bankGeneralAction());
     if (Object.keys(dataOld).length > 3) {
-      console.log("data old", dataOld);
       setData(dataOld);
       form.setFieldsValue({ acc_name: dataOld.acc_name });
       form.setFieldsValue({ acc_no: dataOld.acc_no });
@@ -30,7 +29,6 @@ const FormBank = ({ dataOld, callback }) => {
     setData(val);
   };
 
-  console.log("data", data);
   return (
     <>
       <Form
@@ -91,7 +89,6 @@ const FormBank = ({ dataOld, callback }) => {
             placeholder="Pilih Bank"
             optionFilterProp="children"
             onSelect={(e) => {
-              console.log("select", e);
               let val = Object.assign(data, { id_bank: e });
               setData(val);
             }}

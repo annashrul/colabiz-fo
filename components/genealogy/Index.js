@@ -66,7 +66,6 @@ const Index = ({
   );
   useEffect(() => {
     setTimeout(() => {
-      console.log("running on ", name);
       callback(id, no);
     }, 300);
   }, []);

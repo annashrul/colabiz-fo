@@ -14,7 +14,6 @@ const CurrencyComponent = ({ callback, val }) => {
   ];
 
   useEffect(() => {
-    console.log("change", val);
     for (let i = 0; i < caraCepat.length; i++) {
       if (parseInt(val, 10) === parseInt(caraCepat[i], 10)) {
         setIsActiveAmount(i);
