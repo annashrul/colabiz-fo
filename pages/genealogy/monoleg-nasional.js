@@ -37,7 +37,6 @@ const GenealogyMonolegNasional = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("set data");
       setData([
         {
           hasChild: parseInt(user.jumlah_downline, 10) > 0,
@@ -56,7 +55,7 @@ const GenealogyMonolegNasional = () => {
       ]);
     }, 1000);
   }, [dataConfig.activate === undefined && loadingConfig]);
-  const onChange = async (val, keys) => {
+  const onChange = async (val, name) => {
     let where = "";
     if (val === user.referral) {
       where = `?isFirst=true`;
@@ -64,18 +63,19 @@ const GenealogyMonolegNasional = () => {
     await handleGet(
       `member/genealogy_activate/${val}${where}`,
       (res, status) => {
-        // console.log(res.data);
-        res.data.map((row, index) => {
-          Object.assign(row, {
-            isActive: false,
+        if (res.data.length > 0) {
+          res.data.map((row, index) => {
+            Object.assign(row, {
+              isActive: false,
+            });
           });
-        });
-        data.map((row, index) => {
-          if (row.id === val) {
-            Object.assign(row, { isActive: true, no: index });
-          }
-        });
-        setData(data.concat(res.data));
+          data.map((row, index) => {
+            if (row.id === val) {
+              Object.assign(row, { isActive: true, no: index });
+            }
+          });
+          setData(data.concat(res.data));
+        }
       }
     );
   };
@@ -89,7 +89,6 @@ const GenealogyMonolegNasional = () => {
       cancelText: "Kembali",
       content: "Anda yakin akan melakukan proses ini ?",
       onOk() {
-        console.log(id_member);
         dispatch(
           aktivasiPinAction(
             {
@@ -103,7 +102,6 @@ const GenealogyMonolegNasional = () => {
       },
     });
   };
-  // console.log(arrayToTree(data));
 
   return (
     data.length > 0 && (
@@ -124,7 +122,6 @@ const GenealogyMonolegNasional = () => {
                     dataField: null,
                     childrenField: "children",
                   }).map((res, index) => {
-                    console.log(res);
                     return (
                       <Matahari
                         key={index}
@@ -137,7 +134,7 @@ const GenealogyMonolegNasional = () => {
                         name={`${res.name}`}
                         children={res.children}
                         callback={(val, keys) => {
-                          onChange(val, index);
+                          onChange(val, res.name);
                         }}
                         status={res.status}
                         activate={res.activate}
@@ -162,36 +159,6 @@ const GenealogyMonolegNasional = () => {
       </div>
     )
   );
-  return arrayToTree(data.length > 0 ? data : [], {
-    dataField: null,
-    childrenField: "children",
-  }).map((res, index) => {
-    return (
-      <Matahari
-        key={index}
-        no={res.no}
-        isActive={res.isActive}
-        loading={false}
-        joinDate={res.join_date}
-        picture={res.picture}
-        id={res.id}
-        name={`${res.name}`}
-        children={res.children}
-        callback={(val, keys) => {
-          onChange(val, index);
-        }}
-        status={res.status}
-        activate={res.activate}
-        id_member={res.id_member}
-        handleActive={(id_member, key) => {
-          if (parseInt(dataConfig.total_pin_aktivasi, 10) === 0) {
-            handleActivate(id_member, index);
-          }
-        }}
-        totalPinAktivasi={res.totalPinAktivasi}
-      />
-    );
-  });
 };
 
 export default GenealogyMonolegNasional;

@@ -24,21 +24,21 @@ const Matahari = ({
   totalPinAktivasi,
   hasChild,
 }) => {
-  const handleMore = (idData, index) => {
+  const handleMore = (idData, name) => {
     // if (idData === null) Message.success("data tidak ada");
     // else {
     //   callback(idData, index);
     // }
-    console.log("id", idData);
-    callback(idData, index);
+    callback(idData, name);
   };
   return (
     <>
       <a
         href="#"
         onClick={(e) => {
-          console.log("click parent");
-          handleMore(id, no);
+          if (!isActive) {
+            handleMore(id, name);
+          }
         }}
       >
         <div className="container-genealogy">
@@ -58,9 +58,8 @@ const Matahari = ({
         <ul>
           {children.map((res, index) => {
             return (
-              <li>
+              <li key={index}>
                 <Matahari
-                  key={index}
                   no={res.no}
                   isActive={res.isActive}
                   loading={false}
@@ -70,8 +69,8 @@ const Matahari = ({
                   name={`${res.name}`}
                   children={res.children}
                   callback={(val, keys) => {
-                    console.log("click child");
-                    handleMore(val, index);
+                    console.log(res);
+                    handleMore(val, res.name);
                   }}
                   status={res.status}
                   activate={res.activate}

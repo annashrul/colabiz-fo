@@ -35,28 +35,6 @@ const GenealogyPraPosting = () => {
     dispatch(getConfigAction());
   }, []);
 
-  const getGenealogy = async (where) => {
-    if (!loadingConfig) {
-      setData([
-        {
-          hasChild: parseInt(user.jumlah_downline, 10) > 0,
-          id: user.referral,
-          join_date: user.created_at,
-          name: user.fullname,
-          parentId: null,
-          picture: user.foto,
-          isActive: false,
-          no: 0,
-          status: dataConfig.status_member,
-          activate: dataConfig.activate,
-          id_member: user.id,
-          totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
-        },
-      ]);
-    }
-    setLoadingPage(false);
-  };
-
   useEffect(() => {
     setTimeout(() => {
       setData([
