@@ -22,6 +22,7 @@ const Matahari = ({
   id_member,
   handleActive,
   totalPinAktivasi,
+  hasChild,
 }) => {
   const handleMore = (idData, index) => {
     // if (idData === null) Message.success("data tidak ada");
@@ -31,7 +32,64 @@ const Matahari = ({
     console.log("id", idData);
     callback(idData, index);
   };
-
+  return (
+    <>
+      <a
+        href="#"
+        onClick={(e) => {
+          console.log("click parent");
+          handleMore(id, no);
+        }}
+      >
+        <div className="container-genealogy">
+          <div className="w-16">
+            <img className="imgs" alt="name" src={picture} />
+          </div>
+          <div className="row" style={{ marginTop: "5px" }}>
+            <i className="fa fa-exclamation-circle fa-2x"></i>
+          </div>
+          <div className="row"> {name}</div>
+          <div className="row" style={{ marginBottom: "5px" }}>
+            {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+          </div>
+        </div>
+      </a>
+      {children.length > 0 && (
+        <ul>
+          {children.map((res, index) => {
+            return (
+              <li>
+                <Matahari
+                  key={index}
+                  no={res.no}
+                  isActive={res.isActive}
+                  loading={false}
+                  joinDate={res.join_date}
+                  picture={res.picture}
+                  id={res.id}
+                  name={`${res.name}`}
+                  children={res.children}
+                  callback={(val, keys) => {
+                    console.log("click child");
+                    handleMore(val, index);
+                  }}
+                  status={res.status}
+                  activate={res.activate}
+                  id_member={res.id_member}
+                  handleActive={(id_member, key) => {
+                    // if (parseInt(dataConfig.total_pin_aktivasi, 10) === 0) {
+                    //   handleActivate(id_member, index);
+                    // }
+                  }}
+                  totalPinAktivasi={res.totalPinAktivasi}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </>
+  );
   return (
     children.length > 0 &&
     children.map((res, index) => {

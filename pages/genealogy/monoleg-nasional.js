@@ -65,19 +65,17 @@ const GenealogyMonolegNasional = () => {
       `member/genealogy_activate/${val}${where}`,
       (res, status) => {
         // console.log(res.data);
-        if (res.data.length > 0) {
-          res.data.map((row, index) => {
-            Object.assign(row, {
-              isActive: false,
-            });
+        res.data.map((row, index) => {
+          Object.assign(row, {
+            isActive: false,
           });
-          data.map((row, index) => {
-            if (row.id === val) {
-              Object.assign(row, { isActive: true, no: index });
-            }
-          });
-          setData(data.concat(res.data));
-        }
+        });
+        data.map((row, index) => {
+          if (row.id === val) {
+            Object.assign(row, { isActive: true, no: index });
+          }
+        });
+        setData(data.concat(res.data));
       }
     );
   };
@@ -105,7 +103,7 @@ const GenealogyMonolegNasional = () => {
       },
     });
   };
-  console.log(arrayToTree(data));
+  // console.log(arrayToTree(data));
 
   return (
     data.length > 0 && (
@@ -122,63 +120,38 @@ const GenealogyMonolegNasional = () => {
             >
               <ul>
                 <li>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      onChange(data[0].id, data[0].no);
-                    }}
-                  >
-                    <div className="container-genealogy">
-                      <div className="w-16">
-                        <img
-                          className="imgs"
-                          alt="name"
-                          src={data[0].picture}
-                        />
-                      </div>
-                      <div className="row" style={{ marginTop: "5px" }}>
-                        <i className="fa fa-exclamation-circle fa-2x"></i>
-                      </div>
-                      <div className="row"> {data[0].name} </div>
-                      <div className="row" style={{ marginBottom: "5px" }}>
-                        {data[0].activate === 0
-                          ? "Belum Aktivasi"
-                          : "Telah Aktivasi"}
-                      </div>
-                    </div>
-                  </a>
                   {arrayToTree(data.length > 0 ? data : [], {
                     dataField: null,
                     childrenField: "children",
                   }).map((res, index) => {
+                    console.log(res);
                     return (
-                      <ul>
-                        <Matahari
-                          key={index}
-                          no={res.no}
-                          isActive={res.isActive}
-                          loading={false}
-                          joinDate={res.join_date}
-                          picture={res.picture}
-                          id={res.id}
-                          name={`${res.name}`}
-                          children={res.children}
-                          callback={(val, keys) => {
-                            onChange(val, index);
-                          }}
-                          status={res.status}
-                          activate={res.activate}
-                          id_member={res.id_member}
-                          handleActive={(id_member, key) => {
-                            if (
-                              parseInt(dataConfig.total_pin_aktivasi, 10) === 0
-                            ) {
-                              handleActivate(id_member, index);
-                            }
-                          }}
-                          totalPinAktivasi={res.totalPinAktivasi}
-                        />
-                      </ul>
+                      <Matahari
+                        key={index}
+                        no={res.no}
+                        isActive={res.isActive}
+                        loading={false}
+                        joinDate={res.join_date}
+                        picture={res.picture}
+                        id={res.id}
+                        name={`${res.name}`}
+                        children={res.children}
+                        callback={(val, keys) => {
+                          onChange(val, index);
+                        }}
+                        status={res.status}
+                        activate={res.activate}
+                        id_member={res.id_member}
+                        handleActive={(id_member, key) => {
+                          if (
+                            parseInt(dataConfig.total_pin_aktivasi, 10) === 0
+                          ) {
+                            handleActivate(id_member, index);
+                          }
+                        }}
+                        totalPinAktivasi={res.totalPinAktivasi}
+                        hasChild={res.hasChild}
+                      />
                     );
                   })}
                 </li>
