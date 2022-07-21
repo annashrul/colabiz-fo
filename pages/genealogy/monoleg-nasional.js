@@ -75,6 +75,8 @@ const GenealogyMonolegNasional = () => {
             }
           });
           setData(data.concat(res.data));
+        } else {
+          alert(`${val} belum mempunyai downline`);
         }
       }
     );

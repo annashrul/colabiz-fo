@@ -69,7 +69,6 @@ const Matahari = ({
                   name={`${res.name}`}
                   children={res.children}
                   callback={(val, keys) => {
-                    console.log(res);
                     handleMore(val, res.name);
                   }}
                   status={res.status}
