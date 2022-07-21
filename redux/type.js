@@ -76,6 +76,10 @@ export const INFO = {
   LOADING: "INFO_LOADING",
   DATA: "INFO_DATA",
 };
+export const REWARD = {
+  LOADING: "REWARD_LOADING",
+  DATA: "REWARD_DATA",
+};
 
 export const PAYMENT_CHANNEL = {
   LOADING: "PAYMENT_CHANNEL_LOADING",

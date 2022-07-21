@@ -23,5 +23,6 @@ export const StringLink = {
   transactionRecycle: "/recycle",
   invoiceRecycle: "/recycle/invoice",
   news: "/news",
+  reward: "/reward",
   detailNews: "/news/:id_berita",
 };
