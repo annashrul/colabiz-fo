@@ -36,30 +36,51 @@ const GenealogyPraPosting = () => {
   }, []);
 
   const getGenealogy = async (where) => {
-    setData([
-      {
-        hasChild: parseInt(user.jumlah_downline, 10) > 0,
-        id: user.referral,
-        join_date: user.created_at,
-        name: user.fullname,
-        parentId: null,
-        picture: user.foto,
-        isActive: false,
-        no: 0,
-        status: dataConfig.status_member,
-        activate: dataConfig.activate,
-        id_member: user.id,
-        totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
-      },
-    ]);
+    if (!loadingConfig) {
+      setData([
+        {
+          hasChild: parseInt(user.jumlah_downline, 10) > 0,
+          id: user.referral,
+          join_date: user.created_at,
+          name: user.fullname,
+          parentId: null,
+          picture: user.foto,
+          isActive: false,
+          no: 0,
+          status: dataConfig.status_member,
+          activate: dataConfig.activate,
+          id_member: user.id,
+          totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
+        },
+      ]);
+    }
     setLoadingPage(false);
   };
 
   useEffect(() => {
-    getGenealogy(`${user.referral}?isfirst=true`);
-  }, []);
+    setTimeout(() => {
+      console.log(dataConfig);
+      setData([
+        {
+          hasChild: parseInt(user.jumlah_downline, 10) > 0,
+          id: user.referral,
+          join_date: user.created_at,
+          name: user.fullname,
+          parentId: null,
+          picture: user.foto,
+          isActive: false,
+          no: 0,
+          status: dataConfig.status_member,
+          activate: dataConfig.activate,
+          id_member: user.id,
+          totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
+        },
+      ]);
+    }, 1000);
+    // getGenealogy(`${user.referral}?isfirst=true`);
+  }, [dataConfig.activate === undefined && loadingConfig]);
+
   const onChange = async (val, keys) => {
-    // setLoadingPage(true);
     await handleGet("member/genealogy/" + val, (res, status) => {
       if (res.data.length > 0) {
         res.data.map((row, index) => {
@@ -70,15 +91,15 @@ const GenealogyPraPosting = () => {
 
         data.map((row, index) => {
           if (row.id === val) {
-            Object.assign(row, { isActive: true, no: index });
+            Object.assign(row, { isActive: true });
           }
         });
 
         setData(data.concat(res.data));
       }
-      setLoadingPage(false);
     });
   };
+
   const handleActivate = (id_member, index) => {
     confirm({
       visible: true,
@@ -104,38 +125,34 @@ const GenealogyPraPosting = () => {
       },
     });
   };
-  return (
-    <Spin spinning={loadingConfig}>
-      {arrayToTree(data.length > 0 ? data : [], {
-        dataField: null,
-        childrenField: "children",
-      }).map((res, index) => {
-        return (
-          <Index
-            key={index}
-            no={res.no}
-            isActive={res.isActive}
-            loading={loadingPage}
-            joinDate={res.join_date}
-            picture={res.picture}
-            id={res.id}
-            name={`${res.name}`}
-            children={res.children}
-            callback={(val, keys) => {
-              onChange(val, index);
-            }}
-            status={res.status}
-            activate={res.activate}
-            id_member={res.id_member}
-            handleActive={(id_member, key) => {
-              handleActivate(id_member, index);
-            }}
-            totalPinAktivasi={res.totalPinAktivasi}
-          />
-        );
-      })}
-    </Spin>
-  );
+  return arrayToTree(data.length > 0 ? data : [], {
+    dataField: null,
+    childrenField: "children",
+  }).map((res, index) => {
+    return (
+      <Index
+        key={index}
+        no={res.no}
+        isActive={res.isActive}
+        loading={false}
+        joinDate={res.join_date}
+        picture={res.picture}
+        id={res.id}
+        name={`${res.name}`}
+        children={res.children}
+        callback={(val, keys) => {
+          onChange(val, index);
+        }}
+        status={res.status}
+        activate={res.activate}
+        id_member={res.id_member}
+        handleActive={(id_member, key) => {
+          handleActivate(id_member, index);
+        }}
+        totalPinAktivasi={res.totalPinAktivasi}
+      />
+    );
+  });
 };
 
 export default GenealogyPraPosting;

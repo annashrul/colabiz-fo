@@ -36,52 +36,61 @@ const GenealogyMonolegNasional = () => {
   }, []);
 
   const getGenealogy = async (where) => {
-    setData([
-      {
-        hasChild: parseInt(user.jumlah_downline, 10) > 0,
-        id: user.referral,
-        join_date: user.created_at,
-        name: user.fullname,
-        parentId: null,
-        picture: user.foto,
-        isActive: false,
-        no: 0,
-        status: dataConfig.status_member,
-        activate: dataConfig.activate,
-        id_member: user.id,
-        totalPinAktivasi: dataConfig.total_pin_aktivasi,
-      },
-    ]);
+    if (!loadingConfig) {
+      setData([
+        {
+          hasChild: parseInt(user.jumlah_downline, 10) > 0,
+          id: user.referral,
+          join_date: user.created_at,
+          name: user.fullname,
+          parentId: null,
+          picture: user.foto,
+          isActive: false,
+          no: 0,
+          status: dataConfig.status_member,
+          activate: dataConfig.activate,
+          id_member: user.id,
+          totalPinAktivasi: dataConfig.total_pin_aktivasi,
+        },
+      ]);
+      console.log("user", user);
+    }
+
     setLoading(false);
   };
 
   useEffect(() => {
     setLoading(loadingConfig);
-    if (dataConfig !== undefined) {
-      console.log("config", dataConfig);
-    }
-    getGenealogy(`${user.referral}?isfirst=true`);
-  }, []);
+    getGenealogy();
+  }, [loadingConfig]);
   const onChange = async (val, keys) => {
     setLoading(true);
-    await handleGet("member/genealogy_activate/" + val, (res, status) => {
-      if (res.data.length > 0) {
-        res.data.map((row, index) => {
-          Object.assign(row, {
-            isActive: false,
+    let where = "";
+    if (val === user.referral) {
+      where = "?isfirst=true";
+    }
+    console.log(where);
+    await handleGet(
+      `member/genealogy_activate/${val}${where}`,
+      (res, status) => {
+        if (res.data.length > 0) {
+          res.data.map((row, index) => {
+            Object.assign(row, {
+              isActive: false,
+            });
           });
-        });
 
-        data.map((row, index) => {
-          if (row.id === val) {
-            Object.assign(row, { isActive: true, no: index });
-          }
-        });
+          data.map((row, index) => {
+            if (row.id === val) {
+              Object.assign(row, { isActive: true, no: index });
+            }
+          });
 
-        setData(data.concat(res.data));
+          setData(data.concat(res.data));
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    );
   };
   const handleActivate = (id_member, index) => {
     confirm({

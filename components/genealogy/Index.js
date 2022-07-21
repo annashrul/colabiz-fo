@@ -51,27 +51,23 @@ const Index = ({
   totalPinAktivasi,
 }) => {
   const dispatch = useDispatch();
-  const handleMore = (idData, index) => {
-    // if (children.length === 0) Message.info(`${name} belum mempunyai downline`);
-    // else {
-    //   callback(idData, index);
-    // }
-    callback(idData, index);
-  };
+
   useEffect(() => {
     dispatch(getConfigAction());
   }, []);
   const { loadingConfig, dataConfig } = useSelector(
     (state) => state.infoReducer
   );
-  useEffect(() => {
-    setTimeout(() => {
-      callback(id, no);
-    }, 300);
-  }, []);
+  const handleMore = (idData, index) => {
+    if (idData === null) Message.success("data tidak ada");
+    else {
+      callback(idData, index);
+    }
+  };
+
   return (
     <Collapse
-      key={no}
+      // key={no}
       bordered={false}
       style={{
         boxShadow: "none",
@@ -85,10 +81,10 @@ const Index = ({
         }
       }}
       expandIconPosition="right"
-      defaultActiveKey={"1"}
+      // defaultActiveKey={"1"}
     >
       <Panel
-        key={`${no + 1}`}
+        // key={`${no + 1}`}
         header={
           <Badge.Ribbon
             color={parseInt(activate, 10) === 0 ? "#f50" : "#87d068"}

@@ -25,7 +25,7 @@ const Matahari = ({
 }) => {
   useEffect(() => {
     setTimeout(() => {
-      callback(id, no);
+      // callback(id, no);
     }, 300);
   }, []);
   const handleMore = (idData, index) => {
@@ -98,26 +98,6 @@ const Matahari = ({
                         />
                       );
                     })}
-                  {/* <li>
-                    <a href="#">
-                      <div className="container-genealogy">
-                        <div className="w-16">
-                          <img
-                            className="imgs"
-                            alt="name"
-                            src="https://dummyimage.com/302x302/94a3b8/ffffff"
-                          />
-                        </div>
-                        <div className="row" style={{ marginTop: "5px" }}>
-                          <i className="fa fa-exclamation-circle fa-2x"></i>
-                        </div>
-                        <div className="row"> Tatang Herb </div>
-                        <div className="row" style={{ marginBottom: "5px" }}>
-                          Qualified
-                        </div>
-                      </div>
-                    </a>
-                  </li> */}
                 </ul>
               </li>
             </ul>
