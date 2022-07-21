@@ -35,8 +35,9 @@ const GenealogyMonolegNasional = () => {
     dispatch(getConfigAction());
   }, []);
 
-  const getGenealogy = async (where) => {
-    if (!loadingConfig) {
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("set data");
       setData([
         {
           hasChild: parseInt(user.jumlah_downline, 10) > 0,
@@ -50,45 +51,33 @@ const GenealogyMonolegNasional = () => {
           status: dataConfig.status_member,
           activate: dataConfig.activate,
           id_member: user.id,
-          totalPinAktivasi: dataConfig.total_pin_aktivasi,
+          totalPinAktivasi: parseInt(dataConfig.total_pin_aktivasi, 10),
         },
       ]);
-      console.log("user", user);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    setLoading(loadingConfig);
-    getGenealogy();
-  }, [loadingConfig]);
+    }, 1000);
+  }, [dataConfig.activate === undefined && loadingConfig]);
   const onChange = async (val, keys) => {
-    setLoading(true);
     let where = "";
     if (val === user.referral) {
-      where = "?isfirst=true";
+      where = `?isFirst=true`;
     }
-    console.log(where);
     await handleGet(
       `member/genealogy_activate/${val}${where}`,
       (res, status) => {
+        // console.log(res.data);
         if (res.data.length > 0) {
           res.data.map((row, index) => {
             Object.assign(row, {
               isActive: false,
             });
           });
-
           data.map((row, index) => {
             if (row.id === val) {
               Object.assign(row, { isActive: true, no: index });
             }
           });
-
           setData(data.concat(res.data));
         }
-        setLoading(false);
       }
     );
   };
@@ -116,6 +105,90 @@ const GenealogyMonolegNasional = () => {
       },
     });
   };
+  console.log(arrayToTree(data));
+
+  return (
+    data.length > 0 && (
+      <div style={{ marginTop: "20px", zoom: "80%" }}>
+        <div className="row">
+          <div className="col-md-12">
+            <div
+              className="tree"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <ul>
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      onChange(data[0].id, data[0].no);
+                    }}
+                  >
+                    <div className="container-genealogy">
+                      <div className="w-16">
+                        <img
+                          className="imgs"
+                          alt="name"
+                          src={data[0].picture}
+                        />
+                      </div>
+                      <div className="row" style={{ marginTop: "5px" }}>
+                        <i className="fa fa-exclamation-circle fa-2x"></i>
+                      </div>
+                      <div className="row"> {data[0].name} </div>
+                      <div className="row" style={{ marginBottom: "5px" }}>
+                        {data[0].activate === 0
+                          ? "Belum Aktivasi"
+                          : "Telah Aktivasi"}
+                      </div>
+                    </div>
+                  </a>
+                  {arrayToTree(data.length > 0 ? data : [], {
+                    dataField: null,
+                    childrenField: "children",
+                  }).map((res, index) => {
+                    return (
+                      <ul>
+                        <Matahari
+                          key={index}
+                          no={res.no}
+                          isActive={res.isActive}
+                          loading={false}
+                          joinDate={res.join_date}
+                          picture={res.picture}
+                          id={res.id}
+                          name={`${res.name}`}
+                          children={res.children}
+                          callback={(val, keys) => {
+                            onChange(val, index);
+                          }}
+                          status={res.status}
+                          activate={res.activate}
+                          id_member={res.id_member}
+                          handleActive={(id_member, key) => {
+                            if (
+                              parseInt(dataConfig.total_pin_aktivasi, 10) === 0
+                            ) {
+                              handleActivate(id_member, index);
+                            }
+                          }}
+                          totalPinAktivasi={res.totalPinAktivasi}
+                        />
+                      </ul>
+                    );
+                  })}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  );
   return arrayToTree(data.length > 0 ? data : [], {
     dataField: null,
     childrenField: "children",
@@ -125,7 +198,7 @@ const GenealogyMonolegNasional = () => {
         key={index}
         no={res.no}
         isActive={res.isActive}
-        loading={loading}
+        loading={false}
         joinDate={res.join_date}
         picture={res.picture}
         id={res.id}

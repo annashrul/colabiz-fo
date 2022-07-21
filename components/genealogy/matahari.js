@@ -23,19 +23,46 @@ const Matahari = ({
   handleActive,
   totalPinAktivasi,
 }) => {
-  useEffect(() => {
-    setTimeout(() => {
-      // callback(id, no);
-    }, 300);
-  }, []);
   const handleMore = (idData, index) => {
     // if (idData === null) Message.success("data tidak ada");
     // else {
     //   callback(idData, index);
     // }
+    console.log("id", idData);
     callback(idData, index);
   };
 
+  return (
+    children.length > 0 &&
+    children.map((res, index) => {
+      return (
+        <li>
+          <a
+            href="#"
+            onClick={(e) => {
+              handleMore(res.id, res.no);
+            }}
+          >
+            <div className="container-genealogy">
+              <div className="w-16">
+                <img className="imgs" alt="name" src={res.picture} />
+              </div>
+              <div className="row" style={{ marginTop: "5px" }}>
+                <i className="fa fa-exclamation-circle fa-2x"></i>
+              </div>
+              <div className="row">
+                {" "}
+                {res.name} {res.hasChild ? "true" : "false"}
+              </div>
+              <div className="row" style={{ marginBottom: "5px" }}>
+                {res.activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
+              </div>
+            </div>
+          </a>
+        </li>
+      );
+    })
+  );
   return (
     <div style={{ marginTop: "20px", zoom: "80%" }}>
       <div className="row">
@@ -75,6 +102,44 @@ const Matahari = ({
                   {children.length > 0 &&
                     children.map((res, index) => {
                       return (
+                        <li>
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              handleMore(id, no);
+                            }}
+                          >
+                            <div className="container-genealogy">
+                              <div className="w-16">
+                                <img
+                                  className="imgs"
+                                  alt="name"
+                                  src={picture}
+                                />
+                              </div>
+                              <div className="row" style={{ marginTop: "5px" }}>
+                                <i className="fa fa-exclamation-circle fa-2x"></i>
+                              </div>
+                              <div className="row"> {name} </div>
+                              <div
+                                className="row"
+                                style={{ marginBottom: "5px" }}
+                              >
+                                {activate === 0
+                                  ? "Belum Aktivasi"
+                                  : "Telah Aktivasi"}
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      );
+                    })}
+                </ul>
+                {/* <ul>
+                  
+                  {children.length > 0 &&
+                    children.map((res, index) => {
+                      return (
                         <ComponentMatahari
                           key={index}
                           no={res.no}
@@ -98,7 +163,7 @@ const Matahari = ({
                         />
                       );
                     })}
-                </ul>
+                </ul> */}
               </li>
             </ul>
           </div>

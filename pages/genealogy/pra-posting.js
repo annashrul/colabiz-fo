@@ -59,7 +59,6 @@ const GenealogyPraPosting = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log(dataConfig);
       setData([
         {
           hasChild: parseInt(user.jumlah_downline, 10) > 0,

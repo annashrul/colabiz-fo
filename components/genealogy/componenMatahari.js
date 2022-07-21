@@ -23,11 +23,6 @@ const ComponentMatahari = ({
   totalPinAktivasi,
 }) => {
   const handleMore = (idData, index) => {
-    // if (children.length === 0) Message.info(`${name} belum mempunyai downline`);
-    // else {
-    //   callback(idData, index);
-
-    // }
     callback(idData, index);
   };
   return (
@@ -61,28 +56,26 @@ const ComponentMatahari = ({
           </div>
         </a>
       </li>
-      {children.length > 0 &&
-        children.map((res, index) => {
-          <ComponentMatahari
-            key={index}
-            no={res.no}
-            isActive={res.isActive}
-            loading={loading}
-            joinDate={res.join_date}
-            picture={res.picture}
-            id={res.id}
-            name={`${res.name}`}
-            children={res.children}
-            callback={(val, keys) => {
-              handleMore(val, index);
-            }}
-            status={res.status}
-            activate={res.activate}
-            id_member={res.id_member}
-            handleActive={(id_member, index) => handleActive(id_member, index)}
-            totalPinAktivasi={totalPinAktivasi}
-          />;
-        })}
+      <ComponentMatahari
+        key={no}
+        no={no}
+        isActive={isActive}
+        loading={loading}
+        joinDate={joinDate}
+        picture={picture}
+        id={id}
+        name={`${name}`}
+        children={children}
+        callback={(val, keys) => {
+          handleMore(val, keys);
+        }}
+        status={status}
+        activate={activate}
+        id_member={id_member}
+        handleActive={(id_member, index) => handleActive(id_member, index)}
+        totalPinAktivasi={totalPinAktivasi}
+      />
+      ;
     </>
   );
 };
