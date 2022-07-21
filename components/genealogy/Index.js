@@ -112,7 +112,9 @@ const Index = ({
                   </Col>
                   <Col style={{ marginLeft: "5px" }}>
                     <Row>
-                      <small>{name}</small>
+                      <small>
+                        {id} - ({name})
+                      </small>
                     </Row>
                     <Row>
                       <Col md={12}>

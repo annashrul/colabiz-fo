@@ -48,7 +48,10 @@ const Matahari = ({
           <div className="row" style={{ marginTop: "5px" }}>
             <i className="fa fa-exclamation-circle fa-2x"></i>
           </div>
-          <div className="row"> {name}</div>
+          <div className="row">
+            {" "}
+            {id} <br />({name})
+          </div>
           <div className="row" style={{ marginBottom: "5px" }}>
             {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}
           </div>
