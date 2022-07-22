@@ -152,9 +152,7 @@ const TambahMitra = () => {
         kd_kec: dataForm.kd_kec,
       },
     };
-    console.log(data);
-
-    // dispatch(signUpAction(data));
+    dispatch(signUpAction(data));
   };
 
   return (

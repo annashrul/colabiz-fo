@@ -13,6 +13,8 @@ const initialState = {
   loadingValidateUsername: false,
   dataSignUp: [],
   loadingSignUp: false,
+  loadingSendForgotPassword: false,
+  loadingVerifyForgotPassword: false,
 };
 
 export const authUserReducer = (state = initialState, action) => {
@@ -72,9 +74,16 @@ export const authUserReducer = (state = initialState, action) => {
         loadingResendEmail: action.load,
       });
     case AUTH_USER.LOADING_USER_DETAIL:
-      console.log("redux", action.load);
       return Object.assign({}, state, {
         loadingUserDetail: action.load,
+      });
+    case AUTH_USER.LOADING_SEND_FORGOT_PASSWORD:
+      return Object.assign({}, state, {
+        loadingSendForgotPassword: action.load,
+      });
+    case AUTH_USER.LOADING_VERIFY_FORGOT_PASSWORD:
+      return Object.assign({}, state, {
+        loadingVerifyForgotPassword: action.load,
       });
 
     default:

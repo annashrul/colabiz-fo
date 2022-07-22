@@ -1,7 +1,7 @@
 import { AUTH_USER } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
-import { message, Message } from "antd";
+import { Message } from "antd";
 import Router from "next/router";
 
 export const setDataLogin = (data) => {
@@ -81,6 +81,18 @@ export const setLoadingResendEmail = (load) => {
 export const setLoadingUserDetail = (load) => {
   return {
     type: AUTH_USER.LOADING_USER_DETAIL,
+    load,
+  };
+};
+export const setLoadingSendForgotPassword = (load) => {
+  return {
+    type: AUTH_USER.LOADING_SEND_FORGOT_PASSWORD,
+    load,
+  };
+};
+export const setLoadingVerifyForgotPassword = (load) => {
+  return {
+    type: AUTH_USER.LOADING_VERIFY_FORGOT_PASSWORD,
     load,
   };
 };
@@ -205,6 +217,40 @@ export const userDetailAction = (id) => {
       dispatch(setDataUserDetail(res.data));
       dispatch(setLoadingUserDetail(false));
       console.log("action detail", res);
+    });
+  };
+};
+
+export const sendForgotPasswordAction = (data, callback) => {
+  return (dispatch) => {
+    dispatch(setLoadingSendForgotPassword(true));
+    handlePost("auth/send", data, (res, status, msg) => {
+      if (status) {
+        Message.success(msg).then(() => {
+          dispatch(setLoadingSendForgotPassword(false));
+        });
+      } else {
+        Message.info(msg).then(() => {
+          dispatch(setLoadingSendForgotPassword(false));
+        });
+      }
+    });
+  };
+};
+
+export const verifyForgotPasswordAction = (data, callback) => {
+  return (dispatch) => {
+    dispatch(setLoadingSendForgotPassword(true));
+    handlePost("auth/send", data, (res, status, msg) => {
+      if (status) {
+        Message.success(msg).then(() => {
+          dispatch(setLoadingSendForgotPassword(false));
+        });
+      } else {
+        Message.info(msg).then(() => {
+          dispatch(setLoadingSendForgotPassword(false));
+        });
+      }
     });
   };
 };

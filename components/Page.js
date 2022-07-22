@@ -21,6 +21,7 @@ const NonDashboardRoutes = [
   "/signup",
   "/lockscreen",
   "/_error",
+  `/forgot-password/[token]`,
   StringLink.transactionRecycle,
   StringLink.invoiceRecycle,
   StringLink.invoiceMitra,
@@ -30,22 +31,27 @@ const NonDashboardRoutes = [
 const Page = ({ router, children }) => {
   const [loading, setLoading] = useState(true);
   const [state] = useAppState();
-  const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
 
+  const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
+  console.log("is not dashboard", router.pathname);
   useEffect(() => {
     const coo = authAction.getToken();
     setTimeout(() => {
-      if (coo !== undefined) {
-        setLoading(false);
-        // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-        // const decodedToken = jwt_decode(atob(coo));
-        // const dateNow = new Date();
-        // if (decodedToken.exp * 1000 < dateNow.getTime()) {
-        //   doLogout();
-        // }
+      if (!isNotDashboard) {
+        if (coo !== undefined) {
+          setLoading(false);
+          // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+          // const decodedToken = jwt_decode(atob(coo));
+          // const dateNow = new Date();
+          // if (decodedToken.exp * 1000 < dateNow.getTime()) {
+          //   doLogout();
+          // }
+        } else {
+          doLogout();
+          Routes.push("/signin").then(() => setLoading(false));
+        }
       } else {
-        doLogout();
-        Routes.push("/signin").then(() => setLoading(false));
+        setLoading(false);
       }
     }, 1000);
   }, []);

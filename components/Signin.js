@@ -10,6 +10,7 @@ import ModalResendEmail from "./modalResendEmail";
 import Router from "next/router";
 import FormComponent from "./profile/formComponent";
 import CreatePinComponent from "./auth/createPinComponent";
+import SendForgotPasswordComponent from "./auth/sendForgotPasswordComponent";
 
 const FormItem = Form.Item;
 
@@ -23,7 +24,7 @@ const Signin = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [, forceUpdate] = useState();
-  const [showModalResendEmail, setShowModalResendEmail] = useState(false);
+  const [showModalForgotPassword, setShowModalForgotPassword] = useState(false);
   const [showModalPin, setShowModalPin] = useState(false);
   const resLoading = useSelector((state) => state.authUserReducer.loadingLogin);
 
@@ -80,6 +81,7 @@ const Signin = () => {
                 prefix={<UserOutlined style={{ fontSize: "16px" }} />}
                 type="text"
                 placeholder="Username"
+                style={{ textTransform: "uppercase" }}
               />
             </FormItem>
 
@@ -100,13 +102,10 @@ const Signin = () => {
                 <span>Lupa password?</span>{" "}
                 <a
                   onClick={() => {
-                    message.info(
-                      "maaf fitur ini sedang dalam tahap pengembangan. silahkan hubungi admin"
-                    );
-                    // setShowModalResendEmail(true);
+                    setShowModalForgotPassword(true);
                   }}
                 >
-                  &nbsp;Kirim sekarang!
+                  Klik disini
                 </a>
               </small>
             </div>
@@ -132,12 +131,13 @@ const Signin = () => {
         </Spin>
       </Content>
 
-      {showModalResendEmail && (
-        <ModalResendEmail
-          modal={showModalResendEmail}
-          onCancel={() => {
-            setShowModalResendEmail(false);
+      {showModalForgotPassword && (
+        <SendForgotPasswordComponent
+          isModal={showModalForgotPassword}
+          ok={(e) => {
+            message.success("Email Berhasil Terkirim. Silahkan Cek Email Anda");
           }}
+          cancel={(e) => setShowModalForgotPassword(false)}
         />
       )}
       {showModalPin && (
