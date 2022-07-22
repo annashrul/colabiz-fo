@@ -1,4 +1,4 @@
-import { Button, Form, Input, Spin, Row } from "antd";
+import { Button, Form, Input, Spin, Row, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import styled from "styled-components";
@@ -79,7 +79,14 @@ const Signin = () => {
             <div className="text-center">
               <small className="text-muted">
                 <span>Lupa password?</span>{" "}
-                <a onClick={() => setShowModalResendEmail(true)}>
+                <a
+                  onClick={() => {
+                    message.info(
+                      "maaf fitur ini sedang dalam tahap pengembangan. silahkan hubungi admin"
+                    );
+                    // setShowModalResendEmail(true);
+                  }}
+                >
                   &nbsp;Kirim sekarang!
                 </a>
               </small>
