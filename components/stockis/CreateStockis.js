@@ -162,7 +162,7 @@ const CreateStockis = () => {
                         //   message: "Harus Berupa Angka",
                         // },
                         { min: 9, message: "no handphone tidak valid" },
-                        { max: 14, message: "no handphone tidak valid" },
+                        { max: 16, message: "no handphone tidak valid" },
                       ]}
                       tooltip={{
                         title: "Pastikan no telepon anda aktif",

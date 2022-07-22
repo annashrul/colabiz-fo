@@ -176,10 +176,22 @@ const ProfileComponent = () => {
                 if (e === "cancel") {
                   setShowFormAddress(false);
                 } else {
+                  console.log(data);
+                  let newData = {
+                    id_member: user.id,
+                    ismain: 1,
+                    kd_kec: data.kd_kec,
+                    kd_kota: data.kd_kota,
+                    kd_prov: data.kd_prov,
+                    main_address: data.main_address,
+                    no_hp: data.no_hp,
+                    penerima: data.penerima,
+                    title: data.title,
+                  };
                   dispatch(
                     putAction(
                       dataUserDetail.address.id,
-                      data,
+                      newData,
                       user.id,
                       (res) => {
                         if (res) {

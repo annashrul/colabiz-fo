@@ -82,7 +82,7 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
           <Form.Item
             hasFeedback
             name={"title"}
-            label="Title"
+            label="Simpan alamat sebagai"
             rules={[{ required: true, message: msgInput }]}
           >
             <Input
@@ -118,7 +118,7 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
             rules={[
               { required: true, message: msgInput },
               { min: 9, message: "no handphone tidak valid" },
-              { max: 14, message: "no handphone tidak valid" },
+              { max: 16, message: "no handphone tidak valid" },
             ]}
           >
             <PhoneInput
