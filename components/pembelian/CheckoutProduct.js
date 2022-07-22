@@ -104,20 +104,20 @@ const CheckoutProduct = () => {
     if (!loadingPage) {
       setDataMetodePembayaran([
         {
-          metode_pembayaran: "SALDO",
-          id_bank: "-",
-          bank_name: general_helper.toRp(info.saldo),
-          acc_no: "",
-          acc_name: "SALDO",
-          title: "Gunakan pembayaran menggunakan saldo",
-        },
-        {
           metode_pembayaran: "TRANSFER",
           id_bank: dataStokis.id_bank,
           bank_name: dataStokis.bank_name,
           acc_no: dataStokis.acc_no,
           acc_name: dataStokis.acc_name,
           title: "Gunakan pembayaran menggunakan transfer bank",
+        },
+        {
+          metode_pembayaran: "SALDO",
+          id_bank: "-",
+          bank_name: general_helper.toRp(info.saldo),
+          acc_no: "",
+          acc_name: "SALDO",
+          title: "Gunakan pembayaran menggunakan saldo",
         },
       ]);
     }
@@ -148,6 +148,7 @@ const CheckoutProduct = () => {
   };
   let subtotal = 0;
   let subQty = 0;
+
   return !loadingPage ? (
     <>
       <Collapse
@@ -423,10 +424,33 @@ const CheckoutProduct = () => {
                         disabled={dataCart.length < 1}
                         type="primary"
                         onClick={(e) => {
-                          // if (parseInt(info.saldo, 10) > 0) {
+                          if (
+                            dataMetodePembayaran[indexMetodePembayaran]
+                              .metode_pembayaran === "SALDO"
+                          ) {
+                            if (parseInt(info.saldo, 10) > 0) {
+                              setVisible(true);
+                            } else {
+                              message.info(
+                                "saldo anda tidak cukup, silahkan gunakan metode pembayaran menggunakan transfer"
+                              );
+                            }
+                          } else {
                             setVisible(true);
+                          }
+                          // if (parseInt(info.saldo, 10) > 0) {
+                          //   setVisible(true);
                           // } else {
-                          //   message.info("saldo anda tidak cukup");
+                          //   if (
+                          //     dataMetodePembayaran[indexMetodePembayaran]
+                          //       .metode_pembayaran === "SALDO"
+                          //   ) {
+                          //     message.info(
+                          //       "saldo anda tidak cukup, silahkan gunakan metode pembayaran menggunakan transfer"
+                          //     );
+                          //   } else {
+                          //     setVisible(true);
+                          //   }
                           // }
                         }}
                       >

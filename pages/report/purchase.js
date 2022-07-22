@@ -1,10 +1,22 @@
-import { Table, Select, Row, Col, Input, Form } from "antd";
+import {
+  Table,
+  Select,
+  Row,
+  Col,
+  Input,
+  Form,
+  Button,
+  message,
+  Tooltip,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import authAction from "../../action/auth.action";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { reportPurchaseAction } from "../../redux/actions/report.action";
 import general_helper from "../../helper/general_helper";
+import Router from "next/router";
+import { StringLink } from "../../helper/string_link_helper";
 
 moment.locale("id");
 const { Column, ColumnGroup } = Table;
@@ -132,6 +144,7 @@ const IndexPurchaseReport = () => {
             );
           }}
         />
+
         <Column
           title="Tanggal"
           dataIndex="created_at"
@@ -209,6 +222,30 @@ const IndexPurchaseReport = () => {
             }}
           />
         </ColumnGroup>
+        <Column
+          title="Aksi"
+          dataIndex="created_at"
+          key="created_at"
+          render={(_, record) => {
+            return (
+              <Tooltip title={record.status === 0 ? "Lihat invoice anda" : ""}>
+                <Button
+                  disabled={record.status > 0}
+                  type="primary"
+                  size="small"
+                  onClick={(e) => {
+                    localStorage.setItem("typeTrx", "Produk");
+                    localStorage.setItem("kdTrx", record.kd_trx);
+                    localStorage.setItem("linkBack", "/");
+                    Router.push(StringLink.invoiceProduct);
+                  }}
+                >
+                  Lihat Invoice
+                </Button>
+              </Tooltip>
+            );
+          }}
+        />
       </Table>
     </div>
   );

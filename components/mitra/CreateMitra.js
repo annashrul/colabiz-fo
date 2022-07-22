@@ -139,6 +139,7 @@ const TambahMitra = () => {
       username: dataForm.username,
       email: dataForm.email,
       sponsor: user.referral,
+      password: dataForm.password,
       data_bank: {
         id_bank: form.getFieldValue("id_bank"),
         acc_name: form.getFieldValue("acc_name"),
@@ -151,8 +152,9 @@ const TambahMitra = () => {
         kd_kec: dataForm.kd_kec,
       },
     };
+    console.log(data);
 
-    dispatch(signUpAction(data));
+    // dispatch(signUpAction(data));
   };
 
   return (
@@ -204,10 +206,6 @@ const TambahMitra = () => {
                       label="No Telepon"
                       rules={[
                         { required: true, message: "Tidak Boleh Kosong" },
-                        // {
-                        //   pattern: new RegExp(/^[0-9]*$/),
-                        //   message: "Harus Berupa Angka",
-                        // },
                         { min: 9, message: "no handphone tidak valid" },
                         { max: 16, message: "no handphone tidak valid" },
                       ]}
@@ -254,7 +252,7 @@ const TambahMitra = () => {
                     >
                       <Input
                         ref={usernameInput}
-                        style={{ textTransform: "lowercase" }}
+                        style={{ textTransform: "uppercase" }}
                         placeholder="Ex: jhondoe"
                       />
                     </Form.Item>
@@ -271,6 +269,41 @@ const TambahMitra = () => {
                       ]}
                     >
                       <Input placeholder="Ex: jhondoe@gmail.com" />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="password"
+                      label="Password"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        { min: 6, message: "Password minimal 6 Angka" },
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="confirm_password"
+                      label="Konfirmasi Password"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        {
+                          min: 6,
+                          message: "Konfirmasi password minimal 6 Angka",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error("Password Tidak Sama")
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password />
                     </Form.Item>
                   </Col>
                 </Row>

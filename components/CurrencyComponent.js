@@ -32,6 +32,7 @@ const CurrencyComponent = ({ callback, val }) => {
           <Col md={8} sm={8} xs={8} key={key} className="mb-2">
             <Button
               style={{ width: "100%" }}
+              shape="round"
               type={isActiveAmount === key ? `danger` : `dashed`}
               key={key}
               onClick={(e) => {

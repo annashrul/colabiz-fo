@@ -8,6 +8,10 @@ import {
   Input,
   Card,
   Spin,
+  Space,
+  Tooltip,
+  Typography,
+  message,
 } from "antd";
 import { WalletOutlined, BankOutlined } from "@ant-design/icons";
 
@@ -84,7 +88,10 @@ const FormWithdraw = () => {
         )}`,
       });
       return;
-    } else if (parseInt(e.amount, 10) > parseInt(data.saldo, 10)) {
+    } else if (
+      parseInt(e.amount, 10) + parseInt(dataConfig.charge_withdraw, 10) >
+      parseInt(data.saldo, 10)
+    ) {
       setNominalError({
         enable: true,
         helpText: "nominal penarikan melebihi saldo anda",
@@ -116,15 +123,15 @@ const FormWithdraw = () => {
           <Col md={8} xs={24}>
             <Card
               title={
-                <span>
-                  Penarikan minimal{" "}
-                  {general_helper.toRp(
-                    dataConfig ? dataConfig.min_withdraw : 0
-                  )}
+                <span style={{ color: "green" }}>
+                  <WalletOutlined /> Saldo{" "}
+                  {data ? general_helper.toRp(data.saldo) : 0}
                   <br />
                   <small style={{ color: "green" }}>
-                    <WalletOutlined /> Saldo{" "}
-                    {data ? general_helper.toRp(data.saldo) : 0}
+                    Penarikan minimal &nbsp;
+                    {general_helper.toRp(
+                      dataConfig ? dataConfig.min_withdraw : 0
+                    )}
                   </small>
                 </span>
               }
@@ -137,33 +144,48 @@ const FormWithdraw = () => {
                       val={amountActive}
                     />
                   </Form.Item>
-                  <Form.Item
-                    label="Nominal Yang Akan Ditarik"
-                    hasFeedback
-                    name="amount"
-                    rules={[
-                      { required: true, message: "Tidak Boleh Kosong" },
-                      {
-                        pattern: new RegExp(/^[0-9]*$/),
-                        message: "Harus Berupa Angka",
-                      },
-                      {
-                        validator(_, value) {
-                          if (nominalError.enable) {
-                            return Promise.reject(nominalError.helpText);
-                          }
-                          return Promise.resolve();
+                  <Space>
+                    <Form.Item
+                      label="Nominal Yang Akan Ditarik"
+                      hasFeedback
+                      name="amount"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        {
+                          pattern: new RegExp(/^[0-9]*$/),
+                          message: "Harus Berupa Angka",
                         },
-                      },
-                    ]}
-                  >
-                    <Input
-                      onChange={(e) => setAmountActive(e.target.value)}
-                      style={{ fontSize: state.mobile ? "12px" : "14px" }}
-                      prefix={"Rp."}
-                      ref={nominalInput}
-                    />
-                  </Form.Item>
+                        {
+                          validator(_, value) {
+                            if (nominalError.enable) {
+                              return Promise.reject(nominalError.helpText);
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
+                    >
+                      <Input
+                        onChange={(e) => setAmountActive(e.target.value)}
+                        style={{ fontSize: state.mobile ? "12px" : "14px" }}
+                        prefix={"Rp."}
+                        ref={nominalInput}
+                      />
+                    </Form.Item>
+                    <Tooltip title="Tarik semua saldo anda">
+                      <Typography.Link
+                        href="#API"
+                        onClick={(e) => {
+                          form.setFieldsValue({
+                            amount: data.saldo,
+                          });
+                        }}
+                      >
+                        tarik semua
+                      </Typography.Link>
+                    </Tooltip>
+                  </Space>
+
                   <Form.Item
                     hasFeedback
                     name="id_bank"
@@ -261,6 +283,7 @@ const FormWithdraw = () => {
                     Kembali
                   </Button>
                 )}
+
                 <Button type="primary" size={"medium"} htmlType="submit">
                   Lanjut
                 </Button>
