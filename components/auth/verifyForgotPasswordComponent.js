@@ -1,25 +1,11 @@
-import { Button, Col, Row, Input, Upload, Modal, Form, Tabs, Spin } from "antd";
-import {
-  InfoCircleOutlined,
-  InboxOutlined,
-  SolutionOutlined,
-  LockOutlined,
-  KeyOutlined,
-} from "@ant-design/icons";
+import { Button, Col, Row, Input, Modal, Form, Spin } from "antd";
 
-import { useState, useEffect } from "react";
-import general_helper from "../../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
 import { sendForgotPasswordAction } from "../../redux/actions/auth.action";
-import authAction from "../../action/auth.action";
-
-const { TabPane } = Tabs;
-const { Dragger } = Upload;
 
 const VerifyForgotPasswordComponent = () => {
   const dispatch = useDispatch();
 
-  console.log("verify forgot password page");
   const [form] = Form.useForm();
   const { loadingVerifyForgotPassword } = useSelector(
     (state) => state.authUserReducer

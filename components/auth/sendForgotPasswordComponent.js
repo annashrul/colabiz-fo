@@ -1,21 +1,9 @@
-import { Button, Col, Row, Input, Upload, Modal, Form, Tabs, Spin } from "antd";
-import {
-  InfoCircleOutlined,
-  InboxOutlined,
-  SolutionOutlined,
-  LockOutlined,
-  KeyOutlined,
-} from "@ant-design/icons";
+import { Button, Col, Row, Input, Modal, Form, Spin } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
-import { useState, useEffect } from "react";
-import general_helper from "../../helper/general_helper";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendForgotPasswordAction } from "../../redux/actions/auth.action";
-import authAction from "../../action/auth.action";
-import VerifyForgotPasswordComponent from "./verifyForgotPasswordComponent";
-
-const { TabPane } = Tabs;
-const { Dragger } = Upload;
 
 const SendForgotPasswordComponent = ({ isModal, ok, cancel }) => {
   const dispatch = useDispatch();
@@ -109,7 +97,7 @@ const SendForgotPasswordComponent = ({ isModal, ok, cancel }) => {
           </Form>
         </Spin>
       </Modal>
-      {verifyPass && <VerifyForgotPasswordComponent />}
+      {/* {verifyPass && <VerifyForgotPasswordComponent />} */}
     </>
   );
 };
