@@ -71,10 +71,13 @@ const ProfileCard = ({ callback }) => {
                 className="text-light text-white"
                 style={{ cursor: "pointer", color: "white" }}
                 onClick={async () => {
-                  message.info(
-                    "maaf fitur ini sedang dalam tahap pengembangan. silahkan hubungi admin"
+                  // message.info(
+                  //   "maaf fitur ini sedang dalam tahap pengembangan. silahkan hubungi admin"
+                  // );
+                  general_helper.copyText(
+                    `https://landing.kolabiz.id/regist/${user.referral}`,
+                    "Link referral"
                   );
-                  // general_helper.copyText(user.referral_url, "Link referral");
                 }}
               >
                 <span>{user.referral}</span> &nbsp;
