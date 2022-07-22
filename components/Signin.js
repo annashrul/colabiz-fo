@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
 import ModalResendEmail from "./modalResendEmail";
 import Router from "next/router";
-import FormComponent from "./profile/formComponent";
 import CreatePinComponent from "./auth/createPinComponent";
 import SendForgotPasswordComponent from "./auth/sendForgotPasswordComponent";
 
