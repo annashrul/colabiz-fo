@@ -7,13 +7,19 @@ import {
   districtsAction,
   provinceAction,
 } from "../../redux/actions/address.action";
+import general_helper from "../../helper/general_helper";
+// import PhoneInput from "react-phone-number-input";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/style.css";
+
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
-const FormAddress = ({ dataOld, callback }) => {
+const FormAddress = ({ dataOld, callback, isFull = false }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [data, setData] = useState({});
+  const [noHp, setNoHp] = useState();
   const {
     dataProvince,
     loadingProvince,
@@ -37,14 +43,32 @@ const FormAddress = ({ dataOld, callback }) => {
 
   useEffect(() => {
     dispatch(provinceAction());
+    console.log("dataOld", dataOld);
+
     if (Object.keys(dataOld).length === 4) {
-      setData(dataOld);
       dispatch(cityAction(dataOld.prov));
       dispatch(districtsAction(dataOld.kota));
       form.setFieldsValue({ kd_prov: dataOld.prov });
       form.setFieldsValue({ kd_kota: dataOld.kota });
       form.setFieldsValue({ kd_kec: dataOld.kecamatan });
       form.setFieldsValue({ main_address: dataOld.main_address });
+      setData(dataOld);
+    }
+    if (isFull) {
+      console.log(dataOld.no_hp);
+      dispatch(cityAction(dataOld.kd_prov));
+      dispatch(districtsAction(dataOld.kd_kota));
+      setNoHp(dataOld.no_hp);
+      form.setFieldsValue({ kd_prov: dataOld.kd_prov });
+      form.setFieldsValue({ kd_kota: dataOld.kd_kota });
+      form.setFieldsValue({ kd_kec: dataOld.kd_kec });
+      form.setFieldsValue({ main_address: dataOld.main_address });
+      form.setFieldsValue({ title: dataOld.title });
+      form.setFieldsValue({ penerima: dataOld.penerima });
+      form.setFieldsValue({
+        no_hp: `${general_helper.checkNo(dataOld.no_hp)}`,
+      });
+      setData(dataOld);
     }
   }, []);
 
@@ -54,9 +78,73 @@ const FormAddress = ({ dataOld, callback }) => {
         form={form}
         layout="vertical"
         onFinish={(e) => {
-          callback("submit", data);
+          let newData = data;
+          if (isFull) {
+            // Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
+            Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
+          }
+          callback("submit", newData);
         }}
       >
+        {isFull && (
+          <Form.Item
+            hasFeedback
+            name={"title"}
+            label="Simpan alamat sebagai"
+            rules={[{ required: true, message: msgInput }]}
+          >
+            <Input
+              placeholder="Rumah"
+              onChange={(e) => {
+                let datas = Object.assign(data, { title: e.target.value });
+                setData(datas);
+              }}
+            />
+          </Form.Item>
+        )}
+        {isFull && (
+          <Form.Item
+            hasFeedback
+            name={"penerima"}
+            label="Penerima"
+            rules={[{ required: true, message: msgInput }]}
+          >
+            <Input
+              placeholder="Jhon Doe"
+              onChange={(e) => {
+                let datas = Object.assign(data, { penerima: e.target.value });
+                setData(datas);
+              }}
+            />
+          </Form.Item>
+        )}
+        {isFull && (
+          <Form.Item
+            hasFeedback
+            name={"no_hp"}
+            label="Telepon"
+            rules={[
+              { required: true, message: msgInput },
+              { min: 9, message: "no handphone tidak valid" },
+              { max: 16, message: "no handphone tidak valid" },
+            ]}
+          >
+            {/* <PhoneInput
+              country={"us"}
+              value={noHp}
+              onChange={(phone) =>setNoHp(phone)}
+            /> */}
+            <Input prefix={"+62"} />
+            {/* <PhoneInput
+              international
+              defaultCountry="ID"
+              placeholder="81223165XXXX"
+              value={noHp}
+              onChange={setNoHp}
+            /> */}
+          </Form.Item>
+        )}
+
         <Form.Item
           hasFeedback
           name="kd_prov"

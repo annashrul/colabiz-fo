@@ -5,6 +5,12 @@ import { Message } from "antd";
 import Router from "next/router";
 import { getConfigAction } from "./info.action";
 
+export const setLoadingPutAddress = (load) => {
+  return {
+    type: MEMBER.LOADING_PUT_ADDRESS,
+    load,
+  };
+};
 export const setLoading = (load) => {
   return {
     type: MEMBER.LOADING,
@@ -91,6 +97,7 @@ export const putMemberAction = (id, e) => {
     });
   };
 };
+
 export const createPinAction = (id, e, callback) => {
   return (dispatch) => {
     dispatch(setLoading(true));

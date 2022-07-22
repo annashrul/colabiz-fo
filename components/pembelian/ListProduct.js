@@ -174,7 +174,7 @@ const ListProduct = () => {
   const handleStep = () => {};
 
   const kategoriPaket = ["REGISTER", "SMART_CONTRACT", "HAPPY_SHOPPING"];
-
+  console.log("data stokis", localStorage.getItem("dataStokis"));
   return (
     <>
       <Collapse
@@ -498,6 +498,12 @@ const ListProduct = () => {
           <Button
             type="primary"
             onClick={(e) => {
+              if (step === 1) {
+                if (indexStockis === "") {
+                  Message.info("silahkan pilih stokis terlebih dahulu");
+                  return;
+                }
+              }
               if (step === 2) {
                 localStorage.setItem("linkBackProduct", 3);
                 dispatch(getPaket("page=1", kategoriPaket[indexKategoriPaket]));

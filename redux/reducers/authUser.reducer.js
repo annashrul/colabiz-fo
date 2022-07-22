@@ -6,12 +6,15 @@ const initialState = {
   loadingPin: false,
   dataLogin: [],
   dataInfo: [],
+  loadingUserDetail: true,
   dataUserDetail: [],
   dataPin: [],
   validateUsername: false,
   loadingValidateUsername: false,
   dataSignUp: [],
   loadingSignUp: false,
+  loadingSendForgotPassword: false,
+  loadingVerifyForgotPassword: false,
 };
 
 export const authUserReducer = (state = initialState, action) => {
@@ -69,6 +72,18 @@ export const authUserReducer = (state = initialState, action) => {
     case AUTH_USER.LOADING_RESEND_EMAIL:
       return Object.assign({}, state, {
         loadingResendEmail: action.load,
+      });
+    case AUTH_USER.LOADING_USER_DETAIL:
+      return Object.assign({}, state, {
+        loadingUserDetail: action.load,
+      });
+    case AUTH_USER.LOADING_SEND_FORGOT_PASSWORD:
+      return Object.assign({}, state, {
+        loadingSendForgotPassword: action.load,
+      });
+    case AUTH_USER.LOADING_VERIFY_FORGOT_PASSWORD:
+      return Object.assign({}, state, {
+        loadingVerifyForgotPassword: action.load,
       });
 
     default:

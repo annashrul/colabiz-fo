@@ -27,7 +27,6 @@ export const invoiceAction = (kdTrx, type = "produk") => {
       url = `transaction/deposit/${btoa(kdTrx)}/invoice`;
     }
     handleGet(url, (res, status) => {
-      console.log(type.toLowerCase(), res);
       if (type.toLowerCase() === "produk") {
         dispatch(getCartAction());
       }

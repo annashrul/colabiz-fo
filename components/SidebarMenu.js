@@ -24,14 +24,15 @@ import { useAppState } from "./shared/AppProvider";
 import { withRouter } from "next/router";
 import general_helper from "../helper/general_helper";
 import { StringLink } from "../helper/string_link_helper";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getConfigAction } from "../redux/actions/info.action";
 // import Router from "next/router";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
 
 let rootSubMenuKeys = [];
-const versi = "Versi 1.0.5";
+const versi = "Versi 1.0.7";
 const getKey = (name, index) => {
   const string = `${name}-${index}`;
   let key = string.replace(" ", "-");
@@ -45,12 +46,15 @@ const SidebarContent = ({
   collapsed,
   router,
 }) => {
+  const DISPATCH = useDispatch();
+
   const [state, dispatch] = useAppState();
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
   const [appRoutes] = useState(Routes);
   const { pathname } = router;
   const dataCart = useSelector((state) => state.paketReducer.dataCart);
+  const dataConfig = useSelector((state) => state.infoReducer.dataConfig);
   const badgeTemplate = (badge) => (
     <Badge
       count={badge.value}
@@ -73,6 +77,12 @@ const SidebarContent = ({
       });
     }
   }, [state, collapsed]);
+
+  useEffect(() => {
+    DISPATCH(getConfigAction());
+  }, []);
+
+  console.log("dataConfig", dataConfig.activate);
 
   const onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.slice(-1);
@@ -102,6 +112,15 @@ const SidebarContent = ({
           if (user.stockis !== 0 && route.name === "Daftar Stokis") {
             displayNone = "none";
           }
+          if (dataConfig.activate !== undefined) {
+            if (dataConfig.activate === 0 && route.name === "Daftar Stokis") {
+              displayNone = "none";
+            }
+          }
+          if (route.name === "Register") {
+            displayNone = "none";
+          }
+
           if (!hasChildren) {
             return (
               <Menu.Item

@@ -153,7 +153,7 @@ const TransactionReport = () => {
           return (
             <>
               <Table.Summary.Row>
-                <Table.Summary.Cell colSpan={2} index={0}>
+                <Table.Summary.Cell colSpan={3} index={0}>
                   Total Perhalaman
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1}>
@@ -176,16 +176,17 @@ const TransactionReport = () => {
           title="Nama"
           dataIndex="fullname"
           key="fullname"
-          render={(_, record) => {
-            return (
-              <p>
-                {record.fullname}
-                <br />
-                {record.kd_trx}
-              </p>
-            );
-          }}
+          // render={(_, record) => {
+          //   return (
+          //     <p>
+          //       {record.fullname}
+          //       <br />
+          //       {record.kd_trx}
+          //     </p>
+          //   );
+          // }}
         />
+        <Column title="Kode Transaksi" dataIndex="kd_trx" key="kd_trx" />
         <ColumnGroup title="Transaksi">
           <Column
             title="Masuk"

@@ -1,7 +1,7 @@
 import { AUTH_USER } from "../type";
 import Action from "../../action/auth.action";
 import { handleGet, handlePost } from "../../action/baseAction";
-import { message, Message } from "antd";
+import { Message } from "antd";
 import Router from "next/router";
 
 export const setDataLogin = (data) => {
@@ -78,12 +78,29 @@ export const setLoadingResendEmail = (load) => {
     load,
   };
 };
+export const setLoadingUserDetail = (load) => {
+  return {
+    type: AUTH_USER.LOADING_USER_DETAIL,
+    load,
+  };
+};
+export const setLoadingSendForgotPassword = (load) => {
+  return {
+    type: AUTH_USER.LOADING_SEND_FORGOT_PASSWORD,
+    load,
+  };
+};
+export const setLoadingVerifyForgotPassword = (load) => {
+  return {
+    type: AUTH_USER.LOADING_VERIFY_FORGOT_PASSWORD,
+    load,
+  };
+};
 
-export const loginAction = (data) => {
+export const loginAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingLogin(true));
     handlePost("auth/signin", data, (res, status, msg) => {
-      // message.info(msg);
       if (status) {
         Action.http.axios.defaults.headers.common[
           "Authorization"
@@ -92,13 +109,14 @@ export const loginAction = (data) => {
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
         dispatch(userDetailAction(res.data.id));
-        Message.success(
-          "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-        ).then(() => {
-          dispatch(setLoadingLogin(false));
-          Router.push("/");
-        });
+        if (res.data.pin === "-") {
+          callback(undefined);
+        } else {
+          callback(true);
+        }
+        dispatch(setLoadingLogin(false));
       } else {
+        callback(false);
         dispatch(setLoadingLogin(false));
       }
     });
@@ -169,8 +187,8 @@ export const infoAction = () => {
 };
 export const userDetailAction = (id) => {
   return (dispatch) => {
+    dispatch(setLoadingUserDetail(true));
     handleGet(`member/get/${id}`, (res, status) => {
-      console.log(res);
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
       Action.setUser(actUser);
@@ -197,6 +215,57 @@ export const userDetailAction = (id) => {
             }
       );
       dispatch(setDataUserDetail(res.data));
+      dispatch(setLoadingUserDetail(false));
+      console.log("action detail", res);
+    });
+  };
+};
+
+export const sendForgotPasswordAction = (data, callback) => {
+  return (dispatch) => {
+    dispatch(setLoadingSendForgotPassword(true));
+    handlePost("auth/forgot/send", data, (res, status, msg) => {
+      if (status) {
+        Message.success(msg).then(() => {
+          Message.info(
+            "hubungi segera admin apabila anda tidak menerima email dari kami"
+          ).then(() => {
+            Message.info(
+              "anda akan dialihkan ke halaman login terlebih dahulu"
+            ).then(() => {
+              Router.push("/signin").then(() => {
+                dispatch(setLoadingSendForgotPassword(false));
+                callback(false);
+              });
+            });
+          });
+        });
+      } else {
+        Message.info(msg).then(() => {
+          callback(true);
+          dispatch(setLoadingSendForgotPassword(false));
+        });
+      }
+    });
+  };
+};
+
+export const verifyForgotPasswordAction = (data) => {
+  return (dispatch) => {
+    dispatch(setLoadingVerifyForgotPassword(true));
+
+    handlePost("auth/forgot/verify", data, (res, status, msg) => {
+      if (status) {
+        Message.success(msg).then(() => {
+          Router.push("/signin").then(() => {
+            dispatch(setLoadingVerifyForgotPassword(false));
+          });
+        });
+      } else {
+        Message.info(msg).then(() => {
+          dispatch(setLoadingVerifyForgotPassword(false));
+        });
+      }
     });
   };
 };

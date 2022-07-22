@@ -1,12 +1,15 @@
-import { Button, Form, Input, Spin, Row } from "antd";
+import { Button, Form, Input, Spin, Row, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import general_helper from "../helper/general_helper";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAction } from "../redux/actions/auth.action";
+import { loginAction, setLoadingLogin } from "../redux/actions/auth.action";
 import ModalResendEmail from "./modalResendEmail";
+import Router from "next/router";
+import CreatePinComponent from "./auth/createPinComponent";
+import SendForgotPasswordComponent from "./auth/sendForgotPasswordComponent";
 
 const FormItem = Form.Item;
 
@@ -20,7 +23,8 @@ const Signin = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [, forceUpdate] = useState();
-  const [showModalResendEmail, setShowModalResendEmail] = useState(false);
+  const [showModalForgotPassword, setShowModalForgotPassword] = useState(false);
+  const [showModalPin, setShowModalPin] = useState(false);
   const resLoading = useSelector((state) => state.authUserReducer.loadingLogin);
 
   useEffect(() => {
@@ -28,7 +32,22 @@ const Signin = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    dispatch(loginAction(values));
+    dispatch(
+      loginAction(values, (res) => {
+        if (res === undefined) {
+          setShowModalPin(true);
+        } else if (res) {
+          message
+            .success(
+              "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+            )
+            .then(() => {
+              dispatch(setLoadingLogin(false));
+              Router.push("/");
+            });
+        }
+      })
+    );
   };
 
   return (
@@ -61,6 +80,7 @@ const Signin = () => {
                 prefix={<UserOutlined style={{ fontSize: "16px" }} />}
                 type="text"
                 placeholder="Username"
+                style={{ textTransform: "uppercase" }}
               />
             </FormItem>
 
@@ -79,8 +99,13 @@ const Signin = () => {
             <div className="text-center">
               <small className="text-muted">
                 <span>Lupa password?</span>{" "}
-                <a onClick={() => setShowModalResendEmail(true)}>
-                  &nbsp;Kirim sekarang!
+                <a
+                  onClick={() => {
+                    // message.info("silahkan hubungi admin");
+                    setShowModalForgotPassword(true);
+                  }}
+                >
+                  Klik disini
                 </a>
               </small>
             </div>
@@ -106,12 +131,30 @@ const Signin = () => {
         </Spin>
       </Content>
 
-      {showModalResendEmail && (
-        <ModalResendEmail
-          modal={showModalResendEmail}
-          onCancel={() => {
-            setShowModalResendEmail(false);
+      {showModalForgotPassword && (
+        <SendForgotPasswordComponent
+          isModal={showModalForgotPassword}
+          ok={(e) => {
+            message.success("Email Berhasil Terkirim. Silahkan Cek Email Anda");
           }}
+          cancel={(e) => setShowModalForgotPassword(false)}
+        />
+      )}
+      {showModalPin && (
+        <CreatePinComponent
+          isModal={showModalPin}
+          ok={(e) => {
+            message
+              .success(
+                "Pembuatan pin berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+              )
+              .then(() => {
+                Router.push("/").then(() => {
+                  setShowModalPin(false);
+                });
+              });
+          }}
+          cancel={(e) => setShowModalPin(false)}
         />
       )}
     </Row>

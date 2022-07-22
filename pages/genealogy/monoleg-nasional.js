@@ -107,7 +107,7 @@ const GenealogyMonolegNasional = () => {
 
   return (
     data.length > 0 && (
-      <div style={{ marginTop: "20px", zoom: "80%" }}>
+      <div style={{ marginTop: "20px", zoom: "70%" }}>
         <div className="row">
           <div className="col-md-12">
             <div

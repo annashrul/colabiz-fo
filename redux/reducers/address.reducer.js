@@ -3,13 +3,22 @@ const initialState = {
   dataProvince: [],
   dataCity: [],
   dataDistricts: [],
+  dataDetail: [],
   loadingProvince: false,
   loadingCity: false,
   loadingDistricts: false,
+
+  loadingStrore: false,
+  loadingGetDetail: true,
 };
 
 export const addressReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ADDRESS.DATA_DETAIL:
+      return {
+        ...state,
+        dataDetail: action.data,
+      };
     case ADDRESS.DATA_PROVINCE:
       return {
         ...state,
@@ -36,6 +45,14 @@ export const addressReducer = (state = initialState, action) => {
     case ADDRESS.LOADING_DISTRICTS:
       return Object.assign({}, state, {
         loadingDistricts: action.load,
+      });
+    case ADDRESS.LOADING_STORE:
+      return Object.assign({}, state, {
+        loadingStrore: action.load,
+      });
+    case ADDRESS.LOADING_GET_DETAIL:
+      return Object.assign({}, state, {
+        loadingGetDetail: action.load,
       });
 
     default:

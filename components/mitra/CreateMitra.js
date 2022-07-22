@@ -16,7 +16,8 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
-import PhoneInput from "react-phone-number-input";
+import general_helper from "../../helper/general_helper";
+// import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
@@ -96,8 +97,9 @@ const TambahMitra = () => {
   };
 
   const handleStep = async (e) => {
+    console.log(e);
     if (step === 1) {
-      setValue(value.replaceAll("+", ""));
+      // setValue(value.replaceAll("+", ""));
       dispatch(
         validateUsernameAction(e.username, (res) => {
           if (res !== "") {
@@ -132,10 +134,12 @@ const TambahMitra = () => {
   const onFinish = async () => {
     const data = {
       fullname: dataForm.fullname,
-      mobile_no: value,
+      // mobile_no: value,
+      mobile_no: general_helper.checkNo(dataForm.mobile_no),
       username: dataForm.username,
       email: dataForm.email,
       sponsor: user.referral,
+      password: dataForm.password,
       data_bank: {
         id_bank: form.getFieldValue("id_bank"),
         acc_name: form.getFieldValue("acc_name"),
@@ -148,7 +152,6 @@ const TambahMitra = () => {
         kd_kec: dataForm.kd_kec,
       },
     };
-
     dispatch(signUpAction(data));
   };
 
@@ -201,25 +204,22 @@ const TambahMitra = () => {
                       label="No Telepon"
                       rules={[
                         { required: true, message: "Tidak Boleh Kosong" },
-                        // {
-                        //   pattern: new RegExp(/^[0-9]*$/),
-                        //   message: "Harus Berupa Angka",
-                        // },
                         { min: 9, message: "no handphone tidak valid" },
-                        { max: 14, message: "no handphone tidak valid" },
+                        { max: 16, message: "no handphone tidak valid" },
                       ]}
                       tooltip={{
                         title: "Pastikan no telepon anda aktif",
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <PhoneInput
+                      <Input prefix={"+62"} />
+                      {/* <PhoneInput
                         international
                         defaultCountry="ID"
                         placeholder="81223165XXXX"
                         value={value}
                         onChange={setValue}
-                      />
+                      /> */}
                       {/* <Input prefix={"+62"} placeholder="81223165XXXX" /> */}
                     </Form.Item>
                     <Form.Item
@@ -250,7 +250,7 @@ const TambahMitra = () => {
                     >
                       <Input
                         ref={usernameInput}
-                        style={{ textTransform: "lowercase" }}
+                        style={{ textTransform: "uppercase" }}
                         placeholder="Ex: jhondoe"
                       />
                     </Form.Item>
@@ -267,6 +267,41 @@ const TambahMitra = () => {
                       ]}
                     >
                       <Input placeholder="Ex: jhondoe@gmail.com" />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="password"
+                      label="Password"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        { min: 6, message: "Password minimal 6 Angka" },
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="confirm_password"
+                      label="Konfirmasi Password"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        {
+                          min: 6,
+                          message: "Konfirmasi password minimal 6 Angka",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error("Password Tidak Sama")
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password />
                     </Form.Item>
                   </Col>
                 </Row>
