@@ -1,5 +1,5 @@
-import VerifyForgotPasswordComponent from "../../components/auth/VerifyForgotPasswordComponent";
+// import VerifyForgotPasswordComponent from "../../components/auth/VerifyForgotPasswordComponent";
 
-const VerifyForgotPasswordPage = () => <VerifyForgotPasswordComponent />;
+// const VerifyForgotPasswordPage = () => <VerifyForgotPasswordComponent />;
 
-export default VerifyForgotPasswordPage;
+// export default VerifyForgotPasswordPage;
