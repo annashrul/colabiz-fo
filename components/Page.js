@@ -21,7 +21,7 @@ const NonDashboardRoutes = [
   "/signup",
   "/lockscreen",
   "/_error",
-  `/forgot_password/[token]`,
+  `/forgot-password/[kode-token]`,
   StringLink.transactionRecycle,
   StringLink.invoiceRecycle,
   StringLink.invoiceMitra,
