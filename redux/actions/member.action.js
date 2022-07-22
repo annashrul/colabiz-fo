@@ -97,6 +97,7 @@ export const putMemberAction = (id, e) => {
     });
   };
 };
+
 export const createPinAction = (id, e, callback) => {
   return (dispatch) => {
     dispatch(setLoading(true));

@@ -85,11 +85,10 @@ export const setLoadingUserDetail = (load) => {
   };
 };
 
-export const loginAction = (data) => {
+export const loginAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingLogin(true));
     handlePost("auth/signin", data, (res, status, msg) => {
-      // message.info(msg);
       if (status) {
         Action.http.axios.defaults.headers.common[
           "Authorization"
@@ -98,13 +97,14 @@ export const loginAction = (data) => {
         Action.setUser(res.data);
         dispatch(setDataLogin(res.data));
         dispatch(userDetailAction(res.data.id));
-        Message.success(
-          "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-        ).then(() => {
-          dispatch(setLoadingLogin(false));
-          Router.push("/");
-        });
+        if (res.data.pin === "-") {
+          callback(undefined);
+        } else {
+          callback(true);
+        }
+        dispatch(setLoadingLogin(false));
       } else {
+        callback(false);
         dispatch(setLoadingLogin(false));
       }
     });

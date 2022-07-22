@@ -27,9 +27,11 @@ const ProfileComponent = () => {
   const { loadingBankMember, dataBankMember } = useSelector(
     (state) => state.banksReducer
   );
+
   const { loadingUserDetail, dataUserDetail } = useSelector(
     (state) => state.authUserReducer
   );
+
   useEffect(() => {
     const users = authAction.getUser();
     setUser(users);
@@ -42,7 +44,7 @@ const ProfileComponent = () => {
       }
     }, 100);
   }, [user]);
-  // console.log("loading detail user", loadingUserDetail);
+
   return (
     <div>
       <ProfileCard
