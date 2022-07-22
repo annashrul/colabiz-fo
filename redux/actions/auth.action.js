@@ -224,10 +224,18 @@ export const userDetailAction = (id) => {
 export const sendForgotPasswordAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingSendForgotPassword(true));
-    handlePost("auth/send", data, (res, status, msg) => {
+    handlePost("auth/forgot/send", data, (res, status, msg) => {
       if (status) {
         Message.success(msg).then(() => {
-          dispatch(setLoadingSendForgotPassword(false));
+          Message.info(
+            "hubungi segera admin apabila anda tidak menerima email dari kami"
+          ).then(() => {
+            Message.info(
+              "anda akan dialihkan ke halaman login terlebih dahulul"
+            ).then(() => {
+              dispatch(setLoadingSendForgotPassword(false));
+            });
+          });
         });
       } else {
         Message.info(msg).then(() => {
@@ -238,17 +246,20 @@ export const sendForgotPasswordAction = (data, callback) => {
   };
 };
 
-export const verifyForgotPasswordAction = (data, callback) => {
+export const verifyForgotPasswordAction = (data) => {
   return (dispatch) => {
-    dispatch(setLoadingSendForgotPassword(true));
-    handlePost("auth/send", data, (res, status, msg) => {
+    dispatch(setLoadingVerifyForgotPassword(true));
+
+    handlePost("auth/forgot/verify", data, (res, status, msg) => {
       if (status) {
         Message.success(msg).then(() => {
-          dispatch(setLoadingSendForgotPassword(false));
+          Router.push("/signin").then(() => {
+            dispatch(setLoadingVerifyForgotPassword(false));
+          });
         });
       } else {
         Message.info(msg).then(() => {
-          dispatch(setLoadingSendForgotPassword(false));
+          dispatch(setLoadingVerifyForgotPassword(false));
         });
       }
     });

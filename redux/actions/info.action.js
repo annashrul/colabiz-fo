@@ -62,7 +62,6 @@ export const aktivasiPinAction = (data, callback) => {
       }
       if (callback !== undefined) {
         callback();
-        console.log(data);
       } else {
         dispatch(getInfoAction());
       }
@@ -87,7 +86,6 @@ export const getInfoAction = (where = "") => {
     dispatch(setLoading(true));
     handleGet("site/info", (res, status) => {
       dispatch(setData(res.data));
-      console.log("info", res);
       dispatch(setLoading(false));
     });
   };
@@ -97,6 +95,7 @@ export const getConfigAction = (where = "") => {
   return (dispatch) => {
     dispatch(setLoadingConfig(true));
     handleGet("site/config", (res, status) => {
+      console.log("config action", res);
       dispatch(setDataConfig(res.data));
       dispatch(setLoadingConfig(false));
     });

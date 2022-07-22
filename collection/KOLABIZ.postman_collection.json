@@ -193,6 +193,60 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgot Send",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"netindo\",\n    \"email\":\"ddtardian@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/forgot/send",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"forgot",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Verify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\":\"123456\",\n    \"token\":\"OTJiZWU0OWEtMjBhMi00MTM3LWEwMDUtYmJlYzMyZjgxODE2fDVjYjQ2MGJhNWU2ZmVjYmM5ZDU0YWU1OGUyYTUxOTNh\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/forgot/verify",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"forgot",
+								"verify"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1231,9 +1285,6 @@
 					"item": [
 						{
 							"name": "List",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1258,15 +1309,6 @@
 										"type": "text"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"nomor\":\"ddtardian@gmail.com\",\n    \"type\":\"sms\",\n    \"nama\":\"Tatang\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{url}}member?page=1",
 									"host": [
@@ -1337,13 +1379,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}member/genealogy/TEST3348",
+									"raw": "{{url}}member/genealogy/IMSUI9937",
 									"host": [
 										"{{url}}member"
 									],
 									"path": [
 										"genealogy",
-										"TEST3348"
+										"IMSUI9937"
 									],
 									"query": [
 										{
@@ -2044,12 +2086,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}address/fba67c69-950b-4176-83ac-03fa29236b7e",
+									"raw": "{{url}}address/51885392-d897-4c3c-b867-ff2ec30e3bcf",
 									"host": [
 										"{{url}}address"
 									],
 									"path": [
-										"fba67c69-950b-4176-83ac-03fa29236b7e"
+										"51885392-d897-4c3c-b867-ff2ec30e3bcf"
 									]
 								}
 							},
@@ -6011,7 +6053,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}penjualan/report/order?id_stockis=5a8f1242-14ae-4a16-9dbe-6fa227a6d767&page=1&perpage=2",
+									"raw": "{{url}}penjualan/report/order?perpage=2&page=1&id_stockis=295ee71c-4012-4238-8ac4-1b4c626f8182",
 									"host": [
 										"{{url}}penjualan"
 									],
@@ -6042,10 +6084,6 @@
 											"disabled": true
 										},
 										{
-											"key": "id_stockis",
-											"value": "5a8f1242-14ae-4a16-9dbe-6fa227a6d767"
-										},
-										{
 											"key": "status",
 											"value": "",
 											"disabled": true
@@ -6056,12 +6094,16 @@
 											"disabled": true
 										},
 										{
+											"key": "perpage",
+											"value": "2"
+										},
+										{
 											"key": "page",
 											"value": "1"
 										},
 										{
-											"key": "perpage",
-											"value": "2"
+											"key": "id_stockis",
+											"value": "295ee71c-4012-4238-8ac4-1b4c626f8182"
 										}
 									]
 								}
@@ -6322,13 +6364,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}penjualan/invoice/SU5WL0RQLzIyMDcxMi8wMDI=",
+									"raw": "{{url}}penjualan/invoice/SU5WL1BFLzIyMDcyMS8wMTAw",
 									"host": [
 										"{{url}}penjualan"
 									],
 									"path": [
 										"invoice",
-										"SU5WL0RQLzIyMDcxMi8wMDI="
+										"SU5WL1BFLzIyMDcyMS8wMTAw"
 									],
 									"query": [
 										{
@@ -6484,6 +6526,66 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Klaim bonus generasi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Project-ID",
+								"value": "{{project_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-From",
+								"value": "{{source}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"member_pin\":\"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}transaction/klaim_generasi",
+							"host": [
+								"{{url}}transaction"
+							],
+							"path": [
+								"klaim_generasi"
+							],
+							"query": [
+								{
+									"key": "searchby",
+									"value": "title",
+									"description": "Jika digunakan, pakai nama parameter dari object respon",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "tatang",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -6518,7 +6620,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_member\":\"486a99c8-a7a1-4bf2-87d7-9baace9e124a\"\n}",
+							"raw": "{\n    \"id_member\":\"92bee49a-20a2-4137-a005-bbec32f81816\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -1,4 +1,4 @@
-import { Badge, Empty, Message } from "antd";
+import { Avatar, Badge, Empty, Image, Message } from "antd";
 import React, { useEffect } from "react";
 import moment from "moment";
 import ComponentMatahari from "./componenMatahari";
@@ -41,16 +41,19 @@ const Matahari = ({
           }
         }}
       >
-        <div className="container-genealogy">
+        <div className="container-genealogy" zoom={6}>
           <div className="w-16">
-            <img className="imgs" alt="name" src={picture} />
+            <Avatar src={picture} />
+            {/* <img className="imgs" alt="name" src={picture} /> */}
           </div>
           <div className="row" style={{ marginTop: "5px" }}>
             <i className="fa fa-exclamation-circle fa-2x"></i>
           </div>
           <div className="row">
             {" "}
-            {id} <br />({name})
+            <small>
+              {id} <br />({name})
+            </small>
           </div>
           <div className="row" style={{ marginBottom: "5px" }}>
             {activate === 0 ? "Belum Aktivasi" : "Telah Aktivasi"}

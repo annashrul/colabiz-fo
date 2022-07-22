@@ -104,13 +104,12 @@ right connector from last child*/
       .tree li a {
         border-radius:10px;
         height: auto;
-        width: 140px;
         padding: 5px 10px;
         text-decoration: none;
         background-color: white;
         color: #8b8b8b;
         font-family: arial, verdana, tahoma;
-        font-size: 11px;
+        font-size: 10px;
         display: inline-block;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         -transition: all 0.5s;

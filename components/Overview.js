@@ -2,6 +2,8 @@ import {
   RightCircleOutlined,
   WalletOutlined,
   ApartmentOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import { theme } from "./styles/GlobalStyles";
 import { Col, Button, Row, Card, Popconfirm, Alert, Badge } from "antd";
@@ -64,9 +66,21 @@ const Overview = () => {
 
   const tempAktivasi = () => {
     return (
-      <Card title={"Pin Anda"}>
+      <Card
+        title={"Pin Anda"}
+        headStyle={{
+          backgroundColor: "#fffbe6",
+          color: "#d48806",
+          border: "1px solid #ffe58f",
+        }}
+        bodyStyle={{
+          backgroundColor: "#fffbe6",
+          color: "#d48806",
+          border: "1px solid #ffe58f",
+        }}
+      >
         <p style={{ marginBottom: "10px" }}>
-          Aktivasi :{" "}
+          AKTIVASI :{" "}
           {data === undefined
             ? 0
             : general_helper.toRp(data.total_pin_aktivasi, true)}{" "}
@@ -74,16 +88,21 @@ const Overview = () => {
         </p>
 
         {isDisableButton ? (
-          <Button
-            size="medium"
-            disabled={true}
-            type="primary"
-            style={{
-              width: "100%",
-            }}
-          >
-            Aktivasi
-          </Button>
+          <Badge.Ribbon text={<CloseCircleOutlined />} color="red">
+            <Button
+              size="medium"
+              disabled={true}
+              type="primary"
+              style={{
+                color: "#d48806",
+                borderColor: "#d48806",
+                backgroundColor: "#fffbe6",
+                width: "100%",
+              }}
+            >
+              Aktivasi
+            </Button>
+          </Badge.Ribbon>
         ) : (
           <Popconfirm
             visible={visibleAktivasi}
@@ -103,39 +122,49 @@ const Overview = () => {
               loading: loadingPinAktivasi,
             }}
           >
-            <Button
-              onClick={(e) => {
-                if (data.activate !== 1) setVisibleAktivasi(true);
-              }}
-              size="medium"
-              type="primary"
-              style={{
-                width: "100%",
-              }}
-            >
-              Aktivasi
-            </Button>
+            <Badge.Ribbon text={<CheckCircleOutlined />} color="green">
+              <Button
+                size="medium"
+                type="primary"
+                style={{
+                  color: "#d48806",
+                  borderColor: "#d48806",
+                  backgroundColor: "#fffbe6",
+                  width: "100%",
+                }}
+                onClick={(e) => {
+                  if (data.activate !== 1) setVisibleAktivasi(true);
+                }}
+              >
+                Aktivasi
+              </Button>
+            </Badge.Ribbon>
           </Popconfirm>
         )}
 
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-          Happy Shopping :{" "}
+          HAPPY SHOPPING :{" "}
           {data === undefined
             ? 0
             : general_helper.toRp(data.total_pin_hs, true)}{" "}
           PIN
         </p>
         {isDisableButtonHs ? (
-          <Button
-            size="medium"
-            disabled={true}
-            type="primary"
-            style={{
-              width: "100%",
-            }}
-          >
-            Aktivasi Happy Shopping
-          </Button>
+          <Badge.Ribbon text={<CloseCircleOutlined />} color="red">
+            <Button
+              size="medium"
+              disabled={true}
+              type="primary"
+              style={{
+                color: "#d48806",
+                borderColor: "#d48806",
+                backgroundColor: "#fffbe6",
+                width: "100%",
+              }}
+            >
+              Aktivasi
+            </Button>
+          </Badge.Ribbon>
         ) : (
           <Popconfirm
             visible={visibleHs}
@@ -154,29 +183,64 @@ const Overview = () => {
               loading: loadingHappyShopping,
             }}
           >
-            <Button
-              onClick={(e) => {
-                // if (data.activate !== 1) setVisibleHs(true);
-                setVisibleHs(true);
-              }}
-              size="medium"
-              type="primary"
-              style={{
-                width: "100%",
-              }}
-            >
-              Aktivasi Happy Shopping
-            </Button>
+            <Badge.Ribbon text={<CheckCircleOutlined />} color="green">
+              <Button
+                size="medium"
+                type="primary"
+                style={{
+                  color: "#d48806",
+                  borderColor: "#d48806",
+                  backgroundColor: "#fffbe6",
+                  width: "100%",
+                }}
+                onClick={(e) => {
+                  setVisibleHs(true);
+                }}
+              >
+                Aktivasi
+              </Button>
+            </Badge.Ribbon>
           </Popconfirm>
         )}
 
         <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-          Smart Contract :{" "}
+          SMART CONTRACT :{" "}
           {data === undefined ? 0 : general_helper.toRp(0, true)} PIN
         </p>
-        <Button size="medium" disabled type="primary" style={{ width: "100%" }}>
+        <Badge.Ribbon text={<CloseCircleOutlined />} color="red">
+          <Button
+            size="medium"
+            disabled={true}
+            type="primary"
+            style={{
+              color: "#d48806",
+              borderColor: "#d48806",
+              backgroundColor: "#fffbe6",
+              width: "100%",
+            }}
+          >
+            Aktivasi
+          </Button>
+        </Badge.Ribbon>
+
+        {/* <Badge.Ribbon text="tidak aktif" color="orange">
+          <Button
+            size="medium"
+            disabled={true}
+            type="primary"
+            style={{
+              color: "#d48806",
+              borderColor: "#d48806",
+              backgroundColor: "#fffbe6",
+              width: "100%",
+            }}
+          >
+            Aktivasi
+          </Button>
+        </Badge.Ribbon> */}
+        {/* <Button size="medium" disabled type="primary" style={{ width: "100%" }}>
           Aktivasi Smart Contract
-        </Button>
+        </Button> */}
       </Card>
     );
   };
