@@ -16,7 +16,7 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
-import PhoneInput from "react-phone-number-input";
+// import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
@@ -97,7 +97,7 @@ const TambahMitra = () => {
 
   const handleStep = async (e) => {
     if (step === 1) {
-      setValue(value.replaceAll("+", ""));
+      // setValue(value.replaceAll("+", ""));
       dispatch(
         validateUsernameAction(e.username, (res) => {
           if (res !== "") {
@@ -132,7 +132,8 @@ const TambahMitra = () => {
   const onFinish = async () => {
     const data = {
       fullname: dataForm.fullname,
-      mobile_no: value,
+      // mobile_no: value,
+      mobile_no: dataForm.mobile_no,
       username: dataForm.username,
       email: dataForm.email,
       sponsor: user.referral,
@@ -213,13 +214,14 @@ const TambahMitra = () => {
                         icon: <InfoCircleOutlined />,
                       }}
                     >
-                      <PhoneInput
+                      <Input prefix={"+62"} />
+                      {/* <PhoneInput
                         international
                         defaultCountry="ID"
                         placeholder="81223165XXXX"
                         value={value}
                         onChange={setValue}
-                      />
+                      /> */}
                       {/* <Input prefix={"+62"} placeholder="81223165XXXX" /> */}
                     </Form.Item>
                     <Form.Item

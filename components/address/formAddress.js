@@ -7,7 +7,10 @@ import {
   districtsAction,
   provinceAction,
 } from "../../redux/actions/address.action";
-import PhoneInput from "react-phone-number-input";
+// import PhoneInput from "react-phone-number-input";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/style.css";
+
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
 
@@ -41,26 +44,27 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
     dispatch(provinceAction());
     console.log("dataOld", dataOld);
 
-    if (Object.keys(dataOld).length > 3) {
-      if (isFull) {
-        dispatch(cityAction(dataOld.kd_prov));
-        dispatch(districtsAction(dataOld.kd_kota));
-        setNoHp(dataOld.no_hp);
-        form.setFieldsValue({ kd_prov: dataOld.kd_prov });
-        form.setFieldsValue({ kd_kota: dataOld.kd_kota });
-        form.setFieldsValue({ kd_kec: dataOld.kd_kec });
-        form.setFieldsValue({ main_address: dataOld.main_address });
-        form.setFieldsValue({ title: dataOld.title });
-        form.setFieldsValue({ penerima: dataOld.penerima });
-        form.setFieldsValue({ no_hp: dataOld.no_hp });
-      } else {
-        dispatch(cityAction(dataOld.prov));
-        dispatch(districtsAction(dataOld.kota));
-        form.setFieldsValue({ kd_prov: dataOld.prov });
-        form.setFieldsValue({ kd_kota: dataOld.kota });
-        form.setFieldsValue({ kd_kec: dataOld.kecamatan });
-        form.setFieldsValue({ main_address: dataOld.main_address });
-      }
+    if (Object.keys(dataOld).length === 4) {
+      dispatch(cityAction(dataOld.prov));
+      dispatch(districtsAction(dataOld.kota));
+      form.setFieldsValue({ kd_prov: dataOld.prov });
+      form.setFieldsValue({ kd_kota: dataOld.kota });
+      form.setFieldsValue({ kd_kec: dataOld.kecamatan });
+      form.setFieldsValue({ main_address: dataOld.main_address });
+      setData(dataOld);
+    }
+    if (isFull) {
+      console.log(dataOld.no_hp);
+      dispatch(cityAction(dataOld.kd_prov));
+      dispatch(districtsAction(dataOld.kd_kota));
+      setNoHp(dataOld.no_hp);
+      form.setFieldsValue({ kd_prov: dataOld.kd_prov });
+      form.setFieldsValue({ kd_kota: dataOld.kd_kota });
+      form.setFieldsValue({ kd_kec: dataOld.kd_kec });
+      form.setFieldsValue({ main_address: dataOld.main_address });
+      form.setFieldsValue({ title: dataOld.title });
+      form.setFieldsValue({ penerima: dataOld.penerima });
+      form.setFieldsValue({ no_hp: `${dataOld.no_hp}` });
       setData(dataOld);
     }
   }, []);
@@ -73,7 +77,8 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
         onFinish={(e) => {
           let newData = data;
           if (isFull) {
-            Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
+            // Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
+            Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
           }
           callback("submit", newData);
         }}
@@ -121,13 +126,19 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
               { max: 16, message: "no handphone tidak valid" },
             ]}
           >
-            <PhoneInput
+            {/* <PhoneInput
+              country={"us"}
+              value={noHp}
+              onChange={(phone) =>setNoHp(phone)}
+            /> */}
+            <Input prefix={"+62"} />
+            {/* <PhoneInput
               international
               defaultCountry="ID"
               placeholder="81223165XXXX"
               value={noHp}
               onChange={setNoHp}
-            />
+            /> */}
           </Form.Item>
         )}
 
