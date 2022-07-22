@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Col, Row, Tooltip } from "antd";
+import { Avatar, Button, Card, Col, message, Row, Tooltip } from "antd";
 import { useAppState } from "../shared/AppProvider";
 import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
@@ -70,9 +70,12 @@ const ProfileCard = ({ callback }) => {
               <small
                 className="text-light text-white"
                 style={{ cursor: "pointer", color: "white" }}
-                onClick={async () =>
-                  general_helper.copyText(user.referral_url, "Link referral")
-                }
+                onClick={async () => {
+                  message.info(
+                    "maaf fitur ini sedang dalam tahap pengembangan. silahkan hubungi admin"
+                  );
+                  // general_helper.copyText(user.referral_url, "Link referral");
+                }}
               >
                 <span>{user.referral}</span> &nbsp;
                 <Tooltip title="copy link referral">
