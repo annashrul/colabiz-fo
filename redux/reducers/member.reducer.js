@@ -1,6 +1,7 @@
 import { MEMBER } from "../type";
 const initialState = {
   loading: false,
+  loadingPutAddress: false,
   data: [],
   loadingGenealogy: true,
   loadingGenealogyPraPosting: true,
@@ -12,6 +13,10 @@ const initialState = {
 
 export const memberReducer = (state = initialState, action) => {
   switch (action.type) {
+    case MEMBER.LOADING_PUT_ADDRESS:
+      return Object.assign({}, state, {
+        loadingPutAddress: action.load,
+      });
     case MEMBER.LOADING:
       return Object.assign({}, state, {
         loading: action.load,

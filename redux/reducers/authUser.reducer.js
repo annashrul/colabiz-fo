@@ -6,6 +6,7 @@ const initialState = {
   loadingPin: false,
   dataLogin: [],
   dataInfo: [],
+  loadingUserDetail: true,
   dataUserDetail: [],
   dataPin: [],
   validateUsername: false,
@@ -69,6 +70,11 @@ export const authUserReducer = (state = initialState, action) => {
     case AUTH_USER.LOADING_RESEND_EMAIL:
       return Object.assign({}, state, {
         loadingResendEmail: action.load,
+      });
+    case AUTH_USER.LOADING_USER_DETAIL:
+      console.log("redux", action.load);
+      return Object.assign({}, state, {
+        loadingUserDetail: action.load,
       });
 
     default:

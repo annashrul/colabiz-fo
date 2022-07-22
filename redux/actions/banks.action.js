@@ -4,6 +4,7 @@ import { handleGet, handlePost, handlePut } from "../../action/baseAction";
 import { message } from "antd";
 import authAction from "../../action/auth.action";
 import Router from "next/router";
+import { userDetailAction } from "./auth.action";
 
 export const setDataBankMember = (data) => {
   return {
@@ -54,23 +55,26 @@ export const bankGeneralAction = () => {
   };
 };
 
-export const putBankMemberAction = (data, id, callback) => {
+export const putBankMemberAction = (data, id, idMember, callback) => {
   return (dispatch) => {
     dispatch(setLoadingBankMember(true));
     handlePut(`member/update/bank/${id}`, data, (res, status, msg) => {
       if (status) {
-        message.success(msg).then(() => {
-          message.info("anda akan dialihkan ke halaman login").then(() => {
-            Router.push("/signin").then(() =>
-              dispatch(setLoadingBankMember(false))
-            );
-            authAction.doLogout();
-          });
-        });
+        dispatch(setLoadingBankMember(false));
+        dispatch(userDetailAction(idMember));
+        // message.success(msg).then(() => {
+        //   message.info("anda akan dialihkan ke halaman login").then(() => {
+        //     Router.push("/signin").then(() =>
+        //       dispatch(setLoadingBankMember(false))
+        //     );
+        //     authAction.doLogout();
+        //   });
+        // });
+        callback(true);
       } else {
+        callback(false);
         dispatch(setLoadingBankMember(false));
       }
-      callback(true);
     });
   };
 };

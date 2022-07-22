@@ -78,6 +78,12 @@ export const setLoadingResendEmail = (load) => {
     load,
   };
 };
+export const setLoadingUserDetail = (load) => {
+  return {
+    type: AUTH_USER.LOADING_USER_DETAIL,
+    load,
+  };
+};
 
 export const loginAction = (data) => {
   return (dispatch) => {
@@ -169,8 +175,8 @@ export const infoAction = () => {
 };
 export const userDetailAction = (id) => {
   return (dispatch) => {
+    dispatch(setLoadingUserDetail(true));
     handleGet(`member/get/${id}`, (res, status) => {
-      console.log(res);
       let actUser = Action.getUser();
       Object.assign(actUser, res.data.detail);
       Action.setUser(actUser);
@@ -197,6 +203,8 @@ export const userDetailAction = (id) => {
             }
       );
       dispatch(setDataUserDetail(res.data));
+      dispatch(setLoadingUserDetail(false));
+      console.log("action detail", res);
     });
   };
 };
