@@ -101,7 +101,8 @@ const Signin = () => {
                 <span>Lupa password?</span>{" "}
                 <a
                   onClick={() => {
-                    setShowModalForgotPassword(true);
+					  message.info("silahkan hubungi admin");
+                    //setShowModalForgotPassword(true);
                   }}
                 >
                   Klik disini
