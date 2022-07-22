@@ -231,14 +231,18 @@ export const sendForgotPasswordAction = (data, callback) => {
             "hubungi segera admin apabila anda tidak menerima email dari kami"
           ).then(() => {
             Message.info(
-              "anda akan dialihkan ke halaman login terlebih dahulul"
+              "anda akan dialihkan ke halaman login terlebih dahulu"
             ).then(() => {
-              dispatch(setLoadingSendForgotPassword(false));
+              Router.push("/signin").then(() => {
+                dispatch(setLoadingSendForgotPassword(false));
+                callback(false);
+              });
             });
           });
         });
       } else {
         Message.info(msg).then(() => {
+          callback(true);
           dispatch(setLoadingSendForgotPassword(false));
         });
       }

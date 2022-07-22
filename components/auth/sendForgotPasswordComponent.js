@@ -7,7 +7,7 @@ import { sendForgotPasswordAction } from "../../redux/actions/auth.action";
 
 const SendForgotPasswordComponent = ({ isModal, ok, cancel }) => {
   const dispatch = useDispatch();
-  const [verifyPass, setVerifyPass] = useState(false);
+  const [verifyPass, setVerifyPass] = useState(isModal);
 
   const [form] = Form.useForm();
   const { loadingSendForgotPassword } = useSelector(
@@ -16,7 +16,11 @@ const SendForgotPasswordComponent = ({ isModal, ok, cancel }) => {
 
   const handleSubmit = async (e) => {
     // setVerifyPass(true);
-    dispatch(sendForgotPasswordAction(e));
+    dispatch(
+      sendForgotPasswordAction(e, (res) => {
+        setVerifyPass(res);
+      })
+    );
   };
 
   return (
@@ -24,7 +28,7 @@ const SendForgotPasswordComponent = ({ isModal, ok, cancel }) => {
       <Modal
         centered
         title="Form Lupa Password"
-        visible={isModal}
+        visible={verifyPass}
         closable={false}
         destroyOnClose={true}
         maskClosable={false}
