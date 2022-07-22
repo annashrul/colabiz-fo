@@ -7,6 +7,7 @@ import {
   districtsAction,
   provinceAction,
 } from "../../redux/actions/address.action";
+import general_helper from "../../helper/general_helper";
 // import PhoneInput from "react-phone-number-input";
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
@@ -64,7 +65,9 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
       form.setFieldsValue({ main_address: dataOld.main_address });
       form.setFieldsValue({ title: dataOld.title });
       form.setFieldsValue({ penerima: dataOld.penerima });
-      form.setFieldsValue({ no_hp: `${dataOld.no_hp}` });
+      form.setFieldsValue({
+        no_hp: `${general_helper.checkNo(dataOld.no_hp)}`,
+      });
       setData(dataOld);
     }
   }, []);

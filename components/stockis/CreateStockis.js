@@ -23,6 +23,7 @@ import PlacesAutocomplete, {
 import FormAddress from "../address/formAddress";
 import FormBank from "../bank/formBank";
 import { createStockisAction } from "../../redux/actions/stockis.action";
+import general_helper from "../../helper/general_helper";
 // import PhoneInput from "react-phone-number-input";
 
 const msgInput = "Tidak Boleh Kosong";
@@ -78,7 +79,7 @@ const CreateStockis = () => {
       // id_bank: parseInt(checkedBanks, 10) === 1 ? "-" : objBanks.id,
       name: objForm.name,
       // mobile_no: value,
-      mobile_no: objForm.mobile_no,
+      mobile_no: general_helper.checkNo(objForm.mobile_no),
       email: objForm.email,
       long: long,
       lat: lat,

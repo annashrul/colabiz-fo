@@ -16,6 +16,7 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import { bankGeneralAction } from "../../redux/actions/banks.action";
+import general_helper from "../../helper/general_helper";
 // import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
@@ -96,6 +97,7 @@ const TambahMitra = () => {
   };
 
   const handleStep = async (e) => {
+    console.log(e);
     if (step === 1) {
       // setValue(value.replaceAll("+", ""));
       dispatch(
@@ -133,7 +135,7 @@ const TambahMitra = () => {
     const data = {
       fullname: dataForm.fullname,
       // mobile_no: value,
-      mobile_no: dataForm.mobile_no,
+      mobile_no: general_helper.checkNo(dataForm.mobile_no),
       username: dataForm.username,
       email: dataForm.email,
       sponsor: user.referral,

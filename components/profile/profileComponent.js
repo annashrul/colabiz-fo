@@ -13,6 +13,7 @@ import { putAction } from "../../redux/actions/address.action";
 import FormBank from "../bank/formBank";
 import { userDetailAction } from "../../redux/actions/auth.action";
 import { putBankMemberAction } from "../../redux/actions/banks.action";
+import general_helper from "../../helper/general_helper";
 
 moment.locale("id");
 const ProfileComponent = () => {
@@ -184,7 +185,7 @@ const ProfileComponent = () => {
                     kd_kota: data.kd_kota,
                     kd_prov: data.kd_prov,
                     main_address: data.main_address,
-                    no_hp: data.no_hp,
+                    no_hp: general_helper.checkNo(data.no_hp),
                     penerima: data.penerima,
                     title: data.title,
                   };
