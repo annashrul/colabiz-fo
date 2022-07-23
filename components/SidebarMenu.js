@@ -82,6 +82,41 @@ const SidebarContent = ({
     DISPATCH(getConfigAction());
   }, []);
 
+  useEffect(() => {
+    checkStockis();
+  }, [state, collapsed]);
+
+  const checkStockis = () => {
+    if (dataConfig.stockis !== undefined) {
+      if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
+        authAction.doLogout();
+        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
+          Router.push("/signin");
+        });
+      } else if (
+        dataConfig.stockis !== 1 &&
+        pathname === StringLink.orderStockis
+      ) {
+        authAction.doLogout();
+        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
+          Router.push("/signin");
+        });
+      }
+      if (dataConfig.stockis !== 0 && pathname === StringLink.stockis) {
+        authAction.doLogout();
+        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
+          Router.push("/signin");
+        });
+      }
+      if (dataConfig.activate === 0 && pathname === StringLink.stockis) {
+        authAction.doLogout();
+        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
+          Router.push("/signin");
+        });
+      }
+    }
+  };
+
   console.log("dataConfig", dataConfig.activate);
 
   const onOpenChange = (openKeys) => {
@@ -107,9 +142,10 @@ const SidebarContent = ({
         onOpenChange={onOpenChange}
       >
         {appRoutes.map((route, index) => {
+          checkStockis();
           const hasChildren = !!route.children;
           let displayNone = "block";
-          if (user.stockis !== 0 && route.name === "Daftar Stokis") {
+          if (dataConfig.stockis !== 0 && route.name === "Daftar Stokis") {
             displayNone = "none";
           }
           if (dataConfig.activate !== undefined) {
