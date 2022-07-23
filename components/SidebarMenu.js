@@ -82,33 +82,39 @@ const SidebarContent = ({
   const checkStockis = () => {
     if (dataConfig.stockis !== undefined) {
       if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
-        authAction.doLogout();
-        Router.push("/signin");
+        Router.push("/signin").then(() => {
+          authAction.doLogout();
+        });
       }
       if (dataConfig.stockis !== 1 && pathname === StringLink.orderStockis) {
-        authAction.doLogout();
-        Router.push("/signin");
+        Router.push("/signin").then(() => {
+          authAction.doLogout();
+        });
       }
       if (dataConfig.stockis !== 0 && pathname === StringLink.stockis) {
-        authAction.doLogout();
-        Router.push("/signin");
+        Router.push("/signin").then(() => {
+          authAction.doLogout();
+        });
       }
     }
     if (dataConfig.activate !== undefined) {
       if (dataConfig.activate === 0 && pathname === StringLink.stockis) {
-        authAction.doLogout();
-        Router.push("/signin");
+        Router.push("/signin").then(() => {
+          authAction.doLogout();
+        });
       }
     }
     if (dataConfig.status_member !== undefined) {
       if (dataConfig.status_member === 2) {
-        authAction.doLogout();
-        Router.push("/signin");
+        Router.push("/signin").then(() => {
+          authAction.doLogout();
+        });
       }
     }
     if (pathname === StringLink.tambahMitra) {
-      authAction.doLogout();
-      Router.push("/signin");
+      Router.push("/signin").then(() => {
+        authAction.doLogout();
+      });
     }
     console.log(dataConfig);
   };
