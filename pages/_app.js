@@ -71,7 +71,7 @@ class MyApp extends App {
             type="image/png"
             sizes="32x32"
           />
-          <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+          <link rel="apple-touch-icon" href="/logo.png"></link>
           <meta name="theme-color" content="#317EFB" />
           <link
             href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@700&display=swap"

@@ -5,15 +5,22 @@ import PhoneInput, {
   formatPhoneNumberIntl,
   isValidPhoneNumber,
 } from "react-phone-number-input";
-const HandphoneComponent = ({ callback }) => {
+import general_helper from "../helper/general_helper";
+const HandphoneComponent = ({ callback, val }) => {
   const [noHp, setNoHp] = useState();
 
   useEffect(() => {
     setTimeout(() => {
       console.log(noHp);
-      callback(noHp.replaceAll("+", ""));
+      if (noHp !== undefined) callback(noHp.replaceAll("+", ""));
     }, 100);
   }, [noHp]);
+
+  useEffect(() => {
+    if (val !== undefined) {
+      setNoHp("+" + general_helper.checkNo(val));
+    }
+  }, []);
 
   return (
     <PhoneInput

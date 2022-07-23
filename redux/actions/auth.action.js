@@ -195,7 +195,7 @@ export const userDetailAction = (id) => {
       Action.setBank(res.data.bank);
       Action.setAddress(
         res.data.address !== undefined
-          ? res.data.address
+          ? res.data.address[0]
           : {
               created_at: "2022-07-06T01:26:44.989Z",
               id: "51885392-d897-4c3c-b867-ff2ec30e3bcf",

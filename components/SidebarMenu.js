@@ -125,7 +125,7 @@ const SidebarContent = ({
     const dateNow = new Date();
     console.log("#################");
     if (decodedToken.exp * 1000 < dateNow.getTime()) {
-      clearInterval(jobs);
+      // clearInterval(jobs);
       message.info("sesi anda sudah habis").then(() => {
         message.info("silahkan login kembali").then(() => {
           goLogout();
@@ -134,13 +134,13 @@ const SidebarContent = ({
     }
   };
 
-  const setEmomInterval = (expr, ...rest) =>
-    setTimeout(
-      () => (expr(...rest), setInterval(expr, 6000, ...rest)),
-      6000 - (new Date().getTime() % (60 * 100))
-    );
+  // const setEmomInterval = (expr, ...rest) =>
+  //   setTimeout(
+  //     () => (expr(...rest), setInterval(expr, 6000, ...rest)),
+  //     6000 - (new Date().getTime() % (60 * 100))
+  //   );
 
-  let jobs = setEmomInterval(() => checkJwt());
+  // let jobs = setEmomInterval(() => checkJwt());
   // setTimeout(function () {
   //   clearInterval(jobs);
   // }, 60000);

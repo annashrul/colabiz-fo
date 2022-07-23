@@ -64,7 +64,7 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
       form.setFieldsValue({ title: dataOld.title });
       form.setFieldsValue({ penerima: dataOld.penerima });
       form.setFieldsValue({
-        no_hp: `+${general_helper.checkNo(dataOld.no_hp)}`,
+        no_hp: `${general_helper.checkNo(dataOld.no_hp)}`,
       });
       setData(dataOld);
     }
@@ -78,11 +78,11 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
         onFinish={(e) => {
           let newData = data;
           if (isFull) {
-            Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
-            // Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
+            // Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
+            Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
           }
-          console.log(newData);
-          // callback("submit", newData);
+          // console.log(newData);
+          callback("submit", newData);
         }}
       >
         {isFull && (
@@ -133,8 +133,14 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
               value={noHp}
               onChange={(phone) =>setNoHp(phone)}
             /> */}
-            {/* <Input prefix={"+62"} /> */}
-            <HandphoneComponent callback={() => {}} />
+            <Input />
+            {/* <HandphoneComponent
+              callback={(e) => {
+                setNoHp(e);
+                console.log("receive ", e);
+              }}
+              val={dataOld.no_hp}
+            /> */}
             {/* <PhoneInput
               international
               defaultCountry="ID"

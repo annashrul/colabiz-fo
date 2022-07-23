@@ -94,12 +94,12 @@ const ProfileComponent = () => {
               value={
                 dataUserDetail.address === undefined
                   ? ""
-                  : dataUserDetail.address.title
+                  : dataUserDetail.address[0].title
               }
               title={
                 dataUserDetail.address === undefined
                   ? ""
-                  : `${dataUserDetail.address.main_address}, ${dataUserDetail.address.kecamatan}, ${dataUserDetail.address.kota}, ${dataUserDetail.address.provinsi}`
+                  : `${dataUserDetail.address[0].main_address}, ${dataUserDetail.address[0].kecamatan}, ${dataUserDetail.address[0].kota}, ${dataUserDetail.address[0].provinsi}`
               }
               icon={
                 <HomeOutlined
@@ -193,7 +193,7 @@ const ProfileComponent = () => {
                   };
                   dispatch(
                     putAction(
-                      dataUserDetail.address.id,
+                      dataUserDetail.address[0].id,
                       newData,
                       user.id,
                       (res) => {
