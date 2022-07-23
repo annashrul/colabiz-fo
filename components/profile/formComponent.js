@@ -1,4 +1,15 @@
-import { Button, Col, Row, Input, Upload, Modal, Form, Tabs, Spin } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  Input,
+  Upload,
+  Modal,
+  Form,
+  Tabs,
+  Spin,
+  message,
+} from "antd";
 import {
   InfoCircleOutlined,
   InboxOutlined,
@@ -13,7 +24,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createPinAction,
   putMemberAction,
+  setLoading,
 } from "../../redux/actions/member.action";
+
+import Router from "next/router";
+import { StringLink } from "../../helper/string_link_helper";
+import authAction from "../../action/auth.action";
 
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
@@ -44,10 +60,23 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
     } else {
       Object.assign(datas, { pin: e.pin, current_pin: e.current_pin });
     }
-    if (isCreate) {
+
+    if (step === 3 || isCreate) {
       dispatch(
         createPinAction(userData.id, e.pin, (res) => {
-          ok(res);
+          if (Router.pathname === StringLink.profile) {
+            dispatch(setLoading(true));
+            message
+              .success("anda akan dialihkan ke halaman login terlebih dahulu")
+              .then(() => {
+                Router.push("/signin").then(() => {
+                  authAction.doLogout();
+                  dispatch(setLoading(false));
+                });
+              });
+          } else {
+            ok(res);
+          }
         })
       );
     } else {
@@ -71,6 +100,7 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
             onChange={(e) => setStep(parseInt(e, 10))}
           >
             <TabPane
+              disabled={isCreate}
               tab={
                 <span>
                   <SolutionOutlined />
@@ -109,6 +139,7 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
               </Row>
             </TabPane>
             <TabPane
+              disabled={isCreate}
               tab={
                 <span>
                   <LockOutlined />
@@ -169,30 +200,6 @@ const FormComponent = ({ isModal, ok, cancel, userData, isCreate = false }) => {
               }
               key="3"
             >
-              {!isCreate && (
-                <Form.Item
-                  hasFeedback
-                  name="current_pin"
-                  label="Pin Saat Ini"
-                  rules={
-                    step === 3 && [
-                      { required: true, message: "Tidak Boleh Kosong" },
-                      { min: 6, message: "Harus 6 Angka" },
-                      { max: 6, message: "Harus 6 Angka" },
-                      {
-                        pattern: new RegExp(/^[0-9]*$/),
-                        message: "Harus Berupa Angka",
-                      },
-                    ]
-                  }
-                  tooltip={{
-                    title: "Harus 6 Angka",
-                    icon: <InfoCircleOutlined />,
-                  }}
-                >
-                  <Input.Password />
-                </Form.Item>
-              )}
               <Form.Item
                 hasFeedback
                 name="pin"

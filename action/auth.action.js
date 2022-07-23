@@ -17,8 +17,9 @@ function setAddress(datum) {
 }
 
 function setToken(datum) {
-  Cookies.set(STRING_COOKIES.token, btoa(datum), { expires: 7 });
+  Cookies.set(STRING_COOKIES.token, btoa(datum), { expires: 1 });
 }
+
 export function doLogout() {
   Helper.removeCookie(STRING_COOKIES.info);
   Helper.removeCookie(STRING_COOKIES.user);

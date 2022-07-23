@@ -84,7 +84,11 @@ export const putMemberAction = (id, e) => {
     handlePut(`member/update/data/${id}`, e, (res, status, msg) => {
       if (status) {
         Message.success(msg)
-          .then(() => Message.info("Anda akan dialikan ke halaman login"))
+          .then(() =>
+            Message.success(
+              "Anda akan dialikan ke halaman login terlebih dahulu"
+            )
+          )
           .then(() => {
             Router.push("/signin").then(() => {
               dispatch(setLoading(false));
@@ -103,10 +107,11 @@ export const createPinAction = (id, e, callback) => {
     dispatch(setLoading(true));
     handlePut(`member/pin/${id}`, { pin: e }, (res, status, msg) => {
       if (status) {
-        Message.success(msg);
-        dispatch(getConfigAction());
-        dispatch(setLoading(false));
-        callback(false);
+        Message.success(msg).then(() => {
+          dispatch(getConfigAction());
+          dispatch(setLoading(false));
+          callback(false);
+        });
       } else {
         callback(true);
         dispatch(setLoading(false));

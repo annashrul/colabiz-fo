@@ -67,17 +67,6 @@ const ListProduct = () => {
   );
   const loadingCart = useSelector((state) => state.cartReducer.loadingAdd);
   const dataCart = useSelector((state) => state.cartReducer.data);
-  const {
-    loadingRegister,
-    dataRegister,
-    paginationRegister,
-    loadingHappyShopping,
-    dataHappyShopping,
-    paginationHappyShopping,
-    loadingSmartContract,
-    dataSmartContract,
-    paginationSmartContract,
-  } = useSelector((state) => state.paketReducer);
 
   const {
     dataProvince,
@@ -171,10 +160,7 @@ const ListProduct = () => {
     setIndexStockis(key);
   };
 
-  const handleStep = () => {};
-
   const kategoriPaket = ["REGISTER", "SMART_CONTRACT", "HAPPY_SHOPPING"];
-  console.log("data stokis", localStorage.getItem("dataStokis"));
   return (
     <>
       <Collapse

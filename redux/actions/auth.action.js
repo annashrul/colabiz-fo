@@ -114,7 +114,7 @@ export const loginAction = (data, callback) => {
         } else {
           callback(true);
         }
-        dispatch(setLoadingLogin(false));
+        // dispatch(setLoadingLogin(false));
       } else {
         callback(false);
         dispatch(setLoadingLogin(false));

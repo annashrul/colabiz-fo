@@ -1,52 +1,14 @@
-import {
-  Col,
-  Button,
-  Card,
-  Message,
-  Row,
-  Empty,
-  Modal,
-  Spin,
-  Form,
-  Select,
-  Input,
-  Alert,
-  Badge,
-  Divider,
-  Collapse,
-} from "antd";
-const { Panel } = Collapse;
-import Marquee from "react-fast-marquee";
-import {
-  HomeOutlined,
-  AlignCenterOutlined,
-  CheckOutlined,
-  FilterOutlined,
-  CaretRightOutlined,
-  CaretLeftOutlined,
-  CloseOutlined,
-  MoreOutlined,
-  ShoppingCartOutlined,
-} from "@ant-design/icons";
+import { Col, Button, Card, Row, Empty, Spin } from "antd";
+import { AlignCenterOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getStockisAction } from "../../redux/actions/stockis.action";
-import StatCard from "../shared/StatCard";
-import { theme } from "../styles/GlobalStyles";
-import {
-  provinceAction,
-  cityAction,
-  districtsAction,
-} from "../../redux/actions/address.action";
+
 import { getCartAction, postCart } from "../../redux/actions/cart.action";
 import { getPaket } from "../../redux/actions/paket.action";
-import CardPaket from "../paket/CardPaket";
 import { useAppState } from "../shared/AppProvider";
 import { getConfigAction } from "../../redux/actions/info.action";
 import FormComponent from "../profile/formComponent";
 import authAction from "../../action/auth.action";
-import { StringLink } from "../../helper/string_link_helper";
-const { Option } = Select;
 import Router from "next/router";
 import general_helper from "../../helper/general_helper";
 
@@ -55,13 +17,8 @@ const CardProduct = ({ category = "REGISTER" }) => {
   const [font, setFont] = useState("14px");
   const [isModalPin, setIsModalPin] = useState(false);
   const [state] = useAppState();
-  const { loadingConfig, dataConfig } = useSelector(
-    (state) => state.infoReducer
-  );
-
-  const loadingCart = useSelector((state) => state.cartReducer.loadingAdd);
-  const dataCart = useSelector((state) => state.cartReducer.data);
-  const { loadingRegister, dataRegister, paginationRegister } = useSelector(
+  const { dataConfig } = useSelector((state) => state.infoReducer);
+  const { loadingRegister, dataRegister } = useSelector(
     (state) => state.paketReducer
   );
   useEffect(() => {

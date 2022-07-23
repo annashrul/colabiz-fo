@@ -1,5 +1,5 @@
 import { Container, Inner } from "./styles/Page";
-import { Layout, Spin } from "antd";
+import { Layout, message, Spin } from "antd";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import SidebarMenu from "./SidebarMenu";
@@ -31,21 +31,35 @@ const NonDashboardRoutes = [
 const Page = ({ router, children }) => {
   const [loading, setLoading] = useState(true);
   const [state] = useAppState();
+  const getPayload = (jwt) => {
+    // A JWT has 3 parts separated by '.'
+    // The middle part is a base64 encoded JSON
+    // decode the base64
+    return atob(jwt.split(".")[1]);
+  };
 
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
-  console.log("is not dashboard", router.pathname);
   useEffect(() => {
     const coo = authAction.getToken();
     setTimeout(() => {
       if (!isNotDashboard) {
         if (coo !== undefined) {
           setLoading(false);
-          // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-          // const decodedToken = jwt_decode(atob(coo));
-          // const dateNow = new Date();
-          // if (decodedToken.exp * 1000 < dateNow.getTime()) {
-          //   doLogout();
-          // }
+          axios.defaults.headers.common["Authorization"] = `Bearer ${atob(
+            coo
+          )}`;
+          const decodedToken = jwt_decode(atob(coo));
+          const dateNow = new Date();
+          if (decodedToken.exp * 1000 < dateNow.getTime()) {
+            message.info("sesi anda sudah habis").then(() => {
+              message.info("silahkan login kembali").then(() => {
+                Routes.push("/signin").then(() => {
+                  setLoading(false);
+                  doLogout();
+                });
+              });
+            });
+          }
         } else {
           doLogout();
           Routes.push("/signin").then(() => setLoading(false));

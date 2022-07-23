@@ -102,9 +102,9 @@ right connector from last child*/
       }
 
       .tree li a {
-        border-radius:10px;
+        border-radius:4px;
         height: auto;
-        padding: 5px 10px;
+        padding: 5px 5px;
         text-decoration: none;
         background-color: white;
         color: #8b8b8b;

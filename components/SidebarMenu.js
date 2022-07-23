@@ -3,12 +3,12 @@ import {
   Divider,
   Drawer,
   Layout,
-  List,
   Menu,
   Popconfirm,
   Row,
   Tooltip,
   Message,
+  message,
 } from "antd";
 import { IdcardOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { capitalize, lowercase } from "../lib/helpers";
@@ -27,6 +27,7 @@ import { StringLink } from "../helper/string_link_helper";
 import { useSelector, useDispatch } from "react-redux";
 import { getConfigAction } from "../redux/actions/info.action";
 // import Router from "next/router";
+import jwt_decode from "jwt-decode";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -79,44 +80,35 @@ const SidebarContent = ({
     checkStockis();
   }, [state, collapsed]);
 
+  const goLogout = () => {
+    Router.push("/signin").then(() => authAction.doLogout());
+  };
+
   const checkStockis = () => {
     if (dataConfig.stockis !== undefined) {
       if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
-        Router.push("/signin").then(() => {
-          authAction.doLogout();
-        });
+        goLogout();
       }
       if (dataConfig.stockis !== 1 && pathname === StringLink.orderStockis) {
-        Router.push("/signin").then(() => {
-          authAction.doLogout();
-        });
+        goLogout();
       }
       if (dataConfig.stockis !== 0 && pathname === StringLink.stockis) {
-        Router.push("/signin").then(() => {
-          authAction.doLogout();
-        });
+        goLogout();
       }
     }
     if (dataConfig.activate !== undefined) {
       if (dataConfig.activate === 0 && pathname === StringLink.stockis) {
-        Router.push("/signin").then(() => {
-          authAction.doLogout();
-        });
+        goLogout();
       }
     }
     if (dataConfig.status_member !== undefined) {
       if (dataConfig.status_member === 2) {
-        Router.push("/signin").then(() => {
-          authAction.doLogout();
-        });
+        goLogout();
       }
     }
     if (pathname === StringLink.tambahMitra) {
-      Router.push("/signin").then(() => {
-        authAction.doLogout();
-      });
+      goLogout();
     }
-    console.log(dataConfig);
   };
 
   const onOpenChange = (openKeys) => {
@@ -128,6 +120,30 @@ const SidebarContent = ({
     }
   };
 
+  const checkJwt = () => {
+    const decodedToken = jwt_decode(atob(authAction.getToken()));
+    const dateNow = new Date();
+    console.log("#################");
+    if (decodedToken.exp * 1000 < dateNow.getTime()) {
+      clearInterval(jobs);
+      message.info("sesi anda sudah habis").then(() => {
+        message.info("silahkan login kembali").then(() => {
+          goLogout();
+        });
+      });
+    }
+  };
+
+  const setEmomInterval = (expr, ...rest) =>
+    setTimeout(
+      () => (expr(...rest), setInterval(expr, 6000, ...rest)),
+      6000 - (new Date().getTime() % (60 * 100))
+    );
+
+  let jobs = setEmomInterval(() => checkJwt());
+  // setTimeout(function () {
+  //   clearInterval(jobs);
+  // }, 60000);
   const menu = (
     <>
       <Menu
@@ -145,11 +161,20 @@ const SidebarContent = ({
           checkStockis();
           const hasChildren = !!route.children;
           let displayNone = "block";
-          if (dataConfig.stockis !== 0 && route.name === "Daftar Stokis") {
-            displayNone = "none";
-          }
-          if (dataConfig.activate !== undefined) {
-            if (dataConfig.activate === 0 && route.name === "Daftar Stokis") {
+          let isStokis = dataConfig.stockis;
+          let isActivate = dataConfig.activate;
+          let rn = route.name;
+          let strRegStokis = "Daftar Stokis";
+
+          if (isStokis !== undefined && isActivate !== undefined) {
+            if (isActivate === 0 && rn === strRegStokis) {
+              displayNone = "none";
+            }
+            if (isStokis !== 0 && rn === strRegStokis) {
+              displayNone = "none";
+            }
+
+            if (isStokis !== 1 && rn === "Stokis") {
               displayNone = "none";
             }
           }
@@ -183,11 +208,6 @@ const SidebarContent = ({
               </Menu.Item>
             );
           }
-          if (dataConfig.stockis !== undefined) {
-            if (dataConfig.stockis !== 1 && route.name === "Stokis") {
-              displayNone = "none";
-            }
-          }
 
           if (hasChildren)
             return (
@@ -204,8 +224,8 @@ const SidebarContent = ({
               >
                 {route.children.map((subitem, index) => {
                   let checkMenu;
-                  if (dataConfig.stockis !== undefined) {
-                    if (subitem.name === "Daftar" && dataConfig.stockis !== 0) {
+                  if (isStokis !== undefined) {
+                    if (subitem.name === "Daftar" && isStokis !== 0) {
                       checkMenu = (
                         <a
                           onClick={() =>
@@ -220,10 +240,7 @@ const SidebarContent = ({
                           {subitem.badge && badgeTemplate(subitem.badge)}
                         </a>
                       );
-                    } else if (
-                      subitem.name === "Order" &&
-                      dataConfig.stockis !== 1
-                    ) {
+                    } else if (subitem.name === "Order" && isStokis !== 1) {
                       checkMenu = (
                         <a
                           onClick={() =>
@@ -262,7 +279,7 @@ const SidebarContent = ({
                           if (localStorage.linkBackProduct !== undefined) {
                             localStorage.removeItem("linkBackProduct");
                           }
-                          // if (state.mobile) dispatch({ type: "mobileDrawer" });
+                          if (state.mobile) dispatch({ type: "mobileDrawer" });
                         }}
                       >
                         {checkMenu}

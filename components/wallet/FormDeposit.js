@@ -206,7 +206,6 @@ const FormDeposit = () => {
           isModal={modalProfile}
           ok={(e) => {
             setModalProfile(false);
-            // setModalPin(true);
           }}
           cancel={(e) => {
             setModalProfile(false);

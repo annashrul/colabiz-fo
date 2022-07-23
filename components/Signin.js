@@ -36,14 +36,16 @@ const Signin = () => {
       loginAction(values, (res) => {
         if (res === undefined) {
           setShowModalPin(true);
+          dispatch(setLoadingLogin(false));
         } else if (res) {
           message
             .success(
               "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
             )
             .then(() => {
-              dispatch(setLoadingLogin(false));
-              Router.push("/");
+              Router.push("/").then(() => {
+                dispatch(setLoadingLogin(false));
+              });
             });
         }
       })

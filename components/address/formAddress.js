@@ -8,7 +8,8 @@ import {
   provinceAction,
 } from "../../redux/actions/address.action";
 import general_helper from "../../helper/general_helper";
-// import PhoneInput from "react-phone-number-input";
+import PhoneInput from "react-phone-number-input";
+import HandphoneComponent from "../HandphoneComponent";
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
 
@@ -43,8 +44,6 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
 
   useEffect(() => {
     dispatch(provinceAction());
-    console.log("dataOld", dataOld);
-
     if (Object.keys(dataOld).length === 4) {
       dispatch(cityAction(dataOld.prov));
       dispatch(districtsAction(dataOld.kota));
@@ -55,10 +54,9 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
       setData(dataOld);
     }
     if (isFull) {
-      console.log(dataOld.no_hp);
       dispatch(cityAction(dataOld.kd_prov));
       dispatch(districtsAction(dataOld.kd_kota));
-      setNoHp(dataOld.no_hp);
+      setNoHp(general_helper.checkNo(dataOld.no_hp));
       form.setFieldsValue({ kd_prov: dataOld.kd_prov });
       form.setFieldsValue({ kd_kota: dataOld.kd_kota });
       form.setFieldsValue({ kd_kec: dataOld.kd_kec });
@@ -66,7 +64,7 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
       form.setFieldsValue({ title: dataOld.title });
       form.setFieldsValue({ penerima: dataOld.penerima });
       form.setFieldsValue({
-        no_hp: `${general_helper.checkNo(dataOld.no_hp)}`,
+        no_hp: `+${general_helper.checkNo(dataOld.no_hp)}`,
       });
       setData(dataOld);
     }
@@ -80,10 +78,11 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
         onFinish={(e) => {
           let newData = data;
           if (isFull) {
-            // Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
-            Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
+            Object.assign(newData, { no_hp: noHp.replaceAll("+", "") });
+            // Object.assign(newData, { no_hp: form.getFieldValue("no_hp") });
           }
-          callback("submit", newData);
+          console.log(newData);
+          // callback("submit", newData);
         }}
       >
         {isFull && (
@@ -134,7 +133,8 @@ const FormAddress = ({ dataOld, callback, isFull = false }) => {
               value={noHp}
               onChange={(phone) =>setNoHp(phone)}
             /> */}
-            <Input prefix={"+62"} />
+            {/* <Input prefix={"+62"} /> */}
+            <HandphoneComponent callback={() => {}} />
             {/* <PhoneInput
               international
               defaultCountry="ID"
