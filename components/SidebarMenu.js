@@ -106,7 +106,7 @@ const SidebarContent = ({
         Router.push("/signin");
       }
     }
-    if (pathname === StringLink.stockis) {
+    if (pathname === StringLink.tambahMitra) {
       authAction.doLogout();
       Router.push("/signin");
     }
