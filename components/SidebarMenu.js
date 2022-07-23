@@ -63,19 +63,12 @@ const SidebarContent = ({
   );
 
   useEffect(() => {
-    let users = authAction.getUser();
-    if (users === undefined) {
-      // Router.push("/signin");
-      // authAction.doLogout();
-    } else {
-      setUser(users);
-      appRoutes.forEach((route, index) => {
-        const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
-        const key = getKey(route.name, index);
-        rootSubMenuKeys.push(key);
-        if (isCurrentPath) setOpenKeys([...openKeys, key]);
-      });
-    }
+    appRoutes.forEach((route, index) => {
+      const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
+      const key = getKey(route.name, index);
+      rootSubMenuKeys.push(key);
+      if (isCurrentPath) setOpenKeys([...openKeys, key]);
+    });
   }, [state, collapsed]);
 
   useEffect(() => {
@@ -91,10 +84,8 @@ const SidebarContent = ({
       if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
         authAction.doLogout();
         Router.push("/signin");
-      } else if (
-        dataConfig.stockis !== 1 &&
-        pathname === StringLink.orderStockis
-      ) {
+      }
+      if (dataConfig.stockis !== 1 && pathname === StringLink.orderStockis) {
         authAction.doLogout();
         Router.push("/signin");
       }
@@ -102,14 +93,22 @@ const SidebarContent = ({
         authAction.doLogout();
         Router.push("/signin");
       }
+    }
+    if (dataConfig.activate !== undefined) {
       if (dataConfig.activate === 0 && pathname === StringLink.stockis) {
         authAction.doLogout();
         Router.push("/signin");
       }
+    }
+    if (dataConfig.status_member !== undefined) {
       if (dataConfig.status_member === 2) {
         authAction.doLogout();
         Router.push("/signin");
       }
+    }
+    if (pathname === StringLink.stockis) {
+      authAction.doLogout();
+      Router.push("/signin");
     }
     console.log(dataConfig);
   };
@@ -178,9 +177,12 @@ const SidebarContent = ({
               </Menu.Item>
             );
           }
-          if (user.stockis !== 1 && route.name === "Stokis") {
-            displayNone = "none";
+          if (dataConfig.stockis !== undefined) {
+            if (dataConfig.stockis !== 1 && route.name === "Stokis") {
+              displayNone = "none";
+            }
           }
+
           if (hasChildren)
             return (
               <SubMenu
@@ -196,66 +198,71 @@ const SidebarContent = ({
               >
                 {route.children.map((subitem, index) => {
                   let checkMenu;
-                  if (subitem.name === "Daftar" && user.stockis !== 0) {
-                    checkMenu = (
-                      <a
-                        onClick={() =>
-                          Message.info(
-                            "halaman ini tidak bisa diakses oleh anda"
-                          )
-                        }
-                      >
-                        <span className="mr-auto">
-                          {capitalize(subitem.name)}
-                        </span>
-                        {subitem.badge && badgeTemplate(subitem.badge)}
-                      </a>
-                    );
-                  } else if (subitem.name === "Order" && user.stockis !== 1) {
-                    checkMenu = (
-                      <a
-                        onClick={() =>
-                          Message.info(
-                            "halaman ini tidak bisa diakses oleh anda"
-                          )
-                        }
-                      >
-                        <span className="mr-auto">
-                          {capitalize(subitem.name)}
-                        </span>
-                        {subitem.badge && badgeTemplate(subitem.badge)}
-                      </a>
-                    );
-                  } else {
-                    checkMenu = (
-                      <Link href={`${subitem.path ? subitem.path : ""}`}>
-                        <a>
+                  if (dataConfig.stockis !== undefined) {
+                    if (subitem.name === "Daftar" && dataConfig.stockis !== 0) {
+                      checkMenu = (
+                        <a
+                          onClick={() =>
+                            Message.info(
+                              "halaman ini tidak bisa diakses oleh anda"
+                            )
+                          }
+                        >
                           <span className="mr-auto">
                             {capitalize(subitem.name)}
                           </span>
                           {subitem.badge && badgeTemplate(subitem.badge)}
                         </a>
-                      </Link>
+                      );
+                    } else if (
+                      subitem.name === "Order" &&
+                      dataConfig.stockis !== 1
+                    ) {
+                      checkMenu = (
+                        <a
+                          onClick={() =>
+                            Message.info(
+                              "halaman ini tidak bisa diakses oleh anda"
+                            )
+                          }
+                        >
+                          <span className="mr-auto">
+                            {capitalize(subitem.name)}
+                          </span>
+                          {subitem.badge && badgeTemplate(subitem.badge)}
+                        </a>
+                      );
+                    } else {
+                      checkMenu = (
+                        <Link href={`${subitem.path ? subitem.path : ""}`}>
+                          <a>
+                            <span className="mr-auto">
+                              {capitalize(subitem.name)}
+                            </span>
+                            {subitem.badge && badgeTemplate(subitem.badge)}
+                          </a>
+                        </Link>
+                      );
+                    }
+                    return (
+                      <Menu.Item
+                        key={getKey(subitem.name, index)}
+                        className={
+                          pathname === subitem.path
+                            ? "ant-menu-item-selected"
+                            : ""
+                        }
+                        onClick={() => {
+                          if (localStorage.linkBackProduct !== undefined) {
+                            localStorage.removeItem("linkBackProduct");
+                          }
+                          // if (state.mobile) dispatch({ type: "mobileDrawer" });
+                        }}
+                      >
+                        {checkMenu}
+                      </Menu.Item>
                     );
                   }
-                  return (
-                    <Menu.Item
-                      key={getKey(subitem.name, index)}
-                      className={
-                        pathname === subitem.path
-                          ? "ant-menu-item-selected"
-                          : ""
-                      }
-                      onClick={() => {
-                        if (localStorage.linkBackProduct !== undefined) {
-                          localStorage.removeItem("linkBackProduct");
-                        }
-                        // if (state.mobile) dispatch({ type: "mobileDrawer" });
-                      }}
-                    >
-                      {checkMenu}
-                    </Menu.Item>
-                  );
                 })}
               </SubMenu>
             );
