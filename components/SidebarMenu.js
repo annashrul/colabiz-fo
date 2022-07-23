@@ -111,6 +111,7 @@ const SidebarContent = ({
         Router.push("/signin");
       }
     }
+    console.log(dataConfig);
   };
 
   const onOpenChange = (openKeys) => {
