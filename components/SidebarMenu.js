@@ -90,34 +90,28 @@ const SidebarContent = ({
     if (dataConfig.stockis !== undefined) {
       if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
         authAction.doLogout();
-        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
-          Router.push("/signin");
-        });
+        Router.push("/signin");
       } else if (
         dataConfig.stockis !== 1 &&
         pathname === StringLink.orderStockis
       ) {
         authAction.doLogout();
-        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
-          Router.push("/signin");
-        });
+        Router.push("/signin");
       }
       if (dataConfig.stockis !== 0 && pathname === StringLink.stockis) {
         authAction.doLogout();
-        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
-          Router.push("/signin");
-        });
+        Router.push("/signin");
       }
       if (dataConfig.activate === 0 && pathname === StringLink.stockis) {
         authAction.doLogout();
-        Message.info("anda tidak berhak mengakses halaman ini").then(() => {
-          Router.push("/signin");
-        });
+        Router.push("/signin");
       }
+      // if (dataConfig.versi !== "1.0.8") {
+      //   authAction.doLogout();
+      //   Router.push("/signin");
+      // }
     }
   };
-
-  console.log("dataConfig", dataConfig.activate);
 
   const onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.slice(-1);
