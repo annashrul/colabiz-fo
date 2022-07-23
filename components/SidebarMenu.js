@@ -106,10 +106,10 @@ const SidebarContent = ({
         authAction.doLogout();
         Router.push("/signin");
       }
-      // if (dataConfig.versi !== "1.0.8") {
-      //   authAction.doLogout();
-      //   Router.push("/signin");
-      // }
+      if (dataConfig.status_member === 2) {
+        authAction.doLogout();
+        Router.push("/signin");
+      }
     }
   };
 
