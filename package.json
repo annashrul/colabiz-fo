@@ -22,6 +22,7 @@
     "react-phone-number-input": "^3.2.5",
     "react-pin-input": "^1.1.0",
     "react-places-autocomplete": "^7.3.0",
+    "react-pwa-add-to-homescreen": "^1.1.7",
     "reactour": "^1.18.7",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",

@@ -190,7 +190,6 @@ const FormDeposit = () => {
 
       {modalPin && (
         <ModalPin
-          loading={loadingDeposit}
           submit={(pin) => {
             handleFinish(pin);
           }}
@@ -198,6 +197,7 @@ const FormDeposit = () => {
             setModalPin(false);
           }}
           modalPin={modalPin}
+          loading={loadingDeposit}
         />
       )}
 
