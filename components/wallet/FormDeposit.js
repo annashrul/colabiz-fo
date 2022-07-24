@@ -68,8 +68,11 @@ const FormDeposit = () => {
     Object.assign(dataDeposit, {
       member_pin: pin,
     });
-    setModalPin(false);
-    dispatch(depositAction(dataDeposit));
+    dispatch(
+      depositAction(dataDeposit, (res) => {
+        if (res) setModalPin(false);
+      })
+    );
   };
 
   const handleSubmit = async (e) => {

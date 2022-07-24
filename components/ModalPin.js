@@ -1,4 +1,17 @@
-import { Modal, Popconfirm, Row, Spin, Col, Button, Message } from "antd";
+import {
+  Modal,
+  Popconfirm,
+  Row,
+  Spin,
+  Form,
+  Input,
+  Col,
+  Button,
+  Message,
+  Space,
+  Tooltip,
+  Typography,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { theme } from "./styles/GlobalStyles";
 import dynamic from "next/dynamic";
@@ -8,6 +21,8 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
   const [isModal, setIsModal] = useState(modalPin);
   const [pin, setPin] = useState("");
   const [focusPin, setFocusPin] = useState(true);
+  const [form] = Form.useForm();
+
   useEffect(() => {
     setTimeout(() => setFocusPin(true), 300);
   }, [isModal, focusPin, pin]);
@@ -22,7 +37,42 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
       footer={null}
     >
       <Spin tip="Tunggu Sebentar..." size="large" spinning={loading}>
-        <div>
+        <p>
+          Demi Keamanan & Kenyamanan Menggunakan Sistem Ini, Pastikan Pin Yang
+          Anda Masukan Sesuai
+        </p>
+        <Form form={form} layout="vertical" onFinish={(e) => submit(e.pin)}>
+          <Form.Item
+            hasFeedback
+            name="pin"
+            label="Pin"
+            rules={[
+              { required: true, message: "Tidak Boleh Kosong" },
+              { min: 6, message: "Harus 6 Angka" },
+              { max: 6, message: "Harus 6 Angka" },
+              {
+                pattern: new RegExp(/^[0-9]*$/),
+                message: "Harus Berupa Angka",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button style={{ float: "right" }} type="primary" htmlType="submit">
+              Simpan
+            </Button>
+            <Button
+              onClick={(e) => cancel()}
+              style={{ float: "right", marginRight: "5px" }}
+              type="dashed"
+              htmlType="button"
+            >
+              Batal
+            </Button>
+          </Form.Item>
+        </Form>
+        {/* <div>
           <p>
             Demi Keamanan & Kenyamanan Menggunakan Sistem Ini, Pastikan Pin Yang
             Anda Masukan Sesuai
@@ -90,7 +140,7 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
               </Popconfirm>
             </Col>
           </Row>
-        </div>
+        </div> */}
       </Spin>
     </Modal>
   );

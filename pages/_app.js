@@ -9,7 +9,6 @@ import Router from "next/router";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../redux/store";
-import { AddToHomeScreen } from "react-pwa-add-to-homescreen";
 
 axios.defaults.headers.common[
   "Content-Type"
@@ -112,7 +111,6 @@ class MyApp extends App {
         <Provider store={store}>
           <AppProvider>
             <Page>
-              <AddToHomeScreen />
               <Component {...pageProps} />
             </Page>
           </AppProvider>

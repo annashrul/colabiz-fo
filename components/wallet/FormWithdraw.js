@@ -94,7 +94,11 @@ const FormWithdraw = () => {
     ) {
       setNominalError({
         enable: true,
-        helpText: "nominal penarikan melebihi saldo anda",
+        helpText: `anda hanya bisa menarik sebesar ${general_helper.toRp(
+          parseInt(data.saldo, 10) - parseInt(dataConfig.charge_withdraw, 10)
+        )} karena di potong admin sebesar ${general_helper.toRp(
+          parseInt(dataConfig.charge_withdraw, 10)
+        )}`,
       });
     } else {
       step === 1 ? setStep(2) : setModalPin(true);
@@ -133,6 +137,13 @@ const FormWithdraw = () => {
                       dataConfig ? dataConfig.min_withdraw : 0
                     )}
                   </small>
+                  <br />
+                  <small style={{ color: "green" }}>
+                    Biaya admin sebesar &nbsp;
+                    {general_helper.toRp(
+                      dataConfig ? dataConfig.charge_withdraw : 0
+                    )}
+                  </small>
                 </span>
               }
             >
@@ -144,47 +155,46 @@ const FormWithdraw = () => {
                       val={amountActive}
                     />
                   </Form.Item>
-                  <Space>
-                    <Form.Item
-                      label="Nominal Yang Akan Ditarik"
-                      hasFeedback
-                      name="amount"
-                      rules={[
-                        { required: true, message: "Tidak Boleh Kosong" },
-                        {
-                          pattern: new RegExp(/^[0-9]*$/),
-                          message: "Harus Berupa Angka",
+                  <Form.Item
+                    label="Nominal Yang Akan Ditarik"
+                    name="amount"
+                    rules={[
+                      { required: true, message: "Tidak Boleh Kosong" },
+                      {
+                        pattern: new RegExp(/^[0-9]*$/),
+                        message: "Harus Berupa Angka",
+                      },
+                      {
+                        validator(_, value) {
+                          if (nominalError.enable) {
+                            return Promise.reject(nominalError.helpText);
+                          }
+                          return Promise.resolve();
                         },
-                        {
-                          validator(_, value) {
-                            if (nominalError.enable) {
-                              return Promise.reject(nominalError.helpText);
-                            }
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
-                      <Input
-                        onChange={(e) => setAmountActive(e.target.value)}
-                        style={{ fontSize: state.mobile ? "12px" : "14px" }}
-                        prefix={"Rp."}
-                        ref={nominalInput}
-                      />
-                    </Form.Item>
-                    <Tooltip title="Tarik semua saldo anda">
-                      <Typography.Link
-                        href="#API"
-                        onClick={(e) => {
-                          form.setFieldsValue({
-                            amount: data.saldo,
-                          });
-                        }}
-                      >
-                        tarik semua
-                      </Typography.Link>
-                    </Tooltip>
-                  </Space>
+                      },
+                    ]}
+                  >
+                    <Input
+                      onChange={(e) => setAmountActive(e.target.value)}
+                      style={{ fontSize: state.mobile ? "12px" : "14px" }}
+                      prefix={"Rp."}
+                      ref={nominalInput}
+                      addonAfter={
+                        <Tooltip title="Tarik semua saldo anda">
+                          <Typography.Link
+                            href="#API"
+                            onClick={(e) => {
+                              form.setFieldsValue({
+                                amount: data.saldo,
+                              });
+                            }}
+                          >
+                            tarik semua
+                          </Typography.Link>
+                        </Tooltip>
+                      }
+                    />
+                  </Form.Item>
 
                   <Form.Item
                     hasFeedback

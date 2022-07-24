@@ -33,11 +33,11 @@ export const cancelDepositAction = (kd_trx, e) => {
   };
 };
 
-export const depositAction = (data) => {
+export const depositAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingDeposit(true));
     handlePost("transaction/deposit", data, (res, status, msg) => {
-      console.log(res);
+      callback(status);
       if (status) {
         Message.success(msg).then(() => {
           if (msg === "Masih ada transaksi yang belum selesai..") {
@@ -48,10 +48,10 @@ export const depositAction = (data) => {
               okText: "Batalkan Transaksi.",
               okType: "danger",
               cancelText: "Lihat Invoice",
-              content:(
+              content: (
                 <>
                   #{res.data.kd_trx}
-                  <br/>
+                  <br />
                   Jumlah: {general_helper.toRp(res.data.amount)}
                 </>
               ),
@@ -66,7 +66,7 @@ export const depositAction = (data) => {
                 Router.push(StringLink.invoiceProduct).then(() => {
                   dispatch(setLoadingDeposit(false));
                 });
-              }
+              },
             });
             dispatch(setLoadingDeposit(false));
           } else {

@@ -10,7 +10,7 @@ const IndexPembelian = () => {
   return state.mobile ? (
     <PageHeader
       className="site-page-header"
-      onBack={() => Router.back()}
+      // onBack={() => Router.back()}
       title="Pembelian Produk"
     >
       <ListProduct />

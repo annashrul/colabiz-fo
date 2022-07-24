@@ -85,6 +85,7 @@ const SidebarContent = ({
   };
 
   const checkStockis = () => {
+    checkJwt();
     if (dataConfig.stockis !== undefined) {
       if (dataConfig.stockis !== 1 && pathname === StringLink.deposit) {
         goLogout();
@@ -125,7 +126,6 @@ const SidebarContent = ({
     const dateNow = new Date();
     console.log("#################");
     if (decodedToken.exp * 1000 < dateNow.getTime()) {
-      // clearInterval(jobs);
       message.info("sesi anda sudah habis").then(() => {
         message.info("silahkan login kembali").then(() => {
           goLogout();
