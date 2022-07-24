@@ -182,7 +182,7 @@ const FormWithdraw = () => {
                       addonAfter={
                         <Tooltip title="Tarik semua saldo anda">
                           <Typography.Link
-                            href="#API"
+                            href="#tariksemua"
                             onClick={(e) => {
                               form.setFieldsValue({
                                 amount: data.saldo,
