@@ -71,11 +71,12 @@ const ProfileCard = ({ callback }) => {
                 className="text-light text-white"
                 style={{ cursor: "pointer", color: "white" }}
                 onClick={async () => {
+                  console.log(user.referral_url);
                   // message.info(
                   //   "maaf fitur ini sedang dalam tahap maintenance. silahkan hubungi admin"
                   // );
                   general_helper.copyText(
-                    `${user.referral_url}${user.referral}`,
+                    `${user.referral_url}`,
                     "Link referral"
                   );
                 }}
