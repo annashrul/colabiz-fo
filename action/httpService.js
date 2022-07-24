@@ -6,8 +6,8 @@ const coo = Cookies.get(STRING_COOKIES.token);
 if (coo !== undefined) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
 }
-// const url = "https://api-dev.kolabiz.id/";
-const url = "https://api.kolabiz.id/";
+const url = "https://api-dev.kolabiz.id/";
+// const url = "https://api.kolabiz.id/";
 
 console.log("http service running at ", url);
 export default {
