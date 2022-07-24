@@ -107,9 +107,9 @@ const SidebarContent = ({
         goLogout();
       }
     }
-    if (pathname === StringLink.tambahMitra) {
-      goLogout();
-    }
+    // if (pathname === StringLink.tambahMitra) {
+    //   goLogout();
+    // }
   };
 
   const onOpenChange = (openKeys) => {
@@ -178,9 +178,9 @@ const SidebarContent = ({
               displayNone = "none";
             }
           }
-          if (route.name === "Register") {
-            displayNone = "none";
-          }
+          // if (route.name === "Register") {
+          //   displayNone = "none";
+          // }
 
           if (!hasChildren) {
             return (
