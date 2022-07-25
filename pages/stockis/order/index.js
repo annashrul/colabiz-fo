@@ -12,8 +12,7 @@ import {
   Alert,
   Tag,
   Spin,
-  Dropdown,
-  Menu,
+  message,
 } from "antd";
 const { Column, ColumnGroup } = Table;
 import React, { useEffect, useState } from "react";
@@ -29,7 +28,7 @@ import {
   sendCodeAction,
 } from "../../../redux/actions/stockis.action";
 import general_helper from "../../../helper/general_helper";
-import { DownOutlined } from "@ant-design/icons";
+import Router from "next/router";
 moment.locale("id");
 
 const formItemLayout = {
@@ -55,7 +54,6 @@ const IndexOrderStockis = () => {
   const {
     loadingApprove,
     loadingCancel,
-    loadingTake,
     loadingOrder,
     dataOrder,
     paginationOrder,
@@ -63,7 +61,20 @@ const IndexOrderStockis = () => {
   const user = authAction.getUser();
 
   useEffect(() => {
-    dispatch(orderStockisAction(user.id_stockis));
+    console.log("id stokis", user.id_stockis);
+    if (
+      user.id_stockis === "-" ||
+      user.id_stockis === "" ||
+      user.id_stockis === undefined
+    ) {
+      message.info("maaf id stokis anda kosong").then(() => {
+        message.info("anda akan dialihkan ke halaman utama").then(() => {
+          Router.push("/");
+        });
+      });
+    } else {
+      dispatch(orderStockisAction(user.id_stockis));
+    }
   }, []);
 
   const onFinish = (values) => {
@@ -77,7 +88,6 @@ const IndexOrderStockis = () => {
         searchby === "kd_trx" ? btoa(values) : values
       }`;
     }
-
     setWhere(where);
     dispatch(orderStockisAction(user.id_stockis, `page=1` + where));
   };

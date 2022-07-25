@@ -27,7 +27,7 @@ export const cancelDepositAction = (kd_trx, e) => {
       `transaction/deposit/${btoa(kd_trx)}/approve`,
       { status: 2 },
       (res, status, msg) => {
-        dispatch(depositAction(e));
+        dispatch(depositAction(e, (stts) => {}));
       }
     );
   };
@@ -37,7 +37,6 @@ export const depositAction = (data, callback) => {
   return (dispatch) => {
     dispatch(setLoadingDeposit(true));
     handlePost("transaction/deposit", data, (res, status, msg) => {
-      callback(status);
       if (status) {
         Message.success(msg).then(() => {
           if (msg === "Masih ada transaksi yang belum selesai..") {
@@ -56,7 +55,7 @@ export const depositAction = (data, callback) => {
                 </>
               ),
               onOk() {
-                // Object.assign(data,{kd_trx:res.data.kd_trx})
+                dispatch(setLoadingDeposit(false));
                 dispatch(cancelDepositAction(res.data.kd_trx, data));
               },
               onCancel() {
@@ -82,7 +81,9 @@ export const depositAction = (data, callback) => {
             );
           }
         });
+        callback(false);
       } else {
+        callback(true);
         dispatch(setLoadingDeposit(false));
       }
     });

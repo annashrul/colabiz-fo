@@ -5,7 +5,7 @@ import moment from "moment";
 import authAction from "../../action/auth.action";
 import Index from "../../components/genealogy/Index";
 import Matahari from "../../components/genealogy/matahari";
-import { Tabs, Modal } from "antd";
+import { Tabs, Modal, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getGenealogyAction } from "../../redux/actions/member.action";
 moment.locale("id");
@@ -76,7 +76,8 @@ const GenealogyMonolegNasional = () => {
           });
           setData(data.concat(res.data));
         } else {
-          alert(`${val} belum mempunyai downline`);
+          message.info(`${val} belum mempunyai downline`);
+          // alert(`${val} belum mempunyai downline`);
         }
       }
     );

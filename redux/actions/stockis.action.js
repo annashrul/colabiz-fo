@@ -90,7 +90,6 @@ export const orderStockisAction = (id, where = "") => {
   return (dispatch) => {
     dispatch(setLoadingOder(true));
     handleGet(`penjualan/report?id_stockis=${id}&${where}`, (res, status) => {
-      console.log("action", res);
       dispatch(setDataOrder(res));
       dispatch(setLoadingOder(false));
     });
